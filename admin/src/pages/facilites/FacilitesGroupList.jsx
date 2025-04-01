@@ -8,10 +8,12 @@ import LeftSideBarComponent from "../../components/LeftSideBarComponent";
 import Pagination from "../../components/Pagination";
 import axios from "/config/axiosConfig";
 
-const RoomList = () => {
+const FacilitesGroupList = () => {
+
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(1);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -20,7 +22,8 @@ const RoomList = () => {
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const apiUrl = "/roomsetting/roomList";
+
+  const apiUrl = "/roomfacility/roomfacility_group_list";
   const handleSort = () => {
     const sortedData = [...data].sort((a, b) => {
       if (a.name.toLowerCase() < b.name.toLowerCase()) {
@@ -72,17 +75,19 @@ const RoomList = () => {
     setCurrentPage(page);
   };
 
+
   const handlePageSizeChange = (e) => {
     setPageSize(Number(e.target.value));
   };
 
   const handleAddNewClick = () => {
-    navigate("/roomsetting/add-room");
+    navigate("/facilites/facilites-group-add");
   };
 
   const handleEdit = (id) => {
-    navigate(`/roomsetting/room-edit/${id}`);
+    navigate(`/roomsetting/facilites-group-edit/${id}`);
   };
+
 
   // Correctly closed useEffect hook
   useEffect(() => {
@@ -92,7 +97,7 @@ const RoomList = () => {
   return (
     <>
       <Helmet>
-        <title>Room List</title>
+        <title>Facilites Group List</title>
       </Helmet>
 
       <div>
@@ -105,7 +110,7 @@ const RoomList = () => {
           <div className="page-wrapper">
             <div className="page-content">
               <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div className="breadcrumb-title pe-3">Room List</div>
+                <div className="breadcrumb-title pe-3">Facilites Group List</div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
@@ -114,10 +119,7 @@ const RoomList = () => {
                           <i className="bx bx-home-alt" />
                         </Link>
                       </li>
-                      <li
-                        className="breadcrumb-item active"
-                        aria-current="page"
-                      >
+                      <li className="breadcrumb-item active" aria-current="page">
                         List
                       </li>
                     </ol>
@@ -152,13 +154,14 @@ const RoomList = () => {
                           </div>
                         </div>
 
+
+
                         <div className="col-12 col-md-1 mb-2 mb-md-0">
                           <div className="searchbar">
                             <select
                               className="form-select"
                               value={pageSize}
-                              onChange={handlePageSizeChange}
-                            >
+                              onChange={handlePageSizeChange}>
                               <option value="10">10</option>
                               <option value="20">20</option>
                               <option value="50">50</option>
@@ -177,8 +180,7 @@ const RoomList = () => {
                           <select
                             className="form-select"
                             value={selectedFilter}
-                            onChange={(e) => setSelectedFilter(e.target.value)}
-                          >
+                            onChange={(e) => setSelectedFilter(e.target.value)}>
                             <option value="">All Status</option>
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
@@ -186,8 +188,7 @@ const RoomList = () => {
                           <button
                             type="button"
                             className="btn btn-primary"
-                            onClick={fetchData}
-                          >
+                            onClick={fetchData}>
                             Apply
                           </button>
                         </div>
@@ -204,38 +205,24 @@ const RoomList = () => {
                           <table className="table table-striped table-bordered">
                             <thead>
                               <tr>
-                                <td>ID</td>
-                                <th
-                                  className="text-center"
+                              <td>ID</td>
+                                <th className="text-center"
                                   onClick={handleSort}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  Room Type
+                                  style={{ cursor: "pointer" }}>
+                                  Name
                                   {sortOrder === "asc" ? (
                                     <span
-                                      style={{
-                                        marginLeft: "5px",
-                                        fontSize: "14px",
-                                      }}
-                                    >
+                                      style={{ marginLeft: "5px", fontSize: "14px", }}>
                                       ↑
                                     </span>
                                   ) : (
                                     <span
-                                      style={{
-                                        marginLeft: "5px",
-                                        fontSize: "14px",
-                                      }}
-                                    >
+                                      style={{ marginLeft: "5px", fontSize: "14px", }}>
                                       ↓
                                     </span>
                                   )}
                                 </th>
-                                {/* <td>Room Type</td> */}
-                                <td  className="text-center">Room Price</td>
-                                <td  className="text-center">Bed Charge</td>
-                                <td  className="text-center">Bed Number</td>
-                                <td  className="text-center">Capacity</td>
+                               
                                 <th className="text-center">Status</th>
                                 <th className="text-center">Action</th>
                               </tr>
@@ -244,24 +231,18 @@ const RoomList = () => {
                               {data.length > 0 ? (
                                 data.map((item) => (
                                   <tr key={item.id}>
-                                    <td className="text-center">{item.id}</td>
-                                    <td>{item.roomType}</td>
-                                    {/* <td>{item.roomType}</td> */}
-                                    <td className="text-center">{item.roomPrice}</td>
-                                    <td className="text-center">{item.bedCharge}</td>
-                                    <td className="text-center">{item.bedNumber}</td>
-                                    <td className="text-center">{item.capacity}</td>
-                                    <td className="text-center"> {item.status}</td>
-                                    <td className="text-center">
-                                      <a href="#" onClick={() => handleEdit(item.id)}>
-                                        <i className="lni lni-pencil-alt"></i>
-                                      </a>
-                                    </td>
+                                     <td>{item.id}</td>
+                                    <td>{item.name}</td>
+                                    <td className="text-center">{item.status}</td>
+                                    <td className="text-center"><a href="#" onClick={() => handleEdit(item.id)}><i className="lni lni-pencil-alt"></i></a></td>
+
                                   </tr>
                                 ))
                               ) : (
                                 <tr>
-                                  <td colSpan="9" className="text-center">
+                                  <td
+                                    colSpan="9"
+                                    className="text-center">
                                     No data found
                                   </td>
                                 </tr>
@@ -296,4 +277,4 @@ const RoomList = () => {
   );
 };
 
-export default RoomList;
+export default FacilitesGroupList;

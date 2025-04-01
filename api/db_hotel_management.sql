@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2025 at 08:19 PM
+-- Generation Time: Apr 01, 2025 at 08:18 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -69,6 +69,70 @@ INSERT INTO `api_key` (`id`, `merchant_id`, `key`, `password`, `status`, `create
 (4, 3, 'TQUiTZzqypMpwSNTaKS1kye2p1MGd4tNvK', 'LRWwU5D6womf', 1, '2024-12-08 15:26:59', '2025-01-12 23:21:37'),
 (5, 5, '5yjjrs1dqc064ikm9zf1opiyblj4xn4n', 'cTQt96aJIQZg', 1, '2024-12-08 15:30:33', '2024-12-08 15:30:33'),
 (7, 22, 'a1z796m6004vd9t6euj6aheey7pieprg', 'BuUWvdAEE6pw', 1, '2025-01-10 14:39:03', '2025-01-10 14:39:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bed_type`
+--
+
+CREATE TABLE `bed_type` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(255) DEFAULT NULL,
+  `updated_at` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bed_type`
+--
+
+INSERT INTO `bed_type` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'King Bed', 'king-bed', 1, '2025-03-30 03:23:26', '2025-03-30 03:23:26'),
+(2, 'Queen Bed', 'queen-bed', 1, '2025-03-30 03:23:34', '2025-03-30 03:23:34'),
+(3, 'Twins Bed', 'twins-bed', 1, '2025-03-30 03:23:42', '2025-03-30 03:23:42'),
+(4, 'dsfsdfsdf sdfasdf sdf sd fsd fsdf', 'dsfsdfsdf-sdfasdf-sdf-sd-fsd-fsdf', 1, '2025-03-30 03:23:47', '2025-04-01 21:29:42'),
+(5, 'Futon Bed', 'futon-bed', 1, '2025-03-30 03:23:59', '2025-03-30 03:23:59'),
+(6, 'Mattress Bed', 'mattress-bed', 1, '2025-03-30 03:24:07', '2025-03-30 03:24:07'),
+(7, 'Air Bed', 'air-bed', 1, '2025-03-30 03:24:14', '2025-03-31 05:46:57'),
+(8, 'Standard Double', 'standard-double', 1, '2025-03-31 06:02:52', '2025-03-31 20:48:24'),
+(9, 'Standard Queen', 'standard-queen', 1, '2025-03-31 20:50:57', '2025-03-31 20:50:57'),
+(10, 'Luxury King', 'luxury-king', 1, '2025-03-31 20:52:09', '2025-03-31 20:52:09'),
+(11, 'Standard Twin', 'standard-twin', 1, '2025-03-31 20:55:22', '2025-03-31 20:55:22'),
+(12, 'Luxury Queen', 'luxury-queen', 1, '2025-03-31 20:56:52', '2025-03-31 20:56:52'),
+(13, 'Standard King', 'standard-king', 1, '2025-03-31 20:58:53', '2025-03-31 20:58:53'),
+(14, 'Normal Bed', 'normal-bed', 1, '2025-03-31 21:02:54', '2025-03-31 21:02:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_type`
+--
+
+CREATE TABLE `booking_type` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(255) DEFAULT NULL,
+  `updated_at` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking_type`
+--
+
+INSERT INTO `booking_type` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'SSSSS', 'sssss', 1, '2025-03-31 06:21:21', '2025-03-31 06:37:09'),
+(2, 'Instant', 'instant', 1, '2025-03-31 06:21:31', '2025-03-31 06:21:31'),
+(3, 'Groups', 'groups', 1, '2025-03-31 06:21:40', '2025-03-31 06:21:40'),
+(4, 'Allocation', 'allocation', 1, '2025-03-31 06:21:46', '2025-03-31 06:21:46'),
+(5, 'Business Seminar', 'business-seminar', 1, '2025-03-31 06:21:51', '2025-03-31 06:21:51'),
+(6, 'Wedding', 'wedding', 1, '2025-03-31 06:21:56', '2025-03-31 06:21:56'),
+(7, 'Birthday', 'birthday', 1, '2025-03-31 06:22:01', '2025-03-31 06:22:01'),
+(8, 'Photoshoot', 'photoshoot', 1, '2025-03-31 06:22:06', '2025-03-31 06:22:06');
 
 -- --------------------------------------------------------
 
@@ -591,6 +655,34 @@ INSERT INTO `deposit_request` (`id`, `depositID`, `user_id`, `merchant_id`, `dep
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `facility_group`
+--
+
+CREATE TABLE `facility_group` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `facility_group`
+--
+
+INSERT INTO `facility_group` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'General Amenities', 'general-amenities', 1, '2025-04-01 15:45:39', '2025-04-01 15:45:39'),
+(2, 'Bed & Comfort', 'bed-comfort', 1, '2025-04-01 15:45:45', '2025-04-01 15:45:45'),
+(3, 'Bathroom Facilities', 'bathroom-facilities', 1, '2025-04-01 15:45:51', '2025-04-01 15:45:51'),
+(4, 'Kitchen & Dining', 'kitchen-dining', 1, '2025-04-01 15:45:57', '2025-04-01 15:45:57'),
+(5, 'Technology & Security', 'technology-security', 1, '2025-04-01 15:46:04', '2025-04-01 15:46:04'),
+(6, 'Leisure & Extras', 'leisure-extras', 1, '2025-04-01 15:46:11', '2025-04-01 15:46:11'),
+(7, 'Additional Services', 'additional-services', 1, '2025-04-01 15:46:16', '2025-04-01 15:46:16');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
@@ -706,38 +798,6 @@ CREATE TABLE `merchant_request` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `merchant_request_demo`
---
-
-CREATE TABLE `merchant_request_demo` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `api_key_id` int(10) UNSIGNED NOT NULL,
-  `merchant_id` int(10) UNSIGNED NOT NULL,
-  `amount` decimal(15,2) NOT NULL,
-  `api_key` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `status` int(11) DEFAULT 0 COMMENT '1=approved\r\n0=not approved',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `merchant_request_demo`
---
-
-INSERT INTO `merchant_request_demo` (`id`, `api_key_id`, `merchant_id`, `amount`, `api_key`, `password`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 6, 500.00, 'hkttruzpxboovmme7s7ua6cppa6m0xp8', 'xRSLnG38I9uH', 0, '2024-12-09 08:45:17', '2024-12-09 08:45:17'),
-(2, 1, 6, 500.00, 'hkttruzpxboovmme7s7ua6cppa6m0xp8', 'xRSLnG38I9uH', 0, '2024-12-09 09:22:02', '2024-12-09 09:22:02'),
-(3, 1, 6, 150.00, 'hkttruzpxboovmme7s7ua6cppa6m0xp8', 'xRSLnG38I9uH', 0, '2024-12-09 09:30:13', '2024-12-09 09:30:13'),
-(4, 1, 6, 200.00, 'hkttruzpxboovmme7s7ua6cppa6m0xp8', 'xRSLnG38I9uH', 0, '2024-12-09 09:38:16', '2024-12-09 09:38:16'),
-(5, 1, 6, 50.00, 'hkttruzpxboovmme7s7ua6cppa6m0xp8', 'xRSLnG38I9uH', 0, '2024-12-09 10:42:12', '2024-12-09 10:42:12'),
-(6, 4, 3, 5588.00, 'TQUiTZzqypMpwSNTaKS1kye2p1MGd4tNvK', 'LRWwU5D6womf', 0, '2025-01-08 23:51:23', '2025-01-08 23:51:23'),
-(7, 4, 3, 566.00, 'TQUiTZzqypMpwSNTaKS1kye2p1MGd4tNvK', 'LRWwU5D6womf', 0, '2025-01-10 00:57:44', '2025-01-10 00:57:44'),
-(8, 4, 3, 10000.00, 'TQUiTZzqypMpwSNTaKS1kye2p1MGd4tNvK', 'LRWwU5D6womf', 0, '2025-01-10 20:41:44', '2025-01-10 20:41:44');
 
 -- --------------------------------------------------------
 
@@ -867,7 +927,7 @@ INSERT INTO `post_category` (`id`, `name`, `slug`, `status`, `created_at`, `upda
 (4, 'Education', 'education', 1, '2024-12-07 12:27:29', '2024-12-07 12:27:29'),
 (5, 'Finance', 'finance', 1, '2024-12-07 12:27:29', '2024-12-07 12:27:29'),
 (6, 'Lifestyle', 'lifestyle', 1, '2024-12-07 12:27:29', '2024-12-07 12:27:29'),
-(7, 'Travel', 'travel', 1, '2024-12-07 12:27:29', '2024-12-07 12:27:29'),
+(7, 'Air Bed', 'air-bed', 1, '2024-12-07 12:27:29', '2025-03-30 23:45:24'),
 (8, 'Food', 'food', 1, '2024-12-07 12:27:29', '2024-12-07 12:27:29'),
 (9, 'Entertainment', 'entertainment', 1, '2024-12-07 12:27:29', '2024-12-07 12:27:29'),
 (10, 'Sports', 'sports', 1, '2024-12-07 12:27:29', '2024-12-07 12:27:29'),
@@ -914,6 +974,228 @@ INSERT INTO `post_category` (`id`, `name`, `slug`, `status`, `created_at`, `upda
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `promocode`
+--
+
+CREATE TABLE `promocode` (
+  `id` bigint(20) NOT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `form_date` date DEFAULT NULL,
+  `to_date` date DEFAULT NULL,
+  `discount` decimal(10,2) DEFAULT NULL,
+  `promoCode` text DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(255) DEFAULT NULL,
+  `updated_at` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `promocode`
+--
+
+INSERT INTO `promocode` (`id`, `room_id`, `form_date`, `to_date`, `discount`, `promoCode`, `status`, `created_at`, `updated_at`) VALUES
+(1, 7, '2025-03-12', '2025-03-15', 500.00, 'BEFO-488', 1, '2025-04-01 13:20:55', '2025-04-01 13:20:55'),
+(2, 5, '2025-04-07', '2025-04-17', 5366.00, 'BEFO-4882', 1, '2025-04-01 13:26:03', '2025-04-01 14:33:07'),
+(3, 1, '2025-04-01', '2025-04-15', 33.00, 'BEFO-488233', 1, '2025-04-01 13:27:03', '2025-04-01 13:27:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room`
+--
+
+CREATE TABLE `room` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `roomType` varchar(255) DEFAULT NULL,
+  `capacity` int(11) DEFAULT NULL,
+  `extraCapacity` varchar(255) DEFAULT NULL COMMENT 'extraCapability',
+  `roomPrice` decimal(10,2) DEFAULT NULL,
+  `bedCharge` int(11) DEFAULT NULL,
+  `room_size_id` int(11) DEFAULT NULL,
+  `bedNumber` varchar(255) DEFAULT NULL,
+  `bed_type_id` int(11) DEFAULT NULL,
+  `roomDescription` text DEFAULT NULL,
+  `reserveCondition` text DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(255) DEFAULT NULL,
+  `updated_at` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `room`
+--
+
+INSERT INTO `room` (`id`, `name`, `slug`, `roomType`, `capacity`, `extraCapacity`, `roomPrice`, `bedCharge`, `room_size_id`, `bedNumber`, `bed_type_id`, `roomDescription`, `reserveCondition`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Vip Guest', 'vip-guest', 'Vip Guest', 3, 'YES', 4000.00, 100, 6, '2', 8, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:48:04', '2025-03-31 20:48:38'),
+(2, 'Vip', 'vip', 'Vip', 20, 'YES', 10000.00, 400, 6, '1', 4, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:49:42', '2025-03-31 20:49:42'),
+(3, 'Family Room', 'family-room', 'Family Room', 4, 'YES', 4500.00, 150, 5, '2', 9, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:50:46', '2025-03-31 20:51:06'),
+(4, 'Deluxe Suite', 'deluxe-suite', 'Deluxe Suite', 3, 'YES', 5500.00, 130, 6, '1', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:51:54', '2025-03-31 20:52:21'),
+(5, 'Standard Room', 'standard-room', 'Standard Room', 3, 'YES', 3000.00, 80, 5, '1', 9, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:53:04', '2025-03-31 20:53:04'),
+(6, 'Single Room', 'single-room', 'Single Room', 1, 'YES', 2500.00, 70, 13, '1', 11, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:53:58', '2025-03-31 20:55:32'),
+(7, 'Executive Room', 'executive-room', 'Executive Room', 2, 'YES', 4500.00, 110, 5, '2', 12, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:56:46', '2025-03-31 20:57:02'),
+(8, 'Presidential Suite', 'presidential-suite', 'Presidential Suite', 6, 'YES', 8000.00, 200, 6, '3', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:57:43', '2025-03-31 20:57:43'),
+(9, 'Double Room', 'double-room', 'Double Room', 2, 'YES', 3500.00, 90, 6, '1', 13, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:58:42', '2025-03-31 20:59:00'),
+(10, 'Family Suite', 'family-suite', 'Family Suite', 5, 'YES', 6000.00, 160, 6, '2', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:59:37', '2025-03-31 20:59:37'),
+(11, 'Junior Suite', 'junior-suite', 'Junior Suite', 3, 'YES', 4800.00, 140, 5, '1', 12, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:00:24', '2025-03-31 21:00:24'),
+(12, 'King Suite', 'king-suite', 'King Suite', 4, 'YES', 7000.00, 180, 6, '2', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:01:03', '2025-03-31 21:01:03'),
+(13, 'Twin Room', 'twin-room', 'Twin Room', 2, 'YES', 3200.00, 85, 13, '2', 11, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:01:42', '2025-03-31 21:01:42'),
+(14, 'Signal Room', 'signal-room', 'Signal Room', 1, 'YES', 1600.00, 300, 14, '1', 14, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:02:34', '2025-03-31 21:12:37'),
+(16, 'Triple Room', 'triple-room', 'Triple Room', 5, 'YES', 500.00, 50, 3, '5', 10, 'Triple Room Triple Room', '', 1, '2025-04-01 12:12:37', '2025-04-01 14:39:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_facility`
+--
+
+CREATE TABLE `room_facility` (
+  `id` bigint(20) NOT NULL,
+  `room_facility_group_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `room_facility`
+--
+
+INSERT INTO `room_facility` (`id`, `room_facility_group_id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Air conditioning', 'air-conditioning', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(2, 1, 'Free Wi-Fi', 'free-wifi', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(3, 1, 'Smart TV / Cable TV', 'smart-tv', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(4, 1, 'Work desk & chair', 'work-desk-chair', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(5, 1, 'Sofa or seating area', 'sofa-seating-area', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(6, 1, 'Wardrobe/Closet', 'wardrobe-closet', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(7, 1, 'Safe deposit box', 'safe-deposit-box', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(8, 1, 'Telephone', 'telephone', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(9, 1, 'Alarm clock', 'alarm-clock', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(10, 1, 'Full-length mirror', 'full-length-mirror', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(11, 1, 'Private entrance', 'private-entrance', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(12, 1, 'Coat rack', 'coat-rack', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(13, 1, 'Soundproof walls', 'soundproof-walls', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(14, 1, 'Blackout curtains', 'blackout-curtains', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(15, 1, 'Carpeting / Wooden flooring', 'carpeting-wooden-flooring', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(16, 2, 'King/Queen/Twin beds', 'king-queen-twin-beds', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(17, 2, 'High-quality mattress', 'high-quality-mattress', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(18, 2, 'Soft pillows & cushions', 'soft-pillows-cushions', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(19, 2, 'Extra blanket', 'extra-blanket', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(20, 2, 'Bedside table', 'bedside-table', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(21, 2, 'Adjustable bed lighting', 'adjustable-bed-lighting', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(22, 2, 'Reading lamp', 'reading-lamp', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(23, 2, 'Electric blanket (for winter)', 'electric-blanket', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(24, 2, 'Mosquito net', 'mosquito-net', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(25, 2, 'Hypoallergenic bedding', 'hypoallergenic-bedding', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(26, 3, 'Private bathroom', 'private-bathroom', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(27, 3, 'Rain shower', 'rain-shower', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(28, 3, 'Bathtub', 'bathtub', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(29, 3, 'Hot & cold water', 'hot-cold-water', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(30, 3, 'Fresh towels', 'fresh-towels', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(31, 3, 'Hairdryer', 'hairdryer', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(32, 3, 'Bathrobe & slippers', 'bathrobe-slippers', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(33, 3, 'Complimentary toiletries', 'complimentary-toiletries', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(34, 3, 'Magnifying makeup mirror', 'magnifying-makeup-mirror', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(35, 3, 'Bidet / Toilet hose', 'bidet-toilet-hose', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(36, 3, 'Heated towel rack', 'heated-towel-rack', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(37, 4, 'Mini refrigerator', 'mini-refrigerator', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(38, 4, 'Electric kettle', 'electric-kettle', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(39, 4, 'Coffee maker', 'coffee-maker', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(40, 4, 'Microwave oven', 'microwave-oven', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(41, 4, 'Dining table & chairs', 'dining-table-chairs', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(42, 4, 'Cutlery & crockery set', 'cutlery-crockery-set', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(43, 4, 'Bottled drinking water', 'bottled-drinking-water', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(44, 5, 'Electronic key card access', 'electronic-key-card', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(45, 5, 'Fire alarm & smoke detector', 'fire-alarm-smoke-detector', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(46, 5, 'Emergency evacuation plan', 'emergency-evacuation-plan', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(47, 5, 'CCTV security', 'cctv-security', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(48, 5, 'Power backup / Generator', 'power-backup-generator', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(49, 6, 'Balcony / Terrace', 'balcony-terrace', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(50, 6, 'In-room jacuzzi', 'in-room-jacuzzi', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(51, 6, 'Private swimming pool', 'private-swimming-pool', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(52, 6, 'City/Mountain/Sea view rooms', 'city-mountain-sea-view', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(53, 7, 'Room service (24/7)', 'room-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(54, 7, 'Newspaper delivery', 'newspaper-delivery', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(55, 7, 'Concierge service', 'concierge-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(56, 7, 'Laundry & dry-cleaning service', 'laundry-dry-cleaning', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(57, 7, 'Shoe polishing kit', 'shoe-polishing-kit', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(58, 7, 'Luggage storage', 'luggage-storage', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(59, 7, 'Turndown service', 'turndown-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(60, 7, 'Express check-in/check-out', 'express-check-in-out', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(61, 7, 'Babysitting service', 'babysitting-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(62, 7, 'Car rental assistance', 'car-rental-assistance', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(63, 7, 'Airport transfer service', 'airport-transfer-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_images`
+--
+
+CREATE TABLE `room_images` (
+  `id` bigint(20) NOT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `roomImage` varchar(255) DEFAULT NULL,
+  `roomImgDescription` text DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(255) DEFAULT NULL,
+  `updated_at` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `room_images`
+--
+
+INSERT INTO `room_images` (`id`, `room_id`, `roomImage`, `roomImgDescription`, `status`, `created_at`, `updated_at`) VALUES
+(8, 1, '/backend/files/t3US2GOQs00sWMIxl13I.jpg', 'VIP-Guest', 1, '2025-04-01 11:58:56', '2025-04-01 11:58:56'),
+(12, 2, '/backend/files/YyOfAYVFO9x8Px0EpK6t.jpg', 'VIP', 1, '2025-04-01 12:03:56', '2025-04-01 12:03:56'),
+(15, 6, '/backend/files/SchwxHa0fnywAk6g2zv9.jpg', 'Single room', 1, '2025-04-01 12:09:40', '2025-04-01 12:09:40'),
+(16, 13, '/backend/files/uqg4GTb01gOoRw97yA6I.jpg', 'Twin Room', 1, '2025-04-01 12:09:57', '2025-04-01 12:09:57'),
+(17, 16, '/backend/files/P2qWAYCEDqUJXPi4NAto.jpg', 'Triple Room', 1, '2025-04-01 12:12:56', '2025-04-01 12:12:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_size`
+--
+
+CREATE TABLE `room_size` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(255) DEFAULT NULL,
+  `updated_at` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `room_size`
+--
+
+INSERT INTO `room_size` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Singal', 'singal', 1, '2025-03-31 06:40:50', '2025-03-31 06:40:50'),
+(2, 'Double', 'double', 1, '2025-03-31 06:40:54', '2025-03-31 06:40:54'),
+(3, 'Tripal', 'tripal', 1, '2025-03-31 06:40:58', '2025-03-31 06:40:58'),
+(4, 'Quad', 'quad', 1, '2025-03-31 06:41:01', '2025-03-31 06:41:01'),
+(5, 'Queen', 'queen', 1, '2025-03-31 06:41:05', '2025-03-31 06:41:05'),
+(6, 'King', 'king', 1, '2025-03-31 06:41:09', '2025-03-31 06:41:09'),
+(7, 'Studio', 'studio', 1, '2025-03-31 06:41:15', '2025-03-31 06:41:15'),
+(8, 'Suite', 'suite', 1, '2025-03-31 06:41:21', '2025-03-31 06:41:21'),
+(9, 'Penthouse', 'penthouse', 1, '2025-03-31 06:41:28', '2025-03-31 06:41:28'),
+(10, 'Presidential Suite', 'presidential-suite', 1, '2025-03-31 06:41:34', '2025-03-31 06:41:34'),
+(11, 'Duplex', 'duplex', 1, '2025-03-31 06:41:39', '2025-03-31 06:41:39'),
+(12, 'Others', 'others', 1, '2025-03-31 06:41:46', '2025-03-31 06:41:46'),
+(13, 'Twin', 'twin', 1, '2025-03-31 19:57:48', '2025-03-31 20:54:12'),
+(14, 'Small', 'small', 1, '2025-03-31 21:02:43', '2025-03-31 21:02:43'),
+(15, 'Vip', 'vip', 1, '2025-03-31 23:10:03', '2025-03-31 23:10:03'),
+(16, 'Vip Guest', 'vip-guest', 1, '2025-03-31 23:10:18', '2025-03-31 23:10:18');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rule`
 --
 
@@ -931,7 +1213,7 @@ CREATE TABLE `rule` (
 
 INSERT INTO `rule` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Super Admin', 1, '2024-04-16 10:33:46', '2024-04-16 10:33:46'),
-(2, 'Merchant', 1, '2024-04-16 10:56:15', '2024-04-16 10:56:15'),
+(2, 'Users', 1, '2024-04-16 10:56:15', '2024-04-16 10:56:15'),
 (3, 'Admin', 1, '2024-04-16 10:56:27', '2024-12-06 12:43:05');
 
 -- --------------------------------------------------------
@@ -1116,6 +1398,18 @@ ALTER TABLE `api_key`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bed_type`
+--
+ALTER TABLE `bed_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `booking_type`
+--
+ALTER TABLE `booking_type`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `bulk_address`
 --
 ALTER TABLE `bulk_address`
@@ -1147,6 +1441,12 @@ ALTER TABLE `deposit_request`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `facility_group`
+--
+ALTER TABLE `facility_group`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1171,12 +1471,6 @@ ALTER TABLE `languages`
 -- Indexes for table `merchant_request`
 --
 ALTER TABLE `merchant_request`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `merchant_request_demo`
---
-ALTER TABLE `merchant_request_demo`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1215,6 +1509,36 @@ ALTER TABLE `posts`
 -- Indexes for table `post_category`
 --
 ALTER TABLE `post_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `promocode`
+--
+ALTER TABLE `promocode`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `room`
+--
+ALTER TABLE `room`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `room_facility`
+--
+ALTER TABLE `room_facility`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `room_images`
+--
+ALTER TABLE `room_images`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `room_size`
+--
+ALTER TABLE `room_size`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1262,6 +1586,18 @@ ALTER TABLE `api_key`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `bed_type`
+--
+ALTER TABLE `bed_type`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `booking_type`
+--
+ALTER TABLE `booking_type`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `bulk_address`
 --
 ALTER TABLE `bulk_address`
@@ -1292,6 +1628,12 @@ ALTER TABLE `deposit_request`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `facility_group`
+--
+ALTER TABLE `facility_group`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1314,12 +1656,6 @@ ALTER TABLE `languages`
 --
 ALTER TABLE `merchant_request`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `merchant_request_demo`
---
-ALTER TABLE `merchant_request_demo`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -1350,6 +1686,36 @@ ALTER TABLE `posts`
 --
 ALTER TABLE `post_category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+
+--
+-- AUTO_INCREMENT for table `promocode`
+--
+ALTER TABLE `promocode`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `room`
+--
+ALTER TABLE `room`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `room_facility`
+--
+ALTER TABLE `room_facility`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+
+--
+-- AUTO_INCREMENT for table `room_images`
+--
+ALTER TABLE `room_images`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `room_size`
+--
+ALTER TABLE `room_size`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `rule`

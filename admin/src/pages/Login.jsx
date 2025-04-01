@@ -113,7 +113,8 @@ const Login = () => {
                             </div>
                           )}
                         </div>
-                        <div className="col-md-6">
+                        <br/>
+                        <div className="col-md-6 d-none">
                           <div className="form-check form-switch">
                             <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" />
                             <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Remember Me</label>

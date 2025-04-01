@@ -63,14 +63,14 @@ const Index = () => {
   };
   // Correctly closed useEffect hook
   useEffect(() => {
-    countData();
-    fetchMerchantData();
+  //  countData();
+   // fetchMerchantData();
   }, []);
 
   return (
     <div>
       <Helmet>
-        <title>Dashboard [Payment Getway]</title>
+        <title>Dashboard [Hotel Management]</title>
       </Helmet>
       {/* Start */}
 
@@ -93,7 +93,7 @@ const Index = () => {
                     <div className="card-body">
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
-                          <p className="mb-0 text-white">Today Total Deposit</p>
+                          <p className="mb-0 text-white">Today Total Booking</p>
                           <h4 className="my-1 text-white">{depositCount}</h4>
                         </div>
                         <div id="chart1" />
@@ -107,7 +107,7 @@ const Index = () => {
                     <div className="card-body">
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
-                          <p className="mb-0 text-dark">Today Deposit Amount</p>
+                          <p className="mb-0 text-dark">Today Amount</p>
                           <h4 className="my-1 text-dark">${depositAmt}</h4>
                         </div>
                         <div id="chart4" />
@@ -121,7 +121,7 @@ const Index = () => {
                     <div className="card-body">
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
-                          <p className="mb-0 text-white">Total Merchant</p>
+                          <p className="mb-0 text-white">Total Customer</p>
                           <h4 className="my-1 text-white">{merchantCount}</h4>
                         </div>
                         <div id="chart2" />
@@ -135,7 +135,7 @@ const Index = () => {
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
                           <p className="mb-0 text-white">
-                            Total Wallet Address
+                            Total Rooms
                           </p>
                           <h4 className="my-1 text-white">
                             {bulkAddressCount}
@@ -153,7 +153,7 @@ const Index = () => {
                 <div className="card-header">
                   <div className="d-flex align-items-center">
                     <div>
-                      <h6 className="mb-0">Today Deposit List</h6>
+                      <h6 className="mb-0">Today Booking List</h6>
                     </div>
                   </div>
                 </div>

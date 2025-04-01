@@ -8,47 +8,23 @@ import axios from "/config/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const RoomAdd = () => {
+const PromocodeAdd = () => {
   const [errors, setErrors] = useState({});
   const [name, setName] = useState("");
-  const [status, setStatus] = useState(1);
-  const [roomsize, setRoomSize] = useState([]);
-  const [bedtypes, setBedTypes] = useState([]);
+  const [roomtype, setRoomType] = useState([]);
 
   const token = JSON.parse(sessionStorage.getItem("token"));
 
-  const handleConfigName = (e) => {
-    setName(e.target.value);
-  };
-  const handleConfigStatus = (e) => {
-    setStatus(e.target.value);
-  };
-
-  const getRoomSize = async () => {
+  const getRoomType = async () => {
     try {
-      const response = await axios.get(`/roomsetting/getsRoomSize`, {
+      const response = await axios.get(`/roomsetting/getsRoomTypes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const data = response.data;
       //console.log("API response data:", data); // Debugging: Check API response
-      setRoomSize(data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
-  const getBedTypes = async () => {
-    try {
-      const response = await axios.get(`/roomsetting/getsBetType`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = response.data;
-      //console.log("API response data:", data); // Debugging: Check API response
-      setBedTypes(data);
+      setRoomType(data);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -56,16 +32,11 @@ const RoomAdd = () => {
 
   // From
   const [formData, setFormData] = useState({
-    roomType: "",
-    capacity: "",
-    extraCapacity: "",
-    roomPrice: "",
-    bedCharge: "",
-    roomSize: "",
-    bedNumber: "",
-    bedType: "",
-    roomDescription: "",
-    reserveCondition: "",
+    room_id: "",
+    form_date: "",
+    to_date: "",
+    discount: "",
+    promoCode: "",
     status: "1", // Default value
   });
 
@@ -87,23 +58,17 @@ const RoomAdd = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      console.log("checking.....");
       const token = JSON.parse(sessionStorage.getItem("token"));
       const formPayload = new FormData();
       formPayload.append("id", "");
-      formPayload.append("roomType", formData.roomType);
-      formPayload.append("capacity", formData.capacity);
-      formPayload.append("extraCapacity", formData.extraCapacity);
-      formPayload.append("roomPrice", formData.roomPrice);
-      formPayload.append("bedCharge", formData.bedCharge);
-      formPayload.append("roomSize", formData.roomSize);
-      formPayload.append("bedNumber", formData.bedNumber);
-      formPayload.append("bedType", formData.bedType);
-      formPayload.append("roomDescription", formData.roomDescription);
-      formPayload.append("reserveCondition", formData.reserveCondition);
+      formPayload.append("room_id", formData.room_id);
+      formPayload.append("form_date", formData.form_date);
+      formPayload.append("to_date", formData.to_date);
+      formPayload.append("discount", formData.discount);
+      formPayload.append("promoCode", formData.promoCode);
       formPayload.append("status", formData.status);
 
-      const response = await axios.post("/roomsetting/roomSave", formPayload, {
+      const response = await axios.post("/roomsetting/promoCodeSave", formPayload, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -116,7 +81,7 @@ const RoomAdd = () => {
       });
 
       setFormData({}); // Reset form data
-      navigate("/roomsetting/room-list");
+      navigate("/roomsetting/promocode-list");
     } catch (error) {
       if (error.response && error.response.status === 422) {
         Swal.fire({
@@ -133,22 +98,19 @@ const RoomAdd = () => {
     }
   };
 
-
-  
   const navigate = useNavigate();
   const handleAddNewClick = () => {
-    navigate("/roomsetting/room-list");
+    navigate("/roomsetting/promocode-list");
   };
 
   useEffect(() => {
-    getRoomSize();
-    getBedTypes();
+    getRoomType();
   }, []);
 
   return (
     <>
       <Helmet>
-        <title>Add Room</title>
+        <title>Add Promocode</title>
       </Helmet>
 
       <div>
@@ -161,7 +123,7 @@ const RoomAdd = () => {
           <div className="page-wrapper">
             <div className="page-content">
               <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div className="breadcrumb-title pe-3">Add Room</div>
+                <div className="breadcrumb-title pe-3">Add Promocode</div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
@@ -199,181 +161,97 @@ const RoomAdd = () => {
                         Room Type <span className="text-danger">*</span>
                       </label>
                       <div className="col-sm-9">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="roomType"
-                          placeholder="Room Type"
-                          value={formData.roomType}
-                          onChange={handleChange}
-                        />
-                        {errors.roomType && (
-                          <div style={{ color: "red" }}>{errors.roomType}</div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="row mb-3">
-                      <label className="col-sm-3 col-form-label">
-                        Capacity <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="capacity"
-                          placeholder="5"
-                          value={formData.capacity}
-                          onChange={handleNumericChange}
-                        />
-                        {errors.capacity && (
-                          <div style={{ color: "red" }}>{errors.capacity}</div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="row mb-3">
-                      <label className="col-sm-3 col-form-label">
-                      Extra Capability
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="extraCapacity"
-                          placeholder="YES"
-                          value={formData.extraCapacity}
-                          onChange={handleChange}
-                        />
-                        {errors.extraCapacity && (
-                          <div style={{ color: "red" }}>
-                            {errors.extraCapacity}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="row mb-3">
-                      <label className="col-sm-3 col-form-label">
-                        Room Price <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="roomPrice"
-                          placeholder="0"
-                          value={formData.roomPrice}
-                          onChange={handleNumericChange}
-                        />
-                        {errors.roomPrice && (
-                          <div style={{ color: "red" }}>{errors.roomPrice}</div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="row mb-3">
-                      <label className="col-sm-3 col-form-label">
-                        Bed Charge <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="bedCharge"
-                          placeholder="0"
-                          value={formData.bedCharge}
-                          onChange={handleNumericChange}
-                        />
-                        {errors.bedCharge && (
-                          <div style={{ color: "red" }}>{errors.bedCharge}</div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="row mb-3">
-                      <label className="col-sm-3 col-form-label">
-                        Room Size <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-sm-9">
                         <select
                           className="form-control"
-                          name="roomSize"
-                          value={formData.roomSize}
+                          name="room_id"
+                          value={formData.room_id}
                           onChange={handleChange}
                         >
-                          <option value="">Select Room Size</option>
-                          {roomsize.map((size, index) => (
+                          <option value="">Select Room Type</option>
+                          {roomtype.map((size, index) => (
                             <option key={index} value={size.id}>
                               {size.name}
                             </option>
                           ))}
                         </select>
-                        {errors.roomSize && (
-                          <div style={{ color: "red" }}>{errors.roomSize}</div>
+                        {errors.room_id && (
+                          <div style={{ color: "red" }}>
+                            {errors.room_id}
+                          </div>
                         )}
                       </div>
                     </div>
 
                     <div className="row mb-3">
                       <label className="col-sm-3 col-form-label">
-                        Bed Number <span className="text-danger">*</span>
+                        Form<span className="text-danger">*</span>
+                      </label>
+                      <div className="col-sm-9">
+                        <input
+                          type="date"
+                          className="form-control"
+                          name="form_date"
+                          value={formData.form_date}
+                          onChange={handleChange}
+                        />
+                        {errors.form_date && (
+                          <div style={{ color: "red" }}>{errors.form_date}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="row mb-3">
+                      <label className="col-sm-3 col-form-label">To</label>
+                      <div className="col-sm-9">
+                        <input
+                          type="date"
+                          className="form-control"
+                          name="to_date"
+                          value={formData.to_date}
+                          onChange={handleChange}
+                        />
+                        {errors.to_date && (
+                          <div style={{ color: "red" }}>
+                            {errors.to_date}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="row mb-3">
+                      <label className="col-sm-3 col-form-label">
+                        Discount <span className="text-danger">*</span>
                       </label>
                       <div className="col-sm-9">
                         <input
                           type="text"
                           className="form-control"
-                          name="bedNumber"
-                          placeholder="5"
-                          value={formData.bedNumber}
+                          name="discount"
+                          placeholder="0"
+                          value={formData.discount}
                           onChange={handleNumericChange}
                         />
-                        {errors.capacity && (
-                          <div style={{ color: "red" }}>{errors.bedNumber}</div>
+                        {errors.discount && (
+                          <div style={{ color: "red" }}>{errors.discount}</div>
                         )}
                       </div>
                     </div>
 
                     <div className="row mb-3">
                       <label className="col-sm-3 col-form-label">
-                        Bed Type <span className="text-danger">*</span>
+                        Promo Code <span className="text-danger">*</span>
                       </label>
                       <div className="col-sm-9">
-                        <select
+                        <input
+                          type="text"
                           className="form-control"
-                          name="bedType"
-                          value={formData.bedType}
+                          name="promoCode"
+                          placeholder="0"
+                          value={formData.promoCode}
                           onChange={handleChange}
-                        >
-                          <option value="">Select Bed Type</option>
-                          {bedtypes.map((bedtype, index) => (
-                            <option key={index} value={bedtype.id}>
-                              {bedtype.name}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.bedType && (
-                          <div style={{ color: "red" }}>{errors.bedType}</div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="row mb-3">
-                      <label className="col-sm-3 col-form-label">
-                        Room Description <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-sm-9">
-                        <textarea
-                          className="form-control"
-                          name="roomDescription"
-                          value={formData.roomDescription}
-                          onChange={handleChange}
-                          rows="2"
-                        ></textarea>
-                        {errors.roomDescription && (
-                          <div style={{ color: "red" }}>
-                            {errors.roomDescription}
-                          </div>
+                        />
+                        {errors.promoCode && (
+                          <div style={{ color: "red" }}>{errors.promoCode}</div>
                         )}
                       </div>
                     </div>
@@ -425,4 +303,4 @@ const RoomAdd = () => {
   );
 };
 
-export default RoomAdd;
+export default PromocodeAdd;

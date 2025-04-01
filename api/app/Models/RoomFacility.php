@@ -7,14 +7,14 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use AuthorizesRequests;
 use DB;
-class RoomImages extends Authenticatable
+class RoomFacility extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    public $table = "room_images";
+    public $table = "room_facility";
     protected $fillable = [
-        'room_id',
-        'roomImage',
-        'roomImgDescription',
+        'room_facility_group_id',
+        'name',
+        'slug',
         'status',
     ];
 }

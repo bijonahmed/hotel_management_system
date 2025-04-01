@@ -7,14 +7,16 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use AuthorizesRequests;
 use DB;
-class RoomImages extends Authenticatable
+class PromoCode extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    public $table = "room_images";
+    public $table = "promocode";
     protected $fillable = [
         'room_id',
-        'roomImage',
-        'roomImgDescription',
+        'form_date',
+        'to_date',
+        'discount',
+        'promoCode',
         'status',
     ];
 }

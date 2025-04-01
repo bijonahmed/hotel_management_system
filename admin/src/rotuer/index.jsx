@@ -46,6 +46,15 @@ import RoomList from "../pages/roomsetting/RoomList.jsx";
 import RoomAdd from "../pages/roomsetting/RoomAdd.jsx";
 import RoomEdit from "../pages/roomsetting/RoomEdit.jsx";
 import RoomImagesList from "../pages/roomsetting/RoomImagesList.jsx";
+import PromocodeList from "../pages/roomsetting/PromocodeList.jsx";
+import PromocodeAdd from "../pages/roomsetting/PromocodeAdd.jsx";
+import PromoCodeEdit from "../pages/roomsetting/PromoCodeEdit.jsx";
+import FacilitesGroupList from "../pages/facilites/FacilitesGroupList.jsx";
+import FacilitesGroupAdd from "../pages/facilites/FacilitesGroupAdd.jsx";
+import FacilitesGroupEdit from "../pages/facilites/FacilitesGroupEdit.jsx";
+import FacilitesList from "../pages/facilites/FacilitesList.jsx";
+import FacilitesAdd from "../pages/facilites/FacilitesAdd.jsx";
+import FacilitesEdit from "../pages/facilites/FacilitesEdit.jsx";
 //
 import GeneralCategoryList from "../pages/category/GeneralCategoryList.jsx";
 import GeneralCategoryAdd from "../pages/category/GeneralCategoryAdd.jsx";
@@ -113,6 +122,17 @@ const AppRouter = () => {
       <Route path="/roomsetting/add-room" element={<RoomAdd />} />
       <Route path="/roomsetting/room-edit/:id" element={<RoomEdit />} />
       <Route path="/roomsetting/room-images-list" element={<RoomImagesList />} />
+      <Route path="/roomsetting/promocode-list" element={<PromocodeList />} />
+      <Route path="/roomsetting/promocode-add" element={<PromocodeAdd />} />
+      <Route path="/roomsetting/promocode-edit/:id" element={<PromoCodeEdit />} />
+      {/* FACILITY SETTING */}
+      <Route path="/facilites/facilites-group-list" element={<FacilitesGroupList />} />
+      <Route path="/facilites/facilites-group-add" element={<FacilitesGroupAdd />} />
+      <Route path="/roomsetting/facilites-group-edit/:id" element={<FacilitesGroupEdit />} />
+      <Route path="/facilites/facilites-list" element={<FacilitesList />} />
+      <Route path="/facilites/facilites-add" element={<FacilitesAdd />} />
+      <Route path="/roomsetting/facilites-edit/:id" element={<FacilitesEdit />} />
+
       <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   );

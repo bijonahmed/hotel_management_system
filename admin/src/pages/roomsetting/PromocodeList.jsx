@@ -8,7 +8,7 @@ import LeftSideBarComponent from "../../components/LeftSideBarComponent";
 import Pagination from "../../components/Pagination";
 import axios from "/config/axiosConfig";
 
-const RoomList = () => {
+const PromocodeList = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(1);
@@ -20,13 +20,13 @@ const RoomList = () => {
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const apiUrl = "/roomsetting/roomList";
+  const apiUrl = "/roomsetting/promocodeList";
   const handleSort = () => {
     const sortedData = [...data].sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) {
+      if (a.roomType.toLowerCase() < b.roomType.toLowerCase()) {
         return sortOrder === "asc" ? -1 : 1;
       }
-      if (a.name.toLowerCase() > b.name.toLowerCase()) {
+      if (a.roomType.toLowerCase() > b.roomType.toLowerCase()) {
         return sortOrder === "asc" ? 1 : -1;
       }
       return 0;
@@ -77,11 +77,11 @@ const RoomList = () => {
   };
 
   const handleAddNewClick = () => {
-    navigate("/roomsetting/add-room");
+    navigate("/roomsetting/promocode-add");
   };
 
   const handleEdit = (id) => {
-    navigate(`/roomsetting/room-edit/${id}`);
+    navigate(`/roomsetting/promocode-edit/${id}`);
   };
 
   // Correctly closed useEffect hook
@@ -92,7 +92,7 @@ const RoomList = () => {
   return (
     <>
       <Helmet>
-        <title>Room List</title>
+        <title>Promocode List</title>
       </Helmet>
 
       <div>
@@ -105,7 +105,7 @@ const RoomList = () => {
           <div className="page-wrapper">
             <div className="page-content">
               <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div className="breadcrumb-title pe-3">Room List</div>
+                <div className="breadcrumb-title pe-3">Promocode List</div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
@@ -144,7 +144,7 @@ const RoomList = () => {
                           <div className="searchbar">
                             <input
                               type="text"
-                              placeholder="Search name..."
+                              placeholder="Search Promo Code..."
                               className="form-control"
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
@@ -232,10 +232,11 @@ const RoomList = () => {
                                   )}
                                 </th>
                                 {/* <td>Room Type</td> */}
-                                <td  className="text-center">Room Price</td>
-                                <td  className="text-center">Bed Charge</td>
-                                <td  className="text-center">Bed Number</td>
-                                <td  className="text-center">Capacity</td>
+                                <td className="text-center">From Date</td>
+                                <td className="text-center">To Date</td>
+                                <td className="text-center">Promo Code</td>
+                                <td className="text-center">Discount</td>
+                                <td className="text-center">Promo Status</td>
                                 <th className="text-center">Status</th>
                                 <th className="text-center">Action</th>
                               </tr>
@@ -247,13 +248,37 @@ const RoomList = () => {
                                     <td className="text-center">{item.id}</td>
                                     <td>{item.roomType}</td>
                                     {/* <td>{item.roomType}</td> */}
-                                    <td className="text-center">{item.roomPrice}</td>
-                                    <td className="text-center">{item.bedCharge}</td>
-                                    <td className="text-center">{item.bedNumber}</td>
-                                    <td className="text-center">{item.capacity}</td>
-                                    <td className="text-center"> {item.status}</td>
                                     <td className="text-center">
-                                      <a href="#" onClick={() => handleEdit(item.id)}>
+                                      {item.form_date}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.to_date}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.promoCode}
+                                    </td>
+
+                                    <td className="text-center">
+                                      {item.discount}
+                                    </td>
+                                    <td
+                                      className={`text-center text-white p-2 ${
+                                        item.prostatus === "Expired"
+                                          ? "bg-danger"
+                                          : "bg-primary"
+                                      }`}
+                                    >
+                                      {item.prostatus}
+                                    </td>
+                                    <td className="text-center">
+                                      {" "}
+                                      {item.status}
+                                    </td>
+                                    <td className="text-center">
+                                      <a
+                                        href="#"
+                                        onClick={() => handleEdit(item.id)}
+                                      >
                                         <i className="lni lni-pencil-alt"></i>
                                       </a>
                                     </td>
@@ -296,4 +321,4 @@ const RoomList = () => {
   );
 };
 
-export default RoomList;
+export default PromocodeList;

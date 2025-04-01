@@ -11,11 +11,11 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Public\PublicController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Deposits\DepositController;
-
-
+use App\Http\Controllers\Setting\LeftSideMenuController;
 use App\Http\Controllers\UnauthenticatedController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\RoomSetting\RoomSettingController;
+use App\Http\Controllers\Facility\FacilityController;
 use App\Http\Controllers\Game\GameController as Gcontroller;
 
 Route::get('/clear-cache', function () {
@@ -57,7 +57,6 @@ Route::group([
     'prefix' => 'public'
 ], function () {
     Route::get('/getLogApiReport', [PublicController::class, 'getLogApiReport']);
-    Route::get('/dynamicLeftSidebarmenu', [PublicController::class, 'dynamicMenuLeftSidebar']);
     Route::get('/filterGames', [PublicController::class, 'filterGames']);
     Route::post('/getMerchentRequest', [PublicController::class, 'getMerchentRequest']);
     Route::get('/getApiReport', [PublicController::class, 'getTronApiReport']);
@@ -134,14 +133,19 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
     Route::group([
         'prefix' => 'roomsetting'
     ], function () {
-
+        Route::get('promocodeList', [RoomSettingController::class, 'promocodeList']);
+        Route::post('promoCodeSave', [RoomSettingController::class, 'promoCodeSave']);
+        Route::get('delteRoomImages', [RoomSettingController::class, 'delteRoomImages']);
         Route::post('roomImagesSave', [RoomSettingController::class, 'roomImagesSave']);
         Route::get('roomList', [RoomSettingController::class, 'roomList']);
         Route::post('roomSave', [RoomSettingController::class, 'roomSave']);
         Route::get('roomSizeList', [RoomSettingController::class, 'roomSizeList']);
         Route::get('getsRoomSize', [RoomSettingController::class, 'getsRoomSize']);
+        Route::get('getsRoomTypes', [RoomSettingController::class, 'getsRoomTypes']);
+        Route::get('getsRoomImages', [RoomSettingController::class, 'getsRoomImages']);
         Route::get('getsBetType', [RoomSettingController::class, 'getsBetType']);
         Route::post('roomSizeSave', [RoomSettingController::class, 'roomSizeSave']);
+        Route::get('checkPromoCodeRow', [RoomSettingController::class, 'checkPromoCodeRow']);
         Route::get('checkRoomSizeRow', [RoomSettingController::class, 'checkRoomSizeRow']);
         Route::post('bedtypeSave', [RoomSettingController::class, 'bedtypeSave']);
         Route::get('bedtypelist', [RoomSettingController::class, 'bedtypelist']);
@@ -150,6 +154,22 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::post('bookingTypeSave', [RoomSettingController::class, 'bookingTypeSave']);
         Route::get('bookingTypeList', [RoomSettingController::class, 'bookingTypeList']);
         Route::get('checkBookingTypeRow', [RoomSettingController::class, 'checkBookingTypeRow']);
+    });
+
+
+    Route::group([
+        'prefix' => 'roomfacility'
+    ], function () {
+
+
+        Route::get('getsFacilityGruop', [FacilityController::class, 'getsFacilityGruop']);
+        Route::post('roomFacilitySave', [FacilityController::class, 'roomFacilitySave']);
+        Route::get('roomfacility_group_list', [FacilityController::class, 'roomfacilityGroupList']);
+        Route::get('roomfacility_list', [FacilityController::class, 'roomfacility_list']);
+        Route::post('roomFacilityGroupSave', [FacilityController::class, 'roomFacilityGroupSave']);
+        Route::get('checkRoomFacilityGroupRow', [FacilityController::class, 'checkRoomFacilityGroupRow']);
+        Route::get('checkRoomFacilityRow', [FacilityController::class, 'checkRoomFacilityRow']);
+       
     });
 
 
@@ -166,6 +186,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
     Route::group([
         'prefix' => 'setting'
     ], function () {
+        Route::get('/dynamicLeftSidebarmenu', [LeftSideMenuController::class, 'dynamicMenuLeftSidebar']);
         Route::post('insertLanguageAdd', [SettingController::class, 'insertLanguageAdd']);
         Route::post('saveAPIKey', [SettingController::class, 'saveAPIKey']);
         Route::post('saveMerchantBulkAddress', [SettingController::class, 'saveMerchantBulkAddress']);

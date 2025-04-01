@@ -11,30 +11,24 @@ import "../../components/css/modal.css";
 import Swal from "sweetalert2";
 
 const RoomImagesList = () => {
-  const [data, setData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState(1);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [roomimages, setRoomImages] = useState([]);
   const navigate = useNavigate();
-  const [sortOrder, setSortOrder] = useState("asc");
   const [showModal, setShowModal] = useState(false);
   const [roomsize, setRoomSize] = useState([]);
   const token = JSON.parse(sessionStorage.getItem("token"));
+  const [errors, setErrors] = useState({});
+  const [preview, setPreview] = useState(null);
 
   const [formData, setFormData] = useState({
-    room_size_id: "",
+    room_id: "",
     roomImgDescription: "",
     status: 1,
     roomImage: null,
   });
 
-  const getRoomSize = async () => {
+  const getRoomType = async () => {
     try {
-      const response = await axios.get(`/roomsetting/getsRoomSize`, {
+      const response = await axios.get(`/roomsetting/getsRoomTypes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -47,13 +41,63 @@ const RoomImagesList = () => {
     }
   };
 
-  const [errors, setErrors] = useState({});
-  const [preview, setPreview] = useState(null);
+  const getRoomImages = async () => {
+    try {
+      const response = await axios.get(`/roomsetting/getsRoomImages`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const imagesData = response.data;
+      // console.log("API response imagesData:", imagesData); // Debugging: Check API response
+      setRoomImages(imagesData);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleDelete = async (id) => {
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        const token = JSON.parse(sessionStorage.getItem("token"));
+  
+        const response = await axios.get(`/roomsetting/delteRoomImages`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { id: id },
+        });
+        getRoomImages();
+        const userData = response.data;
+        setFormData((prev) => ({
+          ...prev,
+          ...userData,
+        }));
+  
+        Swal.fire("Deleted!", "Your data has been deleted.", "success");
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        Swal.fire("Error!", "Something went wrong.", "error");
+      }
+    }
+  };
+  
 
   // ✅ Handle Image Upload
   const handleImageChange = (e) => {
@@ -86,13 +130,12 @@ const RoomImagesList = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      console.log("checking.....");
       const token = JSON.parse(sessionStorage.getItem("token"));
       const formPayload = new FormData();
       formPayload.append("id", "");
-      formPayload.append("room_size_id", formData.room_size_id);
+      formPayload.append("room_id", formData.room_id);
       formPayload.append("roomImgDescription", formData.roomImgDescription);
-      formPayload.append("status", formData.status);
+      formPayload.append("status", 1);
 
       // ✅ Append Image File
       if (formData.roomImage) {
@@ -115,8 +158,16 @@ const RoomImagesList = () => {
         title: "Your data has been successful saved.",
       });
 
-      setFormData({}); // Reset form data
-      navigate("/roomsetting/room-images-list");
+      setShowModal(false); // Open modal on button click
+      getRoomImages();
+
+      setFormData({
+        room_id: "",
+        roomImgDescription: "",
+        roomImage: null,
+      });
+
+      //navigate("/roomsetting/room-images-list");
     } catch (error) {
       if (error.response && error.response.status === 422) {
         Swal.fire({
@@ -139,7 +190,8 @@ const RoomImagesList = () => {
 
   // Correctly closed useEffect hook
   useEffect(() => {
-    getRoomSize();
+    getRoomType();
+    getRoomImages();
   }, []);
 
   return (
@@ -191,7 +243,24 @@ const RoomImagesList = () => {
               <div className="card radius-10">
                 <div className="card-body">
                   <div className="container-fluid">
-                    ===================================
+                    <div className="row">
+                      {roomimages.map((rimages, index) => (
+                        <div className="col-3 mb-3" key={index}>
+                          <div className="card">
+                            <img
+                              src={rimages.roomImage} // Ensure this is a valid image URL
+                              alt="Room"
+                              className="card-img-top"
+                              style={{ height: "150px", objectFit: "cover" }} // Adjust as needed
+                            />
+                            <div className="card-body text-center">
+                              <span className="card-text">{rimages.roomType}</span><br/>
+                              <i className="fas fa-trash text-danger" style={{ cursor: "pointer" }}  onClick={() => handleDelete(rimages.id)}></i> {/* Font Awesome Trash Icon */}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -214,25 +283,25 @@ const RoomImagesList = () => {
                   <form onSubmit={handleFormSubmit}>
                     <div className="row mb-3 mt-3">
                       <label className="col-sm-3 col-form-label">
-                        Room Size <span className="text-danger">*</span>
+                        Room Type <span className="text-danger">*</span>
                       </label>
                       <div className="col-sm-9">
                         <select
                           className="form-control"
-                          name="room_size_id"
-                          value={formData.room_size_id}
+                          name="room_id"
+                          value={formData.room_id}
                           onChange={handleChange}
                         >
-                          <option value="">Select Room Size</option>
+                          <option value="">Select Room Type</option>
                           {roomsize.map((size, index) => (
                             <option key={index} value={size.id}>
                               {size.name}
                             </option>
                           ))}
                         </select>
-                        {errors.room_size_id && (
+                        {errors.room_id && (
                           <div style={{ color: "red" }}>
-                            {errors.room_size_id}
+                            {errors.room_id}
                           </div>
                         )}
                       </div>
@@ -266,7 +335,6 @@ const RoomImagesList = () => {
                       </div>
                     </div>
 
-
                     <div className="row mb-3">
                       <label className="col-sm-3 col-form-label">
                         Room Description
@@ -274,7 +342,7 @@ const RoomImagesList = () => {
                       <div className="col-sm-9">
                         <textarea
                           className="form-control"
-                          name="roomDescription"
+                          name="roomImgDescription"
                           value={formData.roomImgDescription}
                           onChange={handleChange}
                           rows="2"
@@ -287,8 +355,7 @@ const RoomImagesList = () => {
                       </div>
                     </div>
 
-
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Status <span className="text-danger">*</span>
                       </label>
