@@ -7,7 +7,6 @@ import GuestNavbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
-import LeftSideBarComponent from "../components/LeftSideBarComponent";
 import { LanguageContext } from "../context/LanguageContext";
 import AuthUser from "../components/AuthUser";
 
@@ -77,7 +76,6 @@ const Index = () => {
       <div>
         <div className="wrapper">
           {/*sidebar wrapper */}
-          <LeftSideBarComponent />
           {/*end sidebar wrapper */}
           {/*start header */}
           <header>

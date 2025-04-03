@@ -242,7 +242,7 @@ const RoomEdit = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Extra Capability
                       </label>
@@ -282,7 +282,7 @@ const RoomEdit = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Bed Charge <span className="text-danger">*</span>
                       </label>
@@ -301,7 +301,7 @@ const RoomEdit = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Room Size <span className="text-danger">*</span>
                       </label>
@@ -325,7 +325,7 @@ const RoomEdit = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Bed Number <span className="text-danger">*</span>
                       </label>

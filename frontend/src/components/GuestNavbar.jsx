@@ -10,119 +10,76 @@ import $ from 'jquery';
 
 const Navbar = () => {
 
-  const { getToken, token, logout } = AuthUser();
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("/public/parentChildCategory");
-      setCategories(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-
-  useEffect(() => {
-    //fetchData();
-
-  }, []);
-
-  useEffect(() => {
-    $('.header-box__mobile-menu').on('click', function () {
-      $('.header-content').toggleClass('show');
-      console.log('Toggled menu visibility:', $('.header-content').hasClass('show'));
-    });
-  }, []);
-
-
-
-
-  const logoutUser = async () => {
-    if (token) {
-      await logout();
-      navigate('/login');
-    }
-  };
+  // useEffect(() => {
+  //   $('.header-box__mobile-menu').on('click', function () {
+  //     $('.header-content').toggleClass('show');
+  //     console.log('Toggled menu visibility:', $('.header-content').hasClass('show'));
+  //   });
+  // }, []);
 
   return (
     <>
-
-
       {/* header  */}
-      <div className="header_main sticky-top z-1">
-        <nav className="navbar navbar-expand-lg bg-body-tertiary ">
-          <div className="container">
-            <Link className="navbar-brand" to="/"><img src="/images/logo.png" className="img-fluid" /></Link>
-            {/* =========== */}
-            <div className="offcanvas offcanvas-start " data-bs-backdrop="static" tabIndex={-1} id="staticBackdrop" aria-labelledby="staticBackdropLabel">
-              <div className="offcanvas-header text-end">
-                <button type="button" className="btn_close ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
-                  <i className="fa-solid fa-x" />
-                </button>
+      <div className="container-fluid bg-dark px-0">
+      <div className="row gx-0">
+        <div className="col-lg-3 bg-dark d-none d-lg-block">
+          <Link to="/" className="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+            <h1 className="m-0 text-primary text-uppercase">Hotelier</h1>
+          </Link>
+        </div>
+        <div className="col-lg-9">
+          <div className="row gx-0 bg-white d-none d-lg-flex">
+            <div className="col-lg-7 px-5 text-start">
+              <div className="h-100 d-inline-flex align-items-center py-2 me-4">
+                <i className="fa fa-envelope text-primary me-2" />
+                <p className="mb-0">info@example.com</p>
               </div>
-              <div className="offcanvas-body">
-                <div className="d-flex aligh-items-center w-100  h-100 justify-content-between">
-                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    {token ? (
-                      <li className="nav-item">
-                        <Link className="nav-link active" aria-current="page" to="/dashboard">
-                          My Dashboard
-                        </Link>
-                      </li>
-                    ) : null}
-
-
-                    <li className="nav-item">
-                      <Link className="nav-link active" aria-current="page" to="/pdf/margepdf">Merge Pdf</Link>
-                    </li>
-
-                    <li className="nav-item">
-                      <Link className="nav-link active" aria-current="page" to="/pdf/splitpdf">Spilt Pdf</Link>
-                    </li>
-
-                    <li className="nav-item">
-                      <Link className="nav-link active" aria-current="page" to="/about">About us</Link>
-                    </li>
-
-
-                    <li className="nav-item">
-                      <Link className="nav-link active" aria-current="page" to="/pricing">Pricing</Link>
-                    </li>
-
-
-                  </ul>
-                  <div className="header-content__buttons d-none d-lg-flex">
-
-                    {token ? (
-                      <><Link className="header-content__buttons-item" id="bLogin1" to="/users/profile"><span className="header-content__buttons-item-text"><i className="fa fa-user" />&nbsp;Profile&nbsp;&nbsp;</span></Link>
-                        <Link className="header-content__buttons-item" id="bLogin1" to="#" onClick={logoutUser}><span className="header-content__buttons-item-text"><i className="fa fa-sign-out" />&nbsp;Logout</span></Link></>) : (
-                      <><Link className="header-content__buttons-item" id="bLogin2" to="/login"><span className="header-content__buttons-item-text">Log In</span>&nbsp;&nbsp;</Link>
-                        <Link className="header-content__buttons-item" id="bSignup" to="/signup"><span className="header-content__buttons-item-text">Sign Up</span></Link></>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="header-content__buttons d-flex d-lg-none ">
-                {token ? (
-                  <Link className="header-content__buttons-item" id="bLogin" to="#" onClick={logoutUser}><span className="header-content__buttons-item-text"><i className="fa fa-sign-out" />&nbsp;Logout</span></Link>) : (
-                  <><Link className="header-content__buttons-item" id="bLogin" to="/login"><span className="header-content__buttons-item-text">Log In</span></Link>
-                    <Link className="header-content__buttons-item" id="bSignup" to="/login"><span className="header-content__buttons-item-text">Sign Up</span></Link></>)}
+              <div className="h-100 d-inline-flex align-items-center py-2">
+                <i className="fa fa-phone-alt text-primary me-2" />
+                <p className="mb-0">+012 345 6789</p>
               </div>
             </div>
-            <button className="btn btn_menu navbar-toggler text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
-              <i className="fa-solid fa-bars" />
-            </button>
+            <div className="col-lg-5 px-5 text-end">
+              <div className="d-inline-flex align-items-center py-2">
+                <a className="me-3" href="#"><i className="fab fa-facebook-f" /></a>
+                <a className="me-3" href="#"><i className="fab fa-twitter" /></a>
+                <a className="me-3" href="#"><i className="fab fa-linkedin-in" /></a>
+                <a className="me-3" href="#"><i className="fab fa-instagram" /></a>
+                <a href="#"><i className="fab fa-youtube" /></a>
+              </div>
+            </div>
           </div>
-        </nav>
+          <nav className="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
+            <a href="index.html" className="navbar-brand d-block d-lg-none">
+              <h1 className="m-0 text-primary text-uppercase">Hotelier</h1>
+            </a>
+            <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+              <span className="navbar-toggler-icon" />
+            </button>
+            <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+              <div className="navbar-nav mr-auto py-0">
+                <a href="index.html" className="nav-item nav-link active">Home</a>
+                <a href="about.html" className="nav-item nav-link">About</a>
+                <a href="service.html" className="nav-item nav-link">Services</a>
+                <a href="room.html" className="nav-item nav-link">Rooms</a>
+                <div className="nav-item dropdown">
+                  <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                  <div className="dropdown-menu rounded-0 m-0">
+                    <a href="booking.html" className="dropdown-item">Booking</a>
+                    <a href="team.html" className="dropdown-item">Our Team</a>
+                    <a href="testimonial.html" className="dropdown-item">Testimonial</a>
+                  </div>
+                </div>
+                <a href="contact.html" className="nav-item nav-link">Contact</a>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
+    </div>
       {/* ------------- Header end ----------------  */}
-
-
-
-
-
     </>
   );
 };

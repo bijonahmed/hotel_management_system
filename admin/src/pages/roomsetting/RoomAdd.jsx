@@ -11,18 +11,9 @@ import Swal from "sweetalert2";
 const RoomAdd = () => {
   const [errors, setErrors] = useState({});
   const [name, setName] = useState("");
-  const [status, setStatus] = useState(1);
   const [roomsize, setRoomSize] = useState([]);
   const [bedtypes, setBedTypes] = useState([]);
-
   const token = JSON.parse(sessionStorage.getItem("token"));
-
-  const handleConfigName = (e) => {
-    setName(e.target.value);
-  };
-  const handleConfigStatus = (e) => {
-    setStatus(e.target.value);
-  };
 
   const getRoomSize = async () => {
     try {
@@ -38,6 +29,7 @@ const RoomAdd = () => {
       console.error("Error fetching user data:", error);
     }
   };
+
 
   const getBedTypes = async () => {
     try {
@@ -133,8 +125,6 @@ const RoomAdd = () => {
     }
   };
 
-
-  
   const navigate = useNavigate();
   const handleAddNewClick = () => {
     navigate("/roomsetting/room-list");
@@ -222,7 +212,7 @@ const RoomAdd = () => {
                           type="text"
                           className="form-control"
                           name="capacity"
-                          placeholder="5"
+                          placeholder="Number of person"
                           value={formData.capacity}
                           onChange={handleNumericChange}
                         />
@@ -232,9 +222,9 @@ const RoomAdd = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
-                      Extra Capability
+                        Extra Capability
                       </label>
                       <div className="col-sm-9">
                         <input
@@ -272,7 +262,7 @@ const RoomAdd = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Bed Charge <span className="text-danger">*</span>
                       </label>
@@ -291,7 +281,7 @@ const RoomAdd = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Room Size <span className="text-danger">*</span>
                       </label>
@@ -315,7 +305,7 @@ const RoomAdd = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row mb-3 d-none">
                       <label className="col-sm-3 col-form-label">
                         Bed Number <span className="text-danger">*</span>
                       </label>
@@ -377,6 +367,8 @@ const RoomAdd = () => {
                         )}
                       </div>
                     </div>
+
+                    
 
                     <div className="row mb-3">
                       <label className="col-sm-3 col-form-label">

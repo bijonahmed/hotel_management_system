@@ -133,6 +133,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
     Route::group([
         'prefix' => 'roomsetting'
     ], function () {
+        Route::post('roomFacilitiesSave', [RoomSettingController::class, 'roomFacilitiesSave']);
         Route::get('promocodeList', [RoomSettingController::class, 'promocodeList']);
         Route::post('promoCodeSave', [RoomSettingController::class, 'promoCodeSave']);
         Route::get('delteRoomImages', [RoomSettingController::class, 'delteRoomImages']);
@@ -154,6 +155,8 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::post('bookingTypeSave', [RoomSettingController::class, 'bookingTypeSave']);
         Route::get('bookingTypeList', [RoomSettingController::class, 'bookingTypeList']);
         Route::get('checkBookingTypeRow', [RoomSettingController::class, 'checkBookingTypeRow']);
+        Route::get('checkselectedfacilities', [RoomSettingController::class, 'checkselectedfacilities']);
+        Route::post('deleteSelectedFacilities', [RoomSettingController::class, 'deleteSelectedFacilities']);
     });
 
 
@@ -161,13 +164,13 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         'prefix' => 'roomfacility'
     ], function () {
 
-
         Route::get('getsFacilityGruop', [FacilityController::class, 'getsFacilityGruop']);
         Route::post('roomFacilitySave', [FacilityController::class, 'roomFacilitySave']);
         Route::get('roomfacility_group_list', [FacilityController::class, 'roomfacilityGroupList']);
         Route::get('roomfacility_list', [FacilityController::class, 'roomfacility_list']);
         Route::post('roomFacilityGroupSave', [FacilityController::class, 'roomFacilityGroupSave']);
         Route::get('checkRoomFacilityGroupRow', [FacilityController::class, 'checkRoomFacilityGroupRow']);
+        Route::get('checkFacilities', [FacilityController::class, 'checkFacilities']);
         Route::get('checkRoomFacilityRow', [FacilityController::class, 'checkRoomFacilityRow']);
        
     });

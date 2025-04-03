@@ -5,7 +5,6 @@ import GuestNavbar from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import axios from "/config/axiosConfig";
-import LeftSideBarComponent from "../components/LeftSideBarComponent";
 import { LanguageContext } from "../context/LanguageContext";
 const Signup = () => {
   const { content } = useContext(LanguageContext);
@@ -84,7 +83,7 @@ const Signup = () => {
 
       <GuestNavbar />
       <div className="main_content">
-        <LeftSideBarComponent />
+      
         <div className="main_section">
           {/* banner section start here  */}
           <div className="container-fluid">

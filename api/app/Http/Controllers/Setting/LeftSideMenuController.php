@@ -43,8 +43,8 @@ class LeftSideMenuController extends Controller
                 'icon' => 'bx bx-category',
                 'submenu' => [
                     ['label' => 'Bed Type List', 'path' => '/roomsetting/bed-type-list', 'icon' => 'bx bx-radio-circle'],
-                    ['label' => 'Booking Type List', 'path' => '/roomsetting/booking-type-list', 'icon' => 'bx bx-radio-circle'],
-                    ['label' => 'Room Size', 'path' => '/roomsetting/room-size-list', 'icon' => 'bx bx-radio-circle'],
+                   // ['label' => 'Booking Type List', 'path' => '/roomsetting/booking-type-list', 'icon' => 'bx bx-radio-circle'],
+                   // ['label' => 'Room Size', 'path' => '/roomsetting/room-size-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Room List', 'path' => '/roomsetting/room-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Room Images', 'path' => '/roomsetting/room-images-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Promocode List', 'path' => '/roomsetting/promocode-list', 'icon' => 'bx bx-radio-circle'],

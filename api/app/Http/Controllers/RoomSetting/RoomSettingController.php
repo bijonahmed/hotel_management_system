@@ -8,8 +8,10 @@ use App\Models\BookingType;
 use App\Models\Categorys;
 use App\Models\PromoCode;
 use App\Models\Room;
+use App\Models\RoomFacility;
 use App\Models\RoomImages;
 use App\Models\RoomSize;
+use App\Models\SelectedRoomFacility;
 use App\Models\User;
 use App\Rules\MatchOldPassword;
 use Auth;
@@ -17,10 +19,10 @@ use Carbon\Carbon;
 use DB;
 use Helper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Validator;
-use Illuminate\Support\Facades\File;
 
 class RoomSettingController extends Controller
 {
@@ -67,6 +69,64 @@ class RoomSettingController extends Controller
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function roomFacilitiesSave(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'room_id'                   => 'required',
+            'room_facility_group_id'    => 'required',
+            'status'                    => 'required',
+        ], [
+            'room_id.required'                      => 'Please select a room.',
+            'room_facility_group_id.required'       => 'Please select facilities group',
+            'status.required'                       => 'Please select the room status.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $chkPoint = RoomFacility::where('room_facility_group_id', $request->room_facility_group_id)->get();
+        // Get existing records in one query
+        $existingRecords = SelectedRoomFacility::where('room_id', $request->room_id)
+            ->whereIn('facilities_id', $chkPoint->pluck('id'))
+            ->whereIn('room_facility_group_id', $chkPoint->pluck('room_facility_group_id'))
+            ->get()
+            ->keyBy(fn($item) => $item->facilities_id . '_' . $item->room_facility_group_id);
+
+        $arryData = [];
+        foreach ($chkPoint as $v) {
+            $key = $v->id . '_' . $v->room_facility_group_id;
+            // ✅ Skip if facilities_id is empty
+            if (empty($v->id)) {
+                continue;
+            }
+            if (!isset($existingRecords[$key])) {
+                $arryData[] = [
+                    'room_id'                => $request->room_id,
+                    'facilities_id'          => $v->id,
+                    'room_facility_group_id' => $v->room_facility_group_id,
+                    'user_id'                => $this->userid,
+                    'status'                 => $request->status,
+                    'created_at'             => now(),
+                    'updated_at'             => now(),
+                ];
+            }
+        }
+        // Insert only if new records exist
+        if (!empty($arryData)) {
+            SelectedRoomFacility::insert($arryData);
+            return response()->json([
+                'success' => 'Facilities added successfully!',
+            ], 200);
+        }
+        // If no new facilities are added
+        return response()->json([
+            'message' => 'No new facilities were added.',
+        ], 200);
+
+        return response()->json($response);
     }
 
     public function roomImagesSave(Request $request)
@@ -188,9 +248,9 @@ class RoomSettingController extends Controller
                 'roomType'           => 'required',
                 'capacity'           => 'required',
                 'roomPrice'          => 'required',
-                'bedCharge'          => 'required',
-                'roomSize'           => 'required',
-                'bedNumber'          => 'required',
+                //'bedCharge'        => 'required',
+                //'roomSize'         => 'required',
+                //'bedNumber'        => 'required',
                 'bedType'            => 'required',
                 'roomDescription'    => 'required',
                 'status'             => 'required',
@@ -200,9 +260,9 @@ class RoomSettingController extends Controller
                 'roomType.unique'          => 'Room Type must be unique.',
                 'capacity.required'        => 'Capacity is required.',
                 'roomPrice.required'       => 'Room Price is required.',
-                'bedCharge.required'       => 'Bed Charge is required.',
-                'roomSize.required'        => 'Room Size is required.',
-                'bedNumber.required'       => 'Bed Number is required.',
+                //'bedCharge.required'     => 'Bed Charge is required.',
+                //'roomSize.required'      => 'Room Size is required.',
+                //'bedNumber.required'     => 'Bed Number is required.',
                 'bedType.required'         => 'Bed Type is required.',
                 'roomDescription.required' => 'Room Description is required.',
                 'status.required'          => 'Status is required.',
@@ -217,9 +277,9 @@ class RoomSettingController extends Controller
             'roomType'                  => $request->roomType,
             'capacity'                  => $request->capacity,
             'extraCapacity'             => !empty($request->extraCapacity) ? $request->extraCapacity : "",
-            'bedCharge'                 => $request->bedCharge,
-            'room_size_id'              => $request->roomSize,
-            'bedNumber'                 => $request->bedNumber,
+            'bedCharge'                 => !empty($request->bedCharge) ? $request->bedCharge : "",
+            'room_size_id'              => !empty($request->roomSize) ? $request->roomSize : "",
+            'bedNumber'                 => !empty($request->bedNumber) ? $request->bedNumber : "",
             'roomPrice'                 => $request->roomPrice,
             'bed_type_id'               => $request->bedType,
             'roomDescription'           => $request->roomDescription,
@@ -273,10 +333,6 @@ class RoomSettingController extends Controller
         ];
         return response()->json($response);
     }
-
-
-
-
 
 
     public function bedtypeSave(Request $request)
@@ -575,7 +631,6 @@ class RoomSettingController extends Controller
     {
         try {
             $data = RoomSize::where('status', 1)->select('id', 'name')->get();
-
             if ($data->isEmpty()) {
                 return response()->json(['message' => 'No room sizes found'], 404);
             }
@@ -592,7 +647,6 @@ class RoomSettingController extends Controller
     {
         try {
             $data = Room::where('status', 1)->get();
-
             if ($data->isEmpty()) {
                 return response()->json(['message' => 'No room sizes found'], 404);
             }
@@ -608,7 +662,6 @@ class RoomSettingController extends Controller
     {
         try {
             $allImages = RoomImages::where('status', 1)->get();
-
             $data = [];
             foreach ($allImages as $key => $v) {
                 $chkRoomType = Room::where('id', $v->room_id)->first();
@@ -629,7 +682,6 @@ class RoomSettingController extends Controller
     {
         try {
             $data = BedType::where('status', 1)->select('id', 'name')->get();
-
             if ($data->isEmpty()) {
                 return response()->json(['message' => 'No room sizes found'], 404);
             }
@@ -639,6 +691,43 @@ class RoomSettingController extends Controller
         }
     }
 
+    public function deleteSelectedFacilities(Request $request)
+    {
+        //dd($request->all());
+        $ids = $request->ids;
+        try {
+            if (empty($ids) || !is_array($ids)) {
+                return response()->json(['message' => 'No facilities selected'], 400);
+            }
+            $deleted = SelectedRoomFacility::whereIn('id', $ids)->delete();
+            if ($deleted) {
+                return response()->json(['message' => 'Facilities deleted successfully'], 200);
+            } else {
+                return response()->json(['message' => 'No facilities found'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function checkselectedfacilities(Request $request)
+    {
+        try {
+            $data = SelectedRoomFacility::where('room_id', $request->id)
+                ->select('select_room_facilities.id', 'facility_group.name as facility_group_name', 'room.roomType as room_name', 'room_facility.name as facilities_name')
+                ->leftJoin('facility_group', 'facility_group.id', '=', 'select_room_facilities.room_facility_group_id')
+                ->leftJoin('room', 'room.id', '=', 'select_room_facilities.room_id')
+                ->leftJoin('room_facility', 'room_facility.id', '=', 'select_room_facilities.facilities_id')
+                ->orderby('id', 'desc')
+                ->get();
+            if ($data->isEmpty()) {
+                return response()->json(['message' => 'No room sizes found'], 404);
+            }
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
 
 

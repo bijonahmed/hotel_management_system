@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import axios from "/config/axiosConfig";
 import Footer from "../components/Footer";
 
-import LeftSideBarComponent from "../components/LeftSideBarComponent";
+
 const Forgetpassword = () => {
 
   return (
@@ -22,8 +22,6 @@ const Forgetpassword = () => {
       <div>
         <GuestNavbar />
         <div className="main_content">
-          <LeftSideBarComponent />
-
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-12">

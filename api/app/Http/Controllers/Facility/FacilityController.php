@@ -46,7 +46,7 @@ class FacilityController extends Controller
 
         // Apply unique validation **only when creating a new record**
         if (empty($request->id)) {
-            $rules['name']                     = 'required|unique:room_facility,name';
+            $rules['name'] = 'required|unique:room_facility,name,NULL,id,room_facility_group_id,' . $request->room_facility_group_id;
         }
 
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->input('name'))));
@@ -126,6 +126,21 @@ class FacilityController extends Controller
         try {
             $id   = $request->id ?? "";
             $data = FacilityGroup::where('id', $id)->first();
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+     public function checkFacilities(Request $request)
+    {
+
+        //dd($request->room_facility_group_id);
+
+        try {
+            $id   = $request->room_facility_group_id ?? "";
+            $data = RoomFacility::where('room_facility_group_id', $id)->get();
             return response()->json($data);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -242,7 +257,6 @@ class FacilityController extends Controller
     {
         try {
             $data = FacilityGroup::where('status', 1)->get();
-
             if ($data->isEmpty()) {
                 return response()->json(['message' => 'No room sizes found'], 404);
             }
@@ -251,4 +265,6 @@ class FacilityController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    
 }

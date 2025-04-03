@@ -83,7 +83,11 @@ const RoomList = () => {
   const handleEdit = (id) => {
     navigate(`/roomsetting/room-edit/${id}`);
   };
+  const handleAddFacilities = (id) => {
+    navigate(`/roomsetting/room-facilities-edit/${id}`);
+  };
 
+  
   // Correctly closed useEffect hook
   useEffect(() => {
     fetchData();
@@ -233,8 +237,6 @@ const RoomList = () => {
                                 </th>
                                 {/* <td>Room Type</td> */}
                                 <td  className="text-center">Room Price</td>
-                                <td  className="text-center">Bed Charge</td>
-                                <td  className="text-center">Bed Number</td>
                                 <td  className="text-center">Capacity</td>
                                 <th className="text-center">Status</th>
                                 <th className="text-center">Action</th>
@@ -248,13 +250,14 @@ const RoomList = () => {
                                     <td>{item.roomType}</td>
                                     {/* <td>{item.roomType}</td> */}
                                     <td className="text-center">{item.roomPrice}</td>
-                                    <td className="text-center">{item.bedCharge}</td>
-                                    <td className="text-center">{item.bedNumber}</td>
                                     <td className="text-center">{item.capacity}</td>
                                     <td className="text-center"> {item.status}</td>
                                     <td className="text-center">
-                                      <a href="#" onClick={() => handleEdit(item.id)}>
-                                        <i className="lni lni-pencil-alt"></i>
+                                      <a href="#" onClick={() => handleEdit(item.id)} className="mx-1">
+                                        <i className="lni lni-pencil-alt"></i> Edit ||
+                                      </a>
+                                      <a href="#" onClick={() => handleAddFacilities(item.id)} className="mx-2">
+                                      <i className="lni lni-apartment"></i> Add Facilities
                                       </a>
                                     </td>
                                   </tr>
