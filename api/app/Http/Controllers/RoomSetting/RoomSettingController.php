@@ -484,6 +484,21 @@ class RoomSettingController extends Controller
     }
 
 
+    public function filterRoomImage(Request $request)
+        {
+            $allImages = RoomImages::where('room_id',$request->id)->get();
+            $data = [];
+            foreach ($allImages as $key => $v) {
+                $data[] = [
+                    'id'        => $v->id,
+                    'room_id'   => $v->room_id,
+                    'roomImage' => !empty($v->roomImage) ? url($v->roomImage) : ""
+                ];
+            }
+            return response()->json($data, 200);
+        }
+    
+
 
     public function roomList(Request $request)
     {

@@ -56,7 +56,7 @@ import FacilitesGroupEdit from "../pages/facilites/FacilitesGroupEdit.jsx";
 import FacilitesList from "../pages/facilites/FacilitesList.jsx";
 import FacilitesAdd from "../pages/facilites/FacilitesAdd.jsx";
 import FacilitesEdit from "../pages/facilites/FacilitesEdit.jsx";
-
+import RoomPreview from "../pages/roomsetting/RoomPreview.jsx";
 //
 import GeneralCategoryList from "../pages/category/GeneralCategoryList.jsx";
 import GeneralCategoryAdd from "../pages/category/GeneralCategoryAdd.jsx";
@@ -69,6 +69,7 @@ import ConfigrrationApiKeyAdd from "../pages/configration/ConfigrationApiKeyAdd.
 import ConfigrrationApiKeyEdit from "../pages/configration/ConfigrationApiKeyEdit.jsx";
 import StatusEdit from "../pages/report/StatusEdit.jsx";
 import CheckTronScanAPI from "../pages/report/CheckTronScanAPI.jsx";
+import GlobalSetting from "../pages/setting/GlobalSetting.jsx";
 
 const AppRouter = () => {
   return (
@@ -128,6 +129,7 @@ const AppRouter = () => {
       <Route path="/roomsetting/promocode-add" element={<PromocodeAdd />} />
       <Route path="/roomsetting/promocode-edit/:id" element={<PromoCodeEdit />} />
       <Route path="/roomsetting/room-facilities-edit/:id" element={<RoomFacilitiesEdit />} />
+      <Route path="/roomsetting/room-preview/:id" element={<RoomPreview />} />
       {/* FACILITY SETTING */}
       <Route path="/facilites/facilites-group-list" element={<FacilitesGroupList />} />
       <Route path="/facilites/facilites-group-add" element={<FacilitesGroupAdd />} />
@@ -135,6 +137,8 @@ const AppRouter = () => {
       <Route path="/facilites/facilites-list" element={<FacilitesList />} />
       <Route path="/facilites/facilites-add" element={<FacilitesAdd />} />
       <Route path="/roomsetting/facilites-edit/:id" element={<FacilitesEdit />} />
+      <Route path="/setting/global-setting" element={<GlobalSetting />} />
+
 
       <Route path="/dashboard" element={<Dashboard />} />
     </Routes>

@@ -31,6 +31,8 @@ const HosterList = () => {
         return prevProgress + 10;
       });
     }, 100); // Increment progress every 100ms
+
+    
     try {
       const response = await axios.get(`/public/getAllHosters`, {
         params: { page } // Pass the current page as a query parameter

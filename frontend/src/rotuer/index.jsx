@@ -8,6 +8,10 @@ import Forgetpassword from "../pages/Forgetpassword.jsx";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import UserLogin from "../pages/UserLogin.jsx";
+import Booking from "../pages/booking/Booking.jsx";
+import Contact from "../pages/Contact.jsx";
+import Service from "../pages/Service.jsx";
+import Room from "../pages/Room.jsx";
 // import ChangePassword from "../pages/users/ChangePassword.jsx";
 //For Admin Panel 
 import Dashboard from "../pages/Dashboard";
@@ -36,6 +40,10 @@ const AppRouter = () => {
       <Route path="/user-login" element={<UserLogin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/forget-password" element={<Forgetpassword />} />
+      <Route path="/booking-details/:slug" element={<Booking />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/service" element={<Service />} />
+      <Route path="/room" element={<Room />} />
       {/* <Route path="/user/profile" element={<MyProfile />} />
       <Route path="/user/role-list" element={<RoleList />} />
       <Route path="/user/role-add" element={<RoleAdd />} />

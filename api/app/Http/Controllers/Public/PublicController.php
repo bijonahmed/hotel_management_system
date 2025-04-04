@@ -4,74 +4,134 @@ namespace App\Http\Controllers\Public;
 
 use Cart;
 use Carbon\Carbon;
-use App\Models\Deposit;
-use App\Models\User;
-use App\Models\ApiKey;
-use App\Models\BulkAddress;
 use Illuminate\Http\Request;
-use App\Models\GamelistTransate;
 use App\Http\Controllers\Controller;
+use App\Models\Room;
+use App\Models\RoomImages;
+use App\Models\SelectedRoomFacility;
+use App\Models\Setting;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Validator;
 
 class PublicController extends Controller
 {
 
-    public function getTronApiReport(Request $request)
+    public function activeRooms(Request $request)
     {
-        // dd($request->all());
-        $contractAddress = !empty($request->searchQuery) ? $request->searchQuery : "";
-        // Define the API URL
-        $apiUrl = "https://api.trongrid.io/v1/accounts/{$contractAddress}/transactions/trc20?limit=1&only_confirmed=true";
-        // Initialize cURL session
-        $ch = curl_init();
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-        ]);
-        // Execute the API request
-        $response = curl_exec($ch);
-        // Check for cURL errors
-        if (curl_errno($ch)) {
-            echo "cURL Error: " . curl_error($ch);
-            exit;
+        try {
+
+            $rowsData = Room::where('room.status', 1)
+                ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
+                ->leftJoinSub(
+                    \DB::table('room_images')
+                        ->select('room_id', \DB::raw('MIN(id) as min_id')) // Get first image ID
+                        ->groupBy('room_id'),
+                    'first_images',
+                    'room.id',
+                    '=',
+                    'first_images.room_id'
+                )
+                ->leftJoin('room_images', 'room_images.id', '=', 'first_images.min_id') // Join first image
+                ->select('room.slug', 'room.id', 'room.name', 'room.roomDescription', 'bed_type.name as bed_name', 'roomPrice', 'room_images.roomImage')
+                ->get()
+                ->map(function ($room) {
+                    return [
+                        'room_id'         => $room->id,
+                        'name'            => $room->name,
+                        'slug'            => $room->slug,
+                        'bed_name'        => $room->bed_name,
+                        'roomPrice'       => number_format($room->roomPrice, 2),
+                        'roomDescription' =>  Str::limit($room->roomDescription, 50), // Limit to 50 characters,
+                        'roomImage'       => !empty($room->roomImage) ? url($room->roomImage) : ""
+                    ];
+                });
+            return response()->json($rowsData, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-        // Close the cURL session
-        curl_close($ch);
+    }
 
-        // Decode the JSON response
-        $data = json_decode($response, true);
 
-        // Check if the response contains data
-        if (isset($data['data']) && !empty($data['data'])) {
-            echo "Last Transactions Details:\n";
-            foreach ($data['data'] as $transaction) {
-                // Extract transaction details
-                $transactionId = $transaction['transaction_id'] ?? 'N/A';
-                $from = $transaction['from'] ?? 'N/A';
-                $to = $transaction['to'] ?? 'N/A';
-                $amount = isset($transaction['value']) && isset($transaction['token_info']['decimals'])
-                    ? $transaction['value'] / pow(10, $transaction['token_info']['decimals'])
-                    : 'N/A';
-                $timestamp = $transaction['block_timestamp'] ?? 'N/A';
 
-                // Convert amount to USDT (assuming 1 unit of token equals 1 USDT)
-                $amountInUsdt = is_numeric($amount) ? number_format($amount, 2) . ' USDT' : 'N/A';
+    public function getRoomDetails(Request $request)
+    {
 
-                // Convert timestamp to a readable date
-                $dateTime = $timestamp !== 'N/A' ? date('Y-m-d H:i:s', $timestamp / 1000) : 'N/A';
+        try {
 
-                // Display the transaction details
-                echo "-----------------------------------\n";
-                echo "Transaction ID: {$transactionId}\n";
-                echo "From: {$from}\n";
-                echo "To: {$to}\n";
-                echo "Amount: {$amountInUsdt}\n";
-                echo "Date and Time: {$dateTime}\n";
+            $roomParticular = Room::where('room.status', 1)->where('room.slug', $request->slug)
+                ->select('room.*', 'bed_type.name as bed_name')
+                ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
+                ->first();
+
+            $room_id          = $roomParticular->id;
+            $activeRoomImg    = RoomImages::where('status', 1)
+                ->where('room_id', $room_id)
+                ->get()
+                ->map(function ($room) {
+                    // Check if roomImage exists and is not empty
+                    return [
+                        'roomImage' => !empty($room->roomImage) ? url($room->roomImage) : null // Returning null if empty
+                    ];
+                });
+
+            $data['roomParticular'] = $roomParticular;
+            $data['activeRoomImg']  = $activeRoomImg;
+
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function checkselectedfacilities(Request $request)
+    {
+
+        try {
+            $data = SelectedRoomFacility::where('room_id', $request->id)
+                ->select('select_room_facilities.id', 'facility_group.name as facility_group_name', 'room.roomType as room_name', 'room_facility.name as facilities_name')
+                ->leftJoin('facility_group', 'facility_group.id', '=', 'select_room_facilities.room_facility_group_id')
+                ->leftJoin('room', 'room.id', '=', 'select_room_facilities.room_id')
+                ->leftJoin('room_facility', 'room_facility.id', '=', 'select_room_facilities.facilities_id')
+                ->orderby('id', 'desc')
+                ->get();
+            if ($data->isEmpty()) {
+                return response()->json(['message' => 'No room sizes found'], 404);
             }
-        } else {
-            echo "No transactions found for the provided contract address.";
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function getGlobalData()
+    {
+
+        try {
+            $data = Setting::where('id', 1)->first();
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function sendContact(Request $request)
+    {
+
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'name'             => 'required',
+            'email'            => 'required',
+            'subject'          => 'required',
+            'message'          => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        //Please add email qeue...
+
+        return response()->json("Send mail", 200);
+
     }
 }

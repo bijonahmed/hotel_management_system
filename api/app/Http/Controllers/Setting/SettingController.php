@@ -219,11 +219,41 @@ class SettingController extends Controller
     }
 
 
+ 
+
+    public function saveSetting(Request $request){
+
+        //dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'name'          => 'required',
+            'email'         => 'required',
+            'address'       => 'required',
+            'whatsApp'      => 'required',
+            'about_us'      => 'required',
+        ]);
+
+        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $data = array(
+            'name'                => $request->name,
+            'email'               => $request->email,
+            'address'             => $request->address ?? "",
+            'whatsApp'            => $request->whatsApp ?? "",
+            'about_us'            => $request->about_us,
+            'fblink'              => $request->fblink,
+            'youtubelink'         => $request->youtubelink,
+        );
+        Setting::where('id', 1)->update($data);
+
+        return response()->json("Successfull update",200);
+
+    }
+
 
     public function saveAPIKey(Request $request)
     {
-
-
         if (empty($request->id)) {
             $validator = Validator::make($request->all(), [
                 'merchant_id' => 'required|unique:api_key,merchant_id',

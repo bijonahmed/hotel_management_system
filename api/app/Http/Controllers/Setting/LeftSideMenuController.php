@@ -43,8 +43,8 @@ class LeftSideMenuController extends Controller
                 'icon' => 'bx bx-category',
                 'submenu' => [
                     ['label' => 'Bed Type List', 'path' => '/roomsetting/bed-type-list', 'icon' => 'bx bx-radio-circle'],
-                   // ['label' => 'Booking Type List', 'path' => '/roomsetting/booking-type-list', 'icon' => 'bx bx-radio-circle'],
-                   // ['label' => 'Room Size', 'path' => '/roomsetting/room-size-list', 'icon' => 'bx bx-radio-circle'],
+                    // ['label' => 'Booking Type List', 'path' => '/roomsetting/booking-type-list', 'icon' => 'bx bx-radio-circle'],
+                    // ['label' => 'Room Size', 'path' => '/roomsetting/room-size-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Room List', 'path' => '/roomsetting/room-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Room Images', 'path' => '/roomsetting/room-images-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Promocode List', 'path' => '/roomsetting/promocode-list', 'icon' => 'bx bx-radio-circle'],
@@ -58,11 +58,9 @@ class LeftSideMenuController extends Controller
                 'submenu' => [
                     ['label' => 'Facilites Group', 'path' => '/facilites/facilites-group-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Facilites List', 'path' => '/facilites/facilites-list', 'icon' => 'bx bx-radio-circle'],
-                   
+
                 ]
             ],
-
-
             [
                 'label' => 'Users Management',
                 'path' => '#',
@@ -91,7 +89,8 @@ class LeftSideMenuController extends Controller
                 'icon' => 'bx bx-category',
                 'submenu' => [
                     ['label' => 'Global Category', 'path' => '/category/global-category-list', 'icon' => 'bx bx-radio-circle'],
-                    ['label' => 'Global Wallet Address', 'path' => '/wallet/global-wallet-address-list', 'icon' => 'bx bx-radio-circle'],
+                    ['label' => 'Frontend Setting', 'path' => '/setting/global-setting', 'icon' => 'bx bx-radio-circle'],
+                    //['label' => 'Global Wallet Address', 'path' => '/wallet/global-wallet-address-list', 'icon' => 'bx bx-radio-circle'],
                     // ['label' => 'Confirgration API Key', 'path' => '/configration/config-api-key-list', 'icon' => 'bx bx-radio-circle'],
                     // ['label' => 'Merchant Request', 'path' => '/configration/config-api-key-list', 'icon' => 'bx bx-radio-circle']
                 ]

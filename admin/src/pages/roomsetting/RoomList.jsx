@@ -87,6 +87,9 @@ const RoomList = () => {
     navigate(`/roomsetting/room-facilities-edit/${id}`);
   };
 
+  const handlePreviewRoom = (id) => {
+    navigate(`/roomsetting/room-preview/${id}`);
+  };
   
   // Correctly closed useEffect hook
   useEffect(() => {
@@ -253,12 +256,13 @@ const RoomList = () => {
                                     <td className="text-center">{item.capacity}</td>
                                     <td className="text-center"> {item.status}</td>
                                     <td className="text-center">
-                                      <a href="#" onClick={() => handleEdit(item.id)} className="mx-1">
-                                        <i className="lni lni-pencil-alt"></i> Edit ||
-                                      </a>
+                                      <a href="#" onClick={() => handleEdit(item.id)} className="mx-1"><i className="lni lni-pencil-alt"></i>Edit&nbsp;||</a>
                                       <a href="#" onClick={() => handleAddFacilities(item.id)} className="mx-2">
-                                      <i className="lni lni-apartment"></i> Add Facilities
-                                      </a>
+                                      <i className="lni lni-apartment"></i> Add Facilities&nbsp;||</a>
+                                      <a href="#" onClick={() => handlePreviewRoom(item.id)} className="mx-2">
+                                      <i className="fas fa-eye"></i>&nbsp;Preview</a>
+
+
                                     </td>
                                   </tr>
                                 ))

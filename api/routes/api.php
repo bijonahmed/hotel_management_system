@@ -56,10 +56,13 @@ Route::group([
 Route::group([
     'prefix' => 'public'
 ], function () {
-    Route::get('/getLogApiReport', [PublicController::class, 'getLogApiReport']);
-    Route::get('/filterGames', [PublicController::class, 'filterGames']);
+    Route::get('/activeRooms', [PublicController::class, 'activeRooms']);
+    Route::get('/getRoomDetails', [PublicController::class, 'getRoomDetails']);
     Route::post('/getMerchentRequest', [PublicController::class, 'getMerchentRequest']);
     Route::get('/getApiReport', [PublicController::class, 'getTronApiReport']);
+    Route::get('checkselectedfacilities', [PublicController::class, 'checkselectedfacilities']);
+    Route::get('getGlobalData', [PublicController::class, 'getGlobalData']);
+    Route::post('/sendContact', [PublicController::class, 'sendContact']);
 });
 
 Route::group([
@@ -155,6 +158,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::post('bookingTypeSave', [RoomSettingController::class, 'bookingTypeSave']);
         Route::get('bookingTypeList', [RoomSettingController::class, 'bookingTypeList']);
         Route::get('checkBookingTypeRow', [RoomSettingController::class, 'checkBookingTypeRow']);
+        Route::get('filterRoomImage', [RoomSettingController::class, 'filterRoomImage']);
         Route::get('checkselectedfacilities', [RoomSettingController::class, 'checkselectedfacilities']);
         Route::post('deleteSelectedFacilities', [RoomSettingController::class, 'deleteSelectedFacilities']);
     });
@@ -172,7 +176,6 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('checkRoomFacilityGroupRow', [FacilityController::class, 'checkRoomFacilityGroupRow']);
         Route::get('checkFacilities', [FacilityController::class, 'checkFacilities']);
         Route::get('checkRoomFacilityRow', [FacilityController::class, 'checkRoomFacilityRow']);
-       
     });
 
 
@@ -192,6 +195,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('/dynamicLeftSidebarmenu', [LeftSideMenuController::class, 'dynamicMenuLeftSidebar']);
         Route::post('insertLanguageAdd', [SettingController::class, 'insertLanguageAdd']);
         Route::post('saveAPIKey', [SettingController::class, 'saveAPIKey']);
+        Route::post('saveSetting', [SettingController::class, 'saveSetting']);
         Route::post('saveMerchantBulkAddress', [SettingController::class, 'saveMerchantBulkAddress']);
         Route::get('searchByConfigrationApiKey', [SettingController::class, 'searchByConfigrationApiKey']);
         Route::get('settingrowSystem', [SettingController::class, 'settingrow']);

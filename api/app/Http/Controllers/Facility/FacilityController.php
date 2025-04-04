@@ -136,8 +136,6 @@ class FacilityController extends Controller
      public function checkFacilities(Request $request)
     {
 
-        //dd($request->room_facility_group_id);
-
         try {
             $id   = $request->room_facility_group_id ?? "";
             $data = RoomFacility::where('room_facility_group_id', $id)->get();
