@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import AuthUser from "../components/AuthUser";
-
+import Footer from "../components/Footer";
 import axios from "/config/axiosConfig";
 import $ from "jquery";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const { getToken, token, logout } = AuthUser();
 
   const fetechGlobalData = async () => {
     try {
@@ -21,10 +22,18 @@ const Navbar = () => {
     }
   };
 
+  const logoutUser = async () => {
+    if (token) {
+      await logout();
+      navigate('/login');
+    }
+  };
+
   useEffect(() => {
     fetechGlobalData();
   }, []);
 
+ 
   return (
     <>
       {/* header  */}
@@ -121,19 +130,45 @@ const Navbar = () => {
                   <Link to="/" className="nav-item nav-link active">
                     Home
                   </Link>
-               
                   <Link to="/service" className="nav-item nav-link">
                     Services
                   </Link>
                   <Link to="/room" className="nav-item nav-link">
                     Rooms
                   </Link>
-                  <Link to="#" className="nav-item nav-link">
-                    Login
-                  </Link>
-                  <Link to="#" className="nav-item nav-link">
-                    Register
-                  </Link>
+                 
+                  {token ? (
+                   <>
+                    <Link to="/dashboard" className="nav-item nav-link">
+                     My Dashbaord
+                   </Link>
+                   <Link to="/dashboard" className="nav-item nav-link">
+                    Billing
+                   </Link>
+
+                    <div className="nav-item dropdown">
+                      <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">My Profile</a>
+                      <div className="dropdown-menu rounded-0 m-0">
+                        <a href="#" className="dropdown-item">Profile</a>
+                        <a href="#" className="dropdown-item">Change Password</a>
+                        <a href="#" className="dropdown-item">Logout</a>
+                      </div>
+                    </div>
+                    <Link to="#" className="nav-item nav-link" onClick={logoutUser}>
+                      Logout
+                    </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/login" className="nav-item nav-link">
+                        Login
+                      </Link>
+                      <Link to="/register" className="nav-item nav-link">
+                        Register
+                      </Link>
+                    </>
+                  )}
+                  
                   <Link to="/contact" className="nav-item nav-link">
                     Contact
                   </Link>
@@ -143,8 +178,10 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+     
       {/* ------------- Header end ----------------  */}
     </>
+  
   );
 };
 

@@ -3,14 +3,14 @@ import { Helmet } from "react-helmet";
 import GuestNavbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import AuthUser from "../components/AuthUser";
-
+import Footer from "../components/Footer";
+import Header from "../components/GuestNavbar";
 import { Link } from "react-router-dom";
 import axios from "/config/axiosConfig";
-import Footer from "../components/Footer";
+
 import { LanguageContext } from "../context/LanguageContext";
 
 const Login = () => {
-
   const [loading, setLoading] = useState(false);
   const { content } = useContext(LanguageContext);
   const navigate = useNavigate();
@@ -33,19 +33,20 @@ const Login = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     const token = JSON.parse(sessionStorage.getItem("token"));
-  if (token) {
-    sessionStorage.removeItem('token');  // Remove token
-    sessionStorage.removeItem('user');   // Remove user
-  }
-
+    if (token) {
+      sessionStorage.removeItem("token"); // Remove token
+      sessionStorage.removeItem("user"); // Remove user
+    }
 
     try {
-      const response = await http.post("/auth/userLogin", { username, password });
+      const response = await http.post("/auth/userLogin", {
+        username,
+        password,
+      });
       setToken(response.data.user, response.data.access_token);
       navigate("/dashboard"); // Adjust the navigation path as needed
     } catch (error) {
@@ -63,87 +64,123 @@ const Login = () => {
 
   return (
     <div>
-      <div className="section-authentication-signin d-flex align-items-center justify-content-center my-5 my-lg-0">
-        <div className="container-fluid">
-          <div className="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
-            <div className="col mx-auto">
-              <div className="card mb-0">
-                <div className="card-body">
-                  <div className="p-4">
-                    <div className="mb-3 text-center">
-                      <img src="/assets/images/logo-icon.png" width={60} />
-                    </div>
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
+      <div className="bg-white p-0">
+        <Header />
+        <div
+          className="d-flex align-items-center justify-content-center"
+          style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
+        >
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-md-6 col-lg-4">
+                <div className="card">
+                  <div className="card-body">
                     <div className="text-center mb-4">
-                      <h5>FG Admin</h5>
+                      <h5>Customer Portal</h5>
                       <p className="mb-0">Please log in to your account</p>
-                      <center>{errors.account && <div style={{ color: 'red' }}>{errors.account[0]}</div>}</center>
+                      {errors.account && (
+                        <div style={{ color: "red" }}>{errors.account[0]}</div>
+                      )}
                     </div>
-                    <div className="form-body">
-                      <form className="row g-3" onSubmit={handleSubmit}>
-                        <div className="col-12">
-                          <label htmlFor="inputEmailAddress" className="form-label">Username</label>
-                          <input type="text" className="form-control" id="inputEmailAddress" placeholder="jhon@example.com" value={username} onChange={handleUsernameChange} />
-                          {errors.username && (<div style={{ color: "red" }}>{errors.username[0]}</div>)}
-                        </div>
-                        <div className="col-12">
-                          <label htmlFor="inputChoosePassword" className="form-label">Password</label>
-                          <div className="input-group">
-                            <input
-                              type={showPassword ? "text" : "password"}
-                              className="form-control border-end-0"
-                              id="inputChoosePassword"
-                              placeholder="Enter Password"
-                              value={password}
-                              onChange={handlePasswordChange}
-                            />
-                            <a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault(); // Prevent default link behavior
-                                togglePasswordVisibility();
-                              }}
-                              className="input-group-text bg-transparent"
-                            >
-                              <i className={`bx ${showPassword ? "bx-show" : "bx-hide"}`} />
-                            </a>
+                    <form className="row g-3" onSubmit={handleSubmit}>
+                      <div className="col-12">
+                        <label
+                          htmlFor="inputEmailAddress"
+                          className="form-label"
+                        >
+                          Username
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="inputEmailAddress"
+                          placeholder="john@example.com"
+                          value={username}
+                          onChange={handleUsernameChange}
+                        />
+                        {errors.username && (
+                          <div style={{ color: "red" }}>
+                            {errors.username[0]}
                           </div>
-                          {errors.password && (
-                            <div className="error" style={{ color: "red" }}>
-                              {errors.password[0]}
-                            </div>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <div className="form-check form-switch">
-                            <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" />
-                            <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Remember Me</label>
-                          </div>
-                        </div>
-                        {/* <div className="col-md-6 text-end">	<a href="authentication-forgot-password.html">Forgot Password ?</a>
-                      </div> */}
-                        <div className="col-12">
-                          <div className="d-grid">
-                            <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? "Processing..." : "Sign in"}</button>
-                          </div>
-                          
-                        </div>
+                        )}
+                      </div>
 
-                      </form>
-                    </div>
+                      <div className="col-12">
+                        <label
+                          htmlFor="inputChoosePassword"
+                          className="form-label"
+                        >
+                          Password
+                        </label>
+                        <div className="input-group">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            className="form-control border-end-0"
+                            id="inputChoosePassword"
+                            placeholder="Enter Password"
+                            value={password}
+                            onChange={handlePasswordChange}
+                          />
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              togglePasswordVisibility();
+                            }}
+                            className="input-group-text bg-transparent"
+                          >
+                            <i
+                              className={`bx ${
+                                showPassword ? "bx-show" : "bx-hide"
+                              }`}
+                            />
+                          </a>
+                        </div>
+                        {errors.password && (
+                          <div style={{ color: "red" }}>
+                            {errors.password[0]}
+                          </div>
+                        )}
+                      </div>
+                      <div className="d-flex justify-content-center">
+                        <Link
+                          to="/"
+                          className="btn btn-outline-primary d-flex align-items-center"
+                        >
+                          <i className="bx bx-arrow-back me-2"></i> Back to Home
+                        </Link>
+                      </div>
+
+
+                      <div className="col-12">
+                        <div className="d-grid">
+                          <button
+                            type="submit"
+                            className="btn btn-primary"
+                            disabled={loading}
+                          >
+                            {loading ? "Processing..." : "Sign in"}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+
+                     <div className="text-center mt-3">
+                                <p>Already have an account? <Link to="/register" className="text-primary">Sign Up</Link></p>
+                              </div>
 
                   </div>
-
                 </div>
               </div>
             </div>
           </div>
-
-          {/*end row*/}
         </div>
       </div>
-
+      <Footer />
     </div>
-
   );
 };
 

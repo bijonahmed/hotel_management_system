@@ -5,21 +5,16 @@ import { Link } from "react-router-dom";
 import axios from "/config/axiosConfig";
 import GuestNavbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 import Loader from "../components/Loader";
-import { LanguageContext } from "../context/LanguageContext";
+import Footer from "../components/Footer";
+import Header from "../components/GuestNavbar";
+import BookingFilter from "../components/BookingFilter";
 import AuthUser from "../components/AuthUser";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
-  const { content } = useContext(LanguageContext);
-  const [merchantData, setMerchantData] = useState([]);
-  const [depositCount, setDepositCount] = useState(0);
-  const [depositAmt, setDepositAmt] = useState(0);
-  const [merchantCount, setMerchentCount] = useState(0);
-  const [bulkAddressCount, setBulkAddressCount] = useState(0);
-
+  const navigate = useNavigate(); // already imported from 'react-router-dom'
   const rawToken = sessionStorage.getItem("token");
   const token = rawToken?.replace(/^"(.*)"$/, "$1");
 
@@ -66,6 +61,12 @@ const Index = () => {
     fetchMerchantData();
   }, []);
 
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <div>
       <Helmet>
@@ -74,174 +75,77 @@ const Index = () => {
       {/* Start */}
 
       <div>
-        <div className="wrapper">
-          {/*sidebar wrapper */}
-          {/*end sidebar wrapper */}
-          {/*start header */}
-          <header>
-            <GuestNavbar />
-          </header>
-          {/*end header */}
-          {/*start page wrapper */}
-          <div className="page-wrapper">
-            <div className="page-content">
-              <div className="row row-cols-1 row-cols-md-2 row-cols-xl-2 row-cols-xxl-4">
-                <div className="col">
-                  <div className="card radius-10 bg-gradient-cosmic">
-                    <div className="card-body">
-                      <div className="d-flex align-items-center">
-                        <div className="me-auto">
-                          <p className="mb-0 text-white">Today Total Deposit</p>
-                          <h4 className="my-1 text-white">{depositCount}</h4>
-                        </div>
-                        <div id="chart1" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      
 
-                <div className="col">
-                  <div className="card radius-10 bg-gradient-kyoto">
-                    <div className="card-body">
-                      <div className="d-flex align-items-center">
-                        <div className="me-auto">
-                          <p className="mb-0 text-dark">Today Deposit Amount</p>
-                          <h4 className="my-1 text-dark">${depositAmt}</h4>
-                        </div>
-                        <div id="chart4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col">
-                  <div className="card radius-10 bg-gradient-ibiza">
-                    <div className="card-body">
-                      <div className="d-flex align-items-center">
-                        <div className="me-auto">
-                          <p className="mb-0 text-white">Total Merchant</p>
-                          <h4 className="my-1 text-white">{merchantCount}</h4>
-                        </div>
-                        <div id="chart2" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="card radius-10 bg-gradient-ohhappiness">
-                    <div className="card-body">
-                      <div className="d-flex align-items-center">
-                        <div className="me-auto">
-                          <p className="mb-0 text-white">
-                            Total Wallet Address
-                          </p>
-                          <h4 className="my-1 text-white">
-                            {bulkAddressCount}
-                          </h4>
-                        </div>
-                        <div id="chart3" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/*end row*/}
-
-              <div className="card radius-10">
-                <div className="card-header">
-                  <div className="d-flex align-items-center">
-                    <div>
-                      <h6 className="mb-0">Today Deposit List</h6>
-                    </div>
-                  </div>
-                </div>
-                <div className="card-body">
-               
-                  {loading ? (
-                    <center>
-                     <div className="spinner-border" role="status"> <span className="visually-hidden">Loading...</span>
-                     </div>
-                   
-                      </center>
-                  ) : (
-                    <div className="table-responsive">
-                      <table className="table align-middle mb-0 table-hover">
-                        <thead className="table-light">
-                          <tr>
-                            <th>Merchant Name</th>
-                            <th>Deposit ID</th>
-                            <th>Username[ID]</th>
-                            <th>Amount</th>
-                            <th>Created At</th>
-                            <th>Status</th>
-                            <th>Crypto Wallet Address</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {merchantData.map((data, index) => (
-                            <tr key={index}>
-                              <td>{data.merchant_name}</td>
-                              <td>
-                                <small>{data.depositID}</small>
-                              </td>
-                              <td>
-                                <small>
-                                  {data.username}[{data.user_id}]
-                                </small>
-                              </td>
-                              <td>
-                                <small>${data.deposit_amount}</small>
-                              </td>
-                              <td>
-                                <small>{data.created_at}</small>
-                              </td>
-                              <td>
-                                <small>
-                                  <span
-                                    className={`badge ${
-                                      data.status == 0
-                                        ? "bg-gradient-blooker"
-                                        : data.status == 1
-                                        ? "bg-gradient-quepal"
-                                        : data.status == 2
-                                        ? "bg-gradient-bloody"
-                                        : ""
-                                    } text-white shadow-sm w-100`}
-                                  >
-                                    {data.status == 0
-                                      ? "Pending"
-                                      : data.status == 1
-                                      ? "Active"
-                                      : data.status == 2
-                                      ? "Rejected"
-                                      : ""}
-                                  </span>
-                                </small>
-                              </td>
-                              <td>
-                                <small>{data.to_crypto_wallet_address}</small>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              </div>
+      <Helmet>
+        <title>Room</title>
+      </Helmet>
+      <div className="bg-white p-0">
+        <Header />
+        {/* Page Header */}
+        <div
+          className="container-fluid page-header mb-5 p-0"
+          style={{ backgroundImage: "url(/img/carousel-1.jpg)" }}
+        >
+          <div className="container-fluid page-header-inner py-5">
+            <div className="container text-center pb-5">
+              <h1 className="display-3 text-white mb-3 animated slideInDown">
+                Dashboard
+              </h1>
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb justify-content-center text-uppercase">
+                  <li className="breadcrumb-item">
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <a href="#">Pages</a>
+                  </li>
+                  <li
+                    className="breadcrumb-item text-white active"
+                    aria-current="page"
+                  >
+                    Dashboard
+                  </li>
+                </ol>
+              </nav>
             </div>
           </div>
-          {/*end page wrapper */}
-          {/*start overlay*/}
-          <div className="overlay toggle-icon" />
-
-          <Link to="#" className="back-to-top">
-            <i className="bx bxs-up-arrow-alt" />
-          </Link>
-
-          <Footer />
         </div>
-        {/*end wrapper*/}
+
+        <BookingFilter />
+
+        {/* start */}
+        {/* Room Start */}
+        <div className="container-xxl py-1">
+          <div className="container">
+            <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+              <h6 className="section-title text-center text-primary text-uppercase">
+                Our Rooms
+              </h6>
+              <h1 className="mb-5">
+                Explore Our{" "}
+                <span className="text-primary text-uppercase">Rooms</span>
+              </h1>
+            </div>
+            dddddd
+          </div>
+        </div>
+        <br/><br/>
+        {/* Room End */}
+
+        {/* end */}
+        <Footer />
+
+        <a
+          href="#"
+          className="btn btn-lg btn-primary btn-lg-square back-to-top"
+        >
+          <i className="bi bi-arrow-up" />
+        </a>
+      </div>
+
+
+
       </div>
 
       {/* END */}
