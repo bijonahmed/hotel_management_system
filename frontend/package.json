@@ -22,6 +22,7 @@
     "docx": "^8.5.0",
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.10.3",
     "isomorphic-fetch": "^3.0.0",
     "jquery": "^3.7.1",
     "jspdf": "^2.5.1",

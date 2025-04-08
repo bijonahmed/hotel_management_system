@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Guestsendingmail;
 use DB;
 use Validator;
 use App\Models\User;
@@ -12,12 +13,13 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserAuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'userRegister','register', 'showProfileData', 'updateprofile', 'updatePassword']]);
+        $this->middleware('auth:api', ['except' => ['login', 'userRegister', 'guestRegister', 'register', 'showProfileData', 'updateprofile', 'updatePassword']]);
     }
     protected function validateLogin(Request $request)
     {
@@ -29,7 +31,6 @@ class UserAuthController extends Controller
     public function login(Request $request)
     {
         // dd($request->all());
-
         $this->validateLogin($request);
         $credentials = request(['username', 'password']);
         if (!$token = auth('api')->attempt($credentials)) {
@@ -44,9 +45,73 @@ class UserAuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    public function guestRegister(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name'  => 'required',
+                'email' => 'required|email|unique:users,email',
+            ],
+            [
+                'name.required'      => 'Please enter your name.',
+                'email.required'     => 'Email address is required.',
+                'email.email'        => 'Please provide a valid email address.',
+                'email.unique'       => 'This email address is already taken.',
+            ]
+        );
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+
+        $password = '#123456#';
+        $username = $this->generateUniqueRandomNumber(); // you'll define this method
+        
+        $user = User::create([
+            'name'          => $request->name,
+            'email'         => $request->email,
+            'role_id'       => 2,
+            'status'        => 1,
+            'username'      => $username, // generated unique number
+            'register_ip'   => $request->ip(),
+            'inviteCode'    => $this->generateUniqueRandomNumber(),
+            'show_password' => $password, // store plain text (optional, not recommended for security)
+            'password'      => bcrypt($password), // secure hash
+        ]);
+
+
+        $domain   = $request->domain;
+        $loginUrl = $domain . '/login';
+       
+        $customData = [
+            'username'   => $username,
+            'login_url'  => $loginUrl,
+            'password'   => $password
+        ];
+        // Send email
+        Mail::to($request->email)->send(new Guestsendingmail($customData));
+        //end
+
+        $inviteCode               = $this->generateUniqueRandomNumber();
+        $fg                       = 'FG' . sprintf('%09d', $user->id);
+        $user->update([
+            'inviteCode'       => $inviteCode,
+            'fg_id'            => $fg, // Add other fields and their respective values here
+            'fg_wallet_address' => md5($fg),
+            // Add more fields as needed
+        ]);
+        // Get the token
+        $token = auth('api')->login($user);
+        return $this->respondWithToken($token);
+
+    }
     public function userRegister(Request $request)
     {
-     //  dd($request->all());
+        //  dd($request->all());
         $setting = Setting::find(1);
 
         $this->validate($request, [
@@ -84,13 +149,13 @@ class UserAuthController extends Controller
             // Add more fields as needed
         ]);
 
-        
+
         // Get the token
         $token = auth('api')->login($user);
         //echo $token;exit; 
         //$this->makePlayer($request->username, $request->password, $lastInsertedId);
 
-       // echo $token;exit; 
+        // echo $token;exit; 
         return $this->respondWithToken($token);
     }
     public function register(Request $request)
@@ -166,18 +231,18 @@ class UserAuthController extends Controller
     }
 
 
-		protected function respondWithToken($token)
-	{
-		$user = auth('api')->user();
-		return response()->json([
-			'success' => true, // Indicating success
-			'status'  => 200, // Indicating success
-			'access_token' => $token,
-			'token_type' => 'bearer',
-			'expires_in' => auth('api')->factory()->getTTL() * 60,
-			'user' => $user
-		], 200); // Explicitly set HTTP status 200
-	}
+    protected function respondWithToken($token)
+    {
+        $user = auth('api')->user();
+        return response()->json([
+            'success' => true, // Indicating success
+            'status'  => 200, // Indicating success
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user' => $user
+        ], 200); // Explicitly set HTTP status 200
+    }
 
     public function guard()
     {

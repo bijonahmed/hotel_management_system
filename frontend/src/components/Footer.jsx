@@ -39,7 +39,7 @@ const Footer = () => {
                   Download{" "}
                   <a
                     className="text-dark fw-medium"
-                    href="https://htmlcodex.com/hotel-html-template-pro"
+                    href="#"
                   >
                     🌙 Moon Nest – Download our customer app for Android today
                     and enjoy seamless access to all our services on the go! 📱

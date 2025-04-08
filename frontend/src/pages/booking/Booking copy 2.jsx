@@ -16,7 +16,6 @@ const Booking = () => {
   const [facilitiesData, setRoomParticular] = useState("");
   const [roomimages, setRoomImages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [guestloading, setGuestLoading] = useState(false);
   const [facilData, setSelectedFacilitiesData] = useState([]);
   const { slug } = useParams();
   const { getToken, token, logout, http, setToken } = AuthUser();
@@ -110,16 +109,11 @@ const Booking = () => {
     if (e) e.preventDefault(); // prevent default only if event is passed
 
     try {
-      setGuestLoading(true); // Set loading to true when the request starts
-      const domain = window.location.origin;
-      console.log("Loaded from domain:", domain);
-      const response = await axios.post(
-        "/auth/guestRegister",
+      const response = await axios.post("/auth/guestRegister",
         {
           name: formData.name,
           email: formData.email,
           slug: formData.slug,
-          domain: domain,
         },
         {
           headers: {
@@ -127,10 +121,11 @@ const Booking = () => {
           },
         }
       );
+      //console.log("API Response:", response.data);
       setToken(response.data.user, response.data.access_token);
       console.log("userData:" + response.data.user.id);
-      await guestHandleSubmit(response.data.user.id);
-      setGuestLoading(false);
+      //setGuestUserId(response.data.user.id);
+      await guestHandleSubmit(response.data.user.id); // No need to pass an event
     } catch (error) {
       if (error.response && error.response.status === 422) {
         // Handle validation errors
@@ -147,23 +142,20 @@ const Booking = () => {
       console.error("Error submitting form", error);
     }
   };
-
   // Handle form submission guest account
   const guestHandleSubmit = async (userid) => {
     console.log("guest User ID: " + userid);
-    // ✅ Add user_id to formData before sending
+      // ✅ Add user_id to formData before sending
     const updatedFormData = {
       ...formData,
       user_id: userid, // or guest_user_id, depending on your API structure
       slug: slug,
     };
 
+
     setErrors({}); // Clear previous errors
     try {
-      const response = await axios.post(
-        "/public/bookingRequest",
-        updatedFormData
-      );
+      const response = await axios.post("/public/bookingRequest", updatedFormData);
 
       const Toast = Swal.mixin({
         toast: true,
@@ -191,7 +183,7 @@ const Booking = () => {
         slug: "", // reset slug here if you want to clear it
         message: "",
       });
-      navigate("/booking-success");
+      // navigate("/dashboard");
     } catch (error) {
       if (error.response && error.response.status === 422) {
         // Handle validation errors
@@ -835,7 +827,7 @@ const Booking = () => {
                                     className="btn btn-primary w-100 py-3 shadow"
                                     type="submit"
                                   >
-                                    Book Now
+                                    Book Now---login
                                   </button>
                                 </div>
                               </>
@@ -847,7 +839,7 @@ const Booking = () => {
                                     type="submit"
                                     onClick={loginbyModal}
                                   >
-                                    Book Now
+                                    Book Now-----not login
                                   </button>
                                 </div>
                               </>
@@ -995,13 +987,8 @@ const Booking = () => {
                               <button
                                 className="btn btn-primary w-100 py-3 shadow"
                                 type="submit"
-                                disabled={guestloading} // Disable the button if loading
                               >
-                                {guestloading ? (
-                                  <span>Loading...</span> // Display loading text or spinner
-                                ) : (
-                                  "Book Now"
-                                )}
+                                Book Now---guest
                               </button>
                             </div>
                           </div>

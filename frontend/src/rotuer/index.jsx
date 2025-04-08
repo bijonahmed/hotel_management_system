@@ -9,14 +9,16 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import UserLogin from "../pages/UserLogin.jsx";
 import Booking from "../pages/booking/Booking.jsx";
+import BookingSuccess from "../pages/booking/BookingSuccess.jsx";
 import Contact from "../pages/Contact.jsx";
 import Service from "../pages/Service.jsx";
 import Room from "../pages/Room.jsx";
-// import ChangePassword from "../pages/users/ChangePassword.jsx";
+import ChangePassword from "../pages/users/ChangePassword.jsx";
 //For Admin Panel 
 import Dashboard from "../pages/Dashboard";
+import BookingHistory from "../pages/booking/BookingHistory.jsx";
+import MyProfile from "../pages/users/MyProfile.jsx";
 
-// import MyProfile from "../pages/users/MyProfile.jsx";
 // import MerchantList from "../pages/users/MerchantList.jsx";
 // import RoleList from "../pages/users/RoleList.jsx";
 // import RoleAdd from "../pages/users/Addrole.jsx";
@@ -41,10 +43,14 @@ const AppRouter = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/forget-password" element={<Forgetpassword />} />
       <Route path="/booking-details/:slug" element={<Booking />} />
+      <Route path="/booking-history-details/:id" element={<BookingHistory />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/service" element={<Service />} />
       <Route path="/room" element={<Room />} />
-      {/* <Route path="/user/profile" element={<MyProfile />} />
+      <Route path="/user/change-password" element={<ChangePassword />} />
+      <Route path="/user/profile" element={<MyProfile />} />
+      <Route path="/booking-success" element={<BookingSuccess />} />
+      {/* 
       <Route path="/user/role-list" element={<RoleList />} />
       <Route path="/user/role-add" element={<RoleAdd />} />
       <Route path="/user/user-add" element={<UserAdd />} />
@@ -53,7 +59,7 @@ const AppRouter = () => {
       <Route path="/user/merchant-list" element={<MerchantList />} />
       <Route path="/user/superadmin-list" element={<SuperAdminList />} />
       <Route path="/user/admin-list" element={<AdminList />} /> */}
-      {/* <Route path="/user/change-password" element={<ChangePassword />} /> */}
+      {/*  */}
       {/* <Route path="/category/post-category-list" element={<PostCategoryList />} />
       <Route path="/category/post-categoryAdd" element={<PostCategoryAdd />} />
       <Route path="/category/post-category-edit/:id" element={<PostCategoryEdit />} />

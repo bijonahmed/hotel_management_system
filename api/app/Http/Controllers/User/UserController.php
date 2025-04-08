@@ -30,6 +30,7 @@ use App\Models\BulkAddress;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log; // Add this line
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -152,7 +153,7 @@ class UserController extends Controller
     public function getOnlyMerchantList(Request $request)
     {
         $data = User::where('status', 1)->where('role_id', 2)->get();
-      
+
         $response = [
             'data' => $data,
             'message' => 'success'
@@ -379,9 +380,6 @@ class UserController extends Controller
 
     public function uploadExcelbulkAddress(Request $request)
     {
-
-        //dd($request->all());
-
         // Validate the file input
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv|max:10240', // Optional: file size validation (10MB)
@@ -398,6 +396,40 @@ class UserController extends Controller
             // Return an error response if something goes wrong
             return response()->json(['message' => 'File import failed', 'error' => $e->getMessage()], 500);
         }
+    }
+
+
+    public function updateBookingUser(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'name'       => 'required',
+            'phone'      => 'required',
+            'email'      => 'required|email',
+            'username' => [
+                'required',
+                'max:255',
+                Rule::unique('users', 'username')->ignore($this->userid),
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $data = array(
+            'name'          => !empty($request->name) ? $request->name : "",
+            'phone'         => !empty($request->phone) ? $request->phone : "",
+            'email'         => !empty($request->email) ? $request->email : "",
+            'username'      => !empty($request->username) ? $request->username : "",
+        );
+
+        User::where('id', $this->userid)->update($data);
+
+        $response = [
+            'message' => 'User register successfully update:',
+        ];
+        return response()->json($response);
     }
 
     public function saveUser(Request $request)

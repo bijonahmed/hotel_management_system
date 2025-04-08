@@ -25,7 +25,7 @@ const Navbar = () => {
   const logoutUser = async () => {
     if (token) {
       await logout();
-      navigate('/login');
+      navigate("/login");
     }
   };
 
@@ -33,7 +33,6 @@ const Navbar = () => {
     fetechGlobalData();
   }, []);
 
- 
   return (
     <>
       {/* header  */}
@@ -51,12 +50,27 @@ const Navbar = () => {
             <div className="row gx-0 bg-white d-none d-lg-flex">
               <div className="col-lg-7 px-5 text-start">
                 <div className="h-100 d-inline-flex align-items-center py-2 me-4">
-                  <i className="fa fa-envelope text-primary me-2" />
-                  <p className="mb-0">{name.email}</p>
+                  {/* <i className="fa fa-envelope text-primary me-2" /> */}
+                  <p
+                    className="mb-0"
+                    style={{
+                      color: "darkslategray",
+                      fontSize: "20px",
+                      fontWeight: "500",
+                      lineHeight: "1.6",
+                      marginBottom: "10px",
+                      textAlign: "justify",
+                      letterSpacing: "0.5px",
+                      fontStyle: "italic", // Italic style added here
+                    }}
+                  >
+                    Moon Nest is a very soothing resort.
+                  </p>
                 </div>
                 <div className="h-100 d-inline-flex align-items-center py-2">
-                  {/* <i className="fa fa-phone-alt text-primary me-2" /> */}
-                  <p className="mb-0">
+                  <i className="fa fa-phone-alt text-primary me-2 text-white" />
+                  <span className="text-white">{name.whatsApp}</span>
+                  {/*
                     <a
                       href={`https://wa.me/${name.whatsApp}`}
                       target="_blank"
@@ -82,7 +96,7 @@ const Navbar = () => {
                       ></i>
                       {name.whatsApp}
                     </a>
-                  </p>
+                  </p> */}
                 </div>
               </div>
               <div className="col-lg-5 px-5 text-end">
@@ -97,7 +111,7 @@ const Navbar = () => {
                   <a className="me-3 d-none" href="#">
                     <i className="fab fa-twitter" />
                   </a>
-                  
+
                   <a className="me-3 d-none" href="#">
                     <i className="fab fa-twitter" />
                   </a>
@@ -136,27 +150,38 @@ const Navbar = () => {
                   <Link to="/room" className="nav-item nav-link">
                     Rooms
                   </Link>
-                 
-                  {token ? (
-                   <>
-                    <Link to="/dashboard" className="nav-item nav-link">
-                     My Dashbaord
-                   </Link>
-                   <Link to="/dashboard" className="nav-item nav-link">
-                    Billing
-                   </Link>
 
-                    <div className="nav-item dropdown">
-                      <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">My Profile</a>
-                      <div className="dropdown-menu rounded-0 m-0">
-                        <a href="#" className="dropdown-item">Profile</a>
-                        <a href="#" className="dropdown-item">Change Password</a>
-                        <a href="#" className="dropdown-item">Logout</a>
+                  {token ? (
+                    <>
+                      <Link to="/dashboard" className="nav-item nav-link">
+                        My Dashbaord
+                      </Link>
+                      <div className="nav-item dropdown">
+                        <a
+                          href="#"
+                          className="nav-link dropdown-toggle"
+                          data-bs-toggle="dropdown">
+                          My Profile
+                        </a>
+                        <div className="dropdown-menu rounded-0 m-0">
+                          <Link to="/user/profile" className="dropdown-item">
+                            Profile
+                          </Link>
+                          <Link to="/user/change-password" className="dropdown-item">
+                            Change Password
+                          </Link>
+                          <a href="#" onClick={logoutUser} className="dropdown-item">
+                            Logout
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                    <Link to="#" className="nav-item nav-link" onClick={logoutUser}>
-                      Logout
-                    </Link>
+                      <Link
+                        to="#"
+                        className="nav-item nav-link"
+                        onClick={logoutUser}
+                      >
+                        Logout
+                      </Link>
                     </>
                   ) : (
                     <>
@@ -168,7 +193,7 @@ const Navbar = () => {
                       </Link>
                     </>
                   )}
-                  
+
                   <Link to="/contact" className="nav-item nav-link">
                     Contact
                   </Link>
@@ -178,10 +203,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-     
+
       {/* ------------- Header end ----------------  */}
     </>
-  
   );
 };
 

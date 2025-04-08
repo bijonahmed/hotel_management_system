@@ -6,6 +6,7 @@ use Cart;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Room;
 use App\Models\RoomImages;
 use App\Models\SelectedRoomFacility;
@@ -13,10 +14,14 @@ use App\Models\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Validator;
+use Illuminate\Support\Facades\DB;
 
 class PublicController extends Controller
 {
 
+
+
+    
     public function activeRooms(Request $request)
     {
         try {
@@ -24,13 +29,10 @@ class PublicController extends Controller
             $rowsData = Room::where('room.status', 1)
                 ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
                 ->leftJoinSub(
-                    \DB::table('room_images')
-                        ->select('room_id', \DB::raw('MIN(id) as min_id')) // Get first image ID
-                        ->groupBy('room_id'),
-                    'first_images',
-                    'room.id',
-                    '=',
-                    'first_images.room_id'
+                \DB::table('room_images')
+                ->select('room_id', \DB::raw('MIN(id) as min_id')) // Get first image ID
+                ->groupBy('room_id'),
+                'first_images','room.id','=','first_images.room_id'
                 )
                 ->leftJoin('room_images', 'room_images.id', '=', 'first_images.min_id') // Join first image
                 ->select('room.slug', 'room.id', 'room.name', 'room.roomDescription', 'bed_type.name as bed_name', 'roomPrice', 'room_images.roomImage')

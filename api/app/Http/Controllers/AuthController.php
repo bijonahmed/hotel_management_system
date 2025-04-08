@@ -94,38 +94,7 @@ class AuthController extends Controller
         return $uniqueId; // Since we're generating only one number, return the first (and only) element of the array
     }
 
-    public function checkMlmComission($inviteCode)
-    {
-        $setting = Setting::find(1);
-        $checkInviteUser  = User::where('inviteCode', $inviteCode)->first();
-        $firstLeveluserId = $checkInviteUser->id;
-        if ($checkInviteUser) {
-            $firstLeveluserId = $checkInviteUser->id;
-            //echo "==Level-1==ID: $firstLeveluserId---Email: $checkInviteUser->email, Ref ID: $checkInviteUser->ref_id <br/>"; 
-            $lev_1['available_balance'] = !empty($setting->level_1_bonus) ? $setting->level_1_bonus : 0;
-            $lev_1['level_commission']  =  $lev_1['available_balance'];
-            User::where('id', $firstLeveluserId)->update($lev_1);
-
-            $secondLeveluser = User::where('id', $checkInviteUser->ref_id)->first();
-            if ($secondLeveluser) {
-                $secondLeveluserId = $secondLeveluser->id;
-                // echo "==Level-2==ID: $secondLeveluserId---Email: $secondLeveluser->email, Ref ID: $secondLeveluser->ref_id <br/>"; 
-                $lev_2['available_balance'] = !empty($setting->level_2_bonus) ? $setting->level_2_bonus : 0;
-                $lev_2['level_commission']  =  $lev_2['available_balance'];
-                User::where('id', $secondLeveluserId)->update($lev_2);
-
-                $thirdLeveluser = User::where('id', $secondLeveluser->ref_id)->first();
-                if ($thirdLeveluser) {
-                    $thirdLeveluserId = $thirdLeveluser->id;
-                    //  echo "==Level-3==ID: $thirdLeveluserId---Email: $thirdLeveluser->email, Ref ID: $thirdLeveluser->ref_id <br/>";
-                    $lev_3['available_balance'] = !empty($setting->level_3_bonus) ? $setting->level_3_bonus : 0;
-                    $lev_3['level_commission']  =  $lev_3['available_balance'];
-                    User::where('id', $thirdLeveluserId)->update($lev_3);
-                }
-            }
-        }
-    }
-
+     
     public function register(Request $request)
     {
         // dd($request->all());
@@ -144,7 +113,7 @@ class AuthController extends Controller
         // if (!$user) {
         //     return response()->json(['errors' => ['inviteCode' => ['Invalid invite code.']]], 422);
         // }
-        //$this->checkMlmComission($inviteCode);
+      
         $user = User::create([
             'name'                => $trimmedEmail,
             'email'               => $request->email,
@@ -166,7 +135,7 @@ class AuthController extends Controller
             'fg_wallet_address' => md5($fg),
             // Add more fields as needed
         ]);
-        $this->sendMail($email);
+       // $this->sendMail($email);
         // Get the token
         $token = auth('api')->login($user);
         return $this->respondWithToken($token);

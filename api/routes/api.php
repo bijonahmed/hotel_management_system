@@ -16,9 +16,10 @@ use App\Http\Controllers\UnauthenticatedController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\RoomSetting\RoomSettingController;
 use App\Http\Controllers\Facility\FacilityController;
-use App\Http\Controllers\Game\GameController as Gcontroller;
+use App\Http\Controllers\Booking\BookingController;
+use App\Http\Controllers\Booking\GuestBookingController;
 
-Route::get('/clear-cache', function () {
+Route::get('/cc', function () {
     $exitCode = Artisan::call('optimize:clear');
     echo "clean done";
     // return what you want
@@ -39,6 +40,7 @@ Route::group([
     'prefix'     => 'auth'
 ], function () {
     Route::post('userRegister', [UserAuthController::class, 'userRegister']);
+    Route::post('guestRegister', [UserAuthController::class, 'guestRegister']);
     Route::post('userLogin', [UserAuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -56,6 +58,7 @@ Route::group([
 Route::group([
     'prefix' => 'public'
 ], function () {
+    Route::post('bookingRequest', [GuestBookingController::class, 'bookingRequest']);
     Route::get('/activeRooms', [PublicController::class, 'activeRooms']);
     Route::get('/getRoomDetails', [PublicController::class, 'getRoomDetails']);
     Route::post('/getMerchentRequest', [PublicController::class, 'getMerchentRequest']);
@@ -66,16 +69,31 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'address'
+    'prefix' => 'booking'
 ], function () {
-    Route::get('getwalleteAddress', [PublicController::class, 'getwalleteAddress']);
-    Route::post('depositRequest', [PublicController::class, 'depositRequest']);
-    Route::get('checkMerchentDetails', [PublicController::class, 'checkMerchentDetails']);
+    Route::get('getUserRow', [BookingController::class, 'editUserId']);
+    Route::get('/getRoomDetails', [BookingController::class, 'getRoomDetails']);
+    Route::post('bookingRequest', [BookingController::class, 'bookingRequest']);
+    Route::get('/getBookingDetails', [BookingController::class, 'getBookingDetails']);
+    Route::get('/activeBookingRooms', [BookingController::class, 'activeBookingRooms']);
+  
 });
 
 
 Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
 
+    Route::group([
+        'prefix' => 'booking'
+    ], function () {
+        Route::get('getUserRow', [BookingController::class, 'editUserId']);
+        Route::get('/getRoomDetails', [BookingController::class, 'getRoomDetails']);
+        Route::post('bookingRequest', [BookingController::class, 'bookingRequest']);
+        Route::get('/getBookingDetails', [BookingController::class, 'getBookingDetails']);
+        Route::get('/activeBookingRooms', [BookingController::class, 'activeBookingRooms']);
+      
+    });
+
+    
     Route::group([
         'prefix' => 'user'
     ], function () {
@@ -90,6 +108,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::post('changePasswordClient', [UserController::class, 'changePasswordClient']);
         Route::post('updateUserProPass', [UserController::class, 'updateUserProPass']);
         Route::post('saveUser', [UserController::class, 'saveUser']);
+        Route::post('updateBookingUser', [UserController::class, 'updateBookingUser']);
         Route::post('updateUser', [UserController::class, 'updateUser']);
         Route::post('updateUserProfileImg', [UserController::class, 'updateUserProfileImg']);
         Route::get('getOnlyMerchantList', [UserController::class, 'getOnlyMerchantList']);

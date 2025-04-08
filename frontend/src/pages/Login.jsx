@@ -97,7 +97,7 @@ const Login = () => {
                           type="text"
                           className="form-control"
                           id="inputEmailAddress"
-                          placeholder="john@example.com"
+                          placeholder="Username"
                           value={username}
                           onChange={handleUsernameChange}
                         />
@@ -145,16 +145,7 @@ const Login = () => {
                           </div>
                         )}
                       </div>
-                      <div className="d-flex justify-content-center">
-                        <Link
-                          to="/"
-                          className="btn btn-outline-primary d-flex align-items-center"
-                        >
-                          <i className="bx bx-arrow-back me-2"></i> Back to Home
-                        </Link>
-                      </div>
-
-
+                     
                       <div className="col-12">
                         <div className="d-grid">
                           <button
@@ -171,6 +162,16 @@ const Login = () => {
                      <div className="text-center mt-3">
                                 <p>Already have an account? <Link to="/register" className="text-primary">Sign Up</Link></p>
                               </div>
+                              <div className="d-flex justify-content-center">
+                        <Link
+                          to="/"
+                          className="btn btn-outline-primary d-flex align-items-center"
+                        >
+                          <i className="bx bx-arrow-back me-2"></i> Back to Home
+                        </Link>
+                      </div>
+
+
 
                   </div>
                 </div>

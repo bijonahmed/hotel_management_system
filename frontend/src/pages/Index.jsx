@@ -4,6 +4,7 @@ import axios from "/config/axiosConfig";
 import Footer from "../components/Footer";
 import Header from "../components/GuestNavbar";
 import Sliders from "../components/Sliders";
+import WhatsApp from "../components/WhatsApp";
 import BookingFilter from "../components/BookingFilter";
 import Swal from "sweetalert2";
 
@@ -173,7 +174,8 @@ const Index = () => {
         </div>
         {/* Room End */}
         {/* Video Start */}
-
+        <WhatsApp/>
+      
         <div
           className="container-xxl py-5 px-0 wow zoomIn"
           data-wow-delay="0.1s"

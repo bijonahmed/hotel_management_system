@@ -226,6 +226,7 @@ const PlayGame = () => {
     getGameDetails();
     //handleSubmit(new Event('submit', { bubbles: true })); // Programmatically trigger form submission
   }, [traceId, token]); // Empty dependency array means this runs once after initial render
+
   const modalRef = useRef(null);
   const openModalLogin = () => {
     const modalElement = new window.bootstrap.Modal(modalRef.current);
@@ -250,13 +251,7 @@ const PlayGame = () => {
         <LeftSideBarComponent />
         <div className="container-fluid">
           {/* Modal */}
-          <div
-            className="modal fade"
-            ref={modalRef}
-            tabIndex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
+      <div className="modal fade" ref={modalRef}  tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content bg-dark">
                 <div className="modal-body">

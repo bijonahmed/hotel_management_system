@@ -17,48 +17,27 @@ const Index = () => {
   const navigate = useNavigate(); // already imported from 'react-router-dom'
   const rawToken = sessionStorage.getItem("token");
   const token = rawToken?.replace(/^"(.*)"$/, "$1");
+  const [roomData, setRoomData] = useState([]);
 
-  const fetchMerchantData = async () => {
+  const fetechActiveBookingRooms = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      if (!token) {
-        throw new Error("Token not found in sessionStorage");
-      }
-      const response = await axios.get(`/deposit/getDepositList`, {
+      const response = await axios.get(`/booking/activeBookingRooms`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setMerchantData(response.data);
+      //console.log("API Response:", response.data); // Log the response
+      setRoomData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data", error);
     } finally {
       setLoading(false);
     }
   };
-
-  const countData = async () => {
-    try {
-      if (!token) {
-        throw new Error("Token not found in sessionStorage");
-      }
-      const response = await axios.get(`/deposit/countMerchantData`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setDepositCount(response.data.data.countDeposit);
-      setDepositAmt(response.data.data.countDepositAmt);
-      setMerchentCount(response.data.data.countMerchant);
-      setBulkAddressCount(response.data.data.countBulkAddress);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
   // Correctly closed useEffect hook
   useEffect(() => {
-    countData();
-    fetchMerchantData();
+    fetechActiveBookingRooms();
   }, []);
 
   useEffect(() => {
@@ -70,82 +49,129 @@ const Index = () => {
   return (
     <div>
       <Helmet>
-        <title>Dashboard [Payment Getway]</title>
+        <title>Dashboard</title>
       </Helmet>
       {/* Start */}
 
       <div>
-      
+        <Helmet>
+          <title>Dashboard</title>
+        </Helmet>
+        <div className="bg-white p-0">
+          <Header />
+          {/* Page Header */}
+          <div
+            className="container-fluid page-header mb-5 p-0"
+            style={{ backgroundImage: "url(/img/carousel-1.jpg)" }}
+          >
+            <div className="container-fluid page-header-inner py-5">
+              <div className="container text-center pb-5">
+                <h1 className="display-3 text-white mb-3 animated slideInDown">
+                  Dashboard
+                </h1>
+                <nav aria-label="breadcrumb">
+                  <ol className="breadcrumb justify-content-center text-uppercase">
+                    <li className="breadcrumb-item">
+                      <Link to="/">Home</Link>
+                    </li>
+                 
+                    <li
+                      className="breadcrumb-item text-white active"
+                      aria-current="page"
+                    >
+                      Dashboard
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
 
-      <Helmet>
-        <title>Room</title>
-      </Helmet>
-      <div className="bg-white p-0">
-        <Header />
-        {/* Page Header */}
-        <div
-          className="container-fluid page-header mb-5 p-0"
-          style={{ backgroundImage: "url(/img/carousel-1.jpg)" }}
-        >
-          <div className="container-fluid page-header-inner py-5">
-            <div className="container text-center pb-5">
-              <h1 className="display-3 text-white mb-3 animated slideInDown">
-                Dashboard
-              </h1>
-              <nav aria-label="breadcrumb">
-                <ol className="breadcrumb justify-content-center text-uppercase">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <a href="#">Pages</a>
-                  </li>
-                  <li
-                    className="breadcrumb-item text-white active"
-                    aria-current="page"
+          <BookingFilter />
+
+          {/* start */}
+          {/* Room Start */}
+          <div className="container-xxl py-1">
+            <div className="container">
+              <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 className="section-title text-center text-primary text-uppercase">
+                  Booking History
+                </h6>
+              </div>
+              <div className="row g-4 mt-3">
+                {roomData.map((room, index) => (
+                  <div
+                    key={index}
+                    className="col-lg-4 col-md-6 wow fadeInUp"
+                    data-wow-delay="0.6s"
                   >
-                    Dashboard
-                  </li>
-                </ol>
-              </nav>
+                    <div className="room-item shadow rounded overflow-hidden">
+                      <div className="position-relative">
+                        <img
+                          className="img-fluid"
+                          src={room.roomImage || "/img/room-3.jpg"}
+                          alt="Room Image"
+                        />
+                        <small className="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">
+                          BDT.&nbsp;{room.roomPrice}/Night
+                        </small>
+                      </div>
+                      <div className="p-4 mt-2">
+                        <div className="d-flex justify-content-between mb-3">
+                          <h5 className="mb-0">
+                            {room.name || "Super Deluxe"}
+                          </h5>
+                          <div className="ps-2">
+                            <small className="fa fa-star text-primary" />
+                            <small className="fa fa-star text-primary" />
+                            <small className="fa fa-star text-primary" />
+                            <small className="fa fa-star text-primary" />
+                            <small className="fa fa-star text-primary" />
+                          </div>
+                        </div>
+
+                        <p
+                          style={{
+                            backgroundColor: "#f8f9fa",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            fontSize: "16px",
+                            color: "#212529",
+                            marginBottom: "16px",
+                            border: "1px solid #dee2e6",
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+                          }}
+                        >
+                          <strong>Check in:</strong> {room.checkin} &nbsp;&nbsp;
+                          <strong>Check out:</strong> {room.checkout}
+                        </p>
+
+                        <div className="d-flex justify-content-between">
+                          <Link to={`/booking-history-details/${room.booking_id}`} className="btn btn-sm btn-primary rounded py-2 px-4 w-100">
+                            View Detail
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
+          <br />
+          <br />
+          {/* Room End */}
+
+          {/* end */}
+          <Footer />
+
+          <a
+            href="#"
+            className="btn btn-lg btn-primary btn-lg-square back-to-top"
+          >
+            <i className="bi bi-arrow-up" />
+          </a>
         </div>
-
-        <BookingFilter />
-
-        {/* start */}
-        {/* Room Start */}
-        <div className="container-xxl py-1">
-          <div className="container">
-            <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-              <h6 className="section-title text-center text-primary text-uppercase">
-                Our Rooms
-              </h6>
-              <h1 className="mb-5">
-                Explore Our{" "}
-                <span className="text-primary text-uppercase">Rooms</span>
-              </h1>
-            </div>
-            dddddd
-          </div>
-        </div>
-        <br/><br/>
-        {/* Room End */}
-
-        {/* end */}
-        <Footer />
-
-        <a
-          href="#"
-          className="btn btn-lg btn-primary btn-lg-square back-to-top"
-        >
-          <i className="bi bi-arrow-up" />
-        </a>
-      </div>
-
-
-
       </div>
 
       {/* END */}
