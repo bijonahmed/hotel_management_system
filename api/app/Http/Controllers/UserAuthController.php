@@ -76,10 +76,8 @@ class UserAuthController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-
         $checkSlug = Room::where('slug', $request->slug)->first();
         //echo $checkSlug->id;exit; 
-
         $existingBooking = Booking::where('room_id', $checkSlug->id)
             ->where(function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
@@ -94,9 +92,6 @@ class UserAuthController extends Controller
                 'message' => 'Room already booked for selected dates. Please choose a checkout date after ' . $nextAvailableDate,
             ], 409); // 409 Conflict
         }
-
-
-
 
         $password = '#123456#';
         $username = $this->generateUniqueRandomNumber(); // you'll define this method

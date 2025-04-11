@@ -82,6 +82,7 @@ class GuestBookingController extends Controller
 
         // Call the separate method to generate a unique booking ID
         $bookingId = $this->generateUniqueBookingId();
+        $checkRoom = Room::where('id', $checkSlug->id)->first();
 
         $data = [
             'booking_id'  => $bookingId,  // Adding custom unique booking ID
@@ -90,6 +91,7 @@ class GuestBookingController extends Controller
             'checkin'     => $request->checkin,
             'checkout'    => $request->checkout,
             'paymenttype' => $request->paymenttype,
+            'room_price'  => $checkRoom->roomPrice,
             'room_id'     => $checkSlug->id,
             'adult'       => $request->adult,
             'child'       => $request->child,
@@ -99,6 +101,11 @@ class GuestBookingController extends Controller
         ];
 
         Booking::create($data);
+
+        $updateRoom = [
+            'booking_status' => 1,
+        ];
+        Room::where('id', $checkSlug->id)->update($updateRoom);
 
         return response()->json(['message' => 'Successfully booked.']);
     }

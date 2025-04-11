@@ -18,6 +18,8 @@ use App\Http\Controllers\RoomSetting\RoomSettingController;
 use App\Http\Controllers\Facility\FacilityController;
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\Booking\GuestBookingController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/cc', function () {
     $exitCode = Artisan::call('optimize:clear');
@@ -68,7 +70,7 @@ Route::group([
     Route::post('/sendContact', [PublicController::class, 'sendContact']);
     Route::post('/filterBooking', [PublicController::class, 'filterBooking']);
 });
-
+/*
 Route::group([
     'prefix' => 'booking'
 ], function () {
@@ -79,8 +81,7 @@ Route::group([
     Route::get('/activeBookingRooms', [BookingController::class, 'activeBookingRooms']);
   
 });
-
-
+*/
 Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
 
     Route::group([
@@ -91,10 +92,8 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::post('bookingRequest', [BookingController::class, 'bookingRequest']);
         Route::get('/getBookingDetails', [BookingController::class, 'getBookingDetails']);
         Route::get('/activeBookingRooms', [BookingController::class, 'activeBookingRooms']);
-      
     });
 
-    
     Route::group([
         'prefix' => 'user'
     ], function () {
@@ -200,13 +199,10 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
 
 
     Route::group([
-        'prefix' => 'deposit'
+        'prefix' => 'dashboard'
     ], function () {
-        Route::get('getDepositList', [DepositController::class, 'getDepositfetchdata']);
-        Route::get('countMerchantData', [DepositController::class, 'countMerchantData']);
-        Route::get('getDepositReport', [DepositController::class, 'getDepositReport']);
-        Route::get('depositrowCheck', [DepositController::class, 'depositrowCheck']);
-        Route::post('updateDepositStatus', [DepositController::class, 'updateDepositStatus']);
+        Route::get('countBookingData', [DashboardController::class, 'countBookingData']);
+        Route::get('getTodayBookingList', [DashboardController::class, 'getTodayBookingList']);
     });
 
     Route::group([

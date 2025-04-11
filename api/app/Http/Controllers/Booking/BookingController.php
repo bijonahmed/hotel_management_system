@@ -198,7 +198,7 @@ class BookingController extends Controller
             'email'       => $request->email,
             'checkin'     => $request->checkin,
             'checkout'    => $request->checkout,
-            'roomPrice'   => $checkRoom->roomPrice,
+            'room_price'  => $checkRoom->roomPrice,
             'paymenttype' => $request->paymenttype,
             'room_id'     => $checkSlug->id,
             'adult'       => $request->adult,

@@ -15,27 +15,27 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const { content } = useContext(LanguageContext);
-  const [merchantData, setMerchantData] = useState([]);
-  const [depositCount, setDepositCount] = useState(0);
-  const [depositAmt, setDepositAmt] = useState(0);
-  const [merchantCount, setMerchentCount] = useState(0);
-  const [bulkAddressCount, setBulkAddressCount] = useState(0);
+  const [bookingData, setBookingData] = useState([]);
+  const [todaybookingCount, setTodayBCount] = useState(0);
+  const [todaybookingAmt, setbPayment] = useState(0);
+  const [coustomerCount, setCustomerCount] = useState(0);
+  const [roomCount, setRoomCount] = useState(0);
 
   const rawToken = sessionStorage.getItem("token");
   const token = rawToken?.replace(/^"(.*)"$/, "$1");
 
-  const fetchMerchantData = async () => {
+  const getBookingList = async () => {
     try {
       setLoading(true);
       if (!token) {
         throw new Error("Token not found in sessionStorage");
       }
-      const response = await axios.get(`/deposit/getDepositList`, {
+      const response = await axios.get(`/dashboard/getTodayBookingList`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setMerchantData(response.data);
+      setBookingData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -48,23 +48,23 @@ const Index = () => {
       if (!token) {
         throw new Error("Token not found in sessionStorage");
       }
-      const response = await axios.get(`/deposit/countMerchantData`, {
+      const response = await axios.get(`/dashboard/countBookingData`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setDepositCount(response.data.data.countDeposit);
-      setDepositAmt(response.data.data.countDepositAmt);
-      setMerchentCount(response.data.data.countMerchant);
-      setBulkAddressCount(response.data.data.countBulkAddress);
+      setTodayBCount(response.data.todayBooking);
+      setbPayment(response.data.bookingPayment);
+      setCustomerCount(response.data.customerCount);
+      setRoomCount(response.data.roomCount);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   // Correctly closed useEffect hook
   useEffect(() => {
-  //  countData();
-   // fetchMerchantData();
+    countData();
+    getBookingList();
   }, []);
 
   return (
@@ -93,8 +93,8 @@ const Index = () => {
                     <div className="card-body">
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
-                          <p className="mb-0 text-white">Today Total Booking</p>
-                          <h4 className="my-1 text-white">{depositCount}</h4>
+                          <p className="mb-0 text-white">Today Booking</p>
+                          <h4 className="my-1 text-white">{todaybookingCount}</h4>
                         </div>
                         <div id="chart1" />
                       </div>
@@ -107,8 +107,8 @@ const Index = () => {
                     <div className="card-body">
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
-                          <p className="mb-0 text-dark">Today Amount</p>
-                          <h4 className="my-1 text-dark">${depositAmt}</h4>
+                          <p className="mb-0 text-dark">Today Booking Amount</p>
+                          <h4 className="my-1 text-dark">Tk.{todaybookingAmt}</h4>
                         </div>
                         <div id="chart4" />
                       </div>
@@ -122,7 +122,7 @@ const Index = () => {
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
                           <p className="mb-0 text-white">Total Customer</p>
-                          <h4 className="my-1 text-white">{merchantCount}</h4>
+                          <h4 className="my-1 text-white">{coustomerCount}</h4>
                         </div>
                         <div id="chart2" />
                       </div>
@@ -138,7 +138,7 @@ const Index = () => {
                             Total Rooms
                           </p>
                           <h4 className="my-1 text-white">
-                            {bulkAddressCount}
+                            {roomCount}
                           </h4>
                         </div>
                         <div id="chart3" />
@@ -163,66 +163,34 @@ const Index = () => {
                     <center>
                      <div className="spinner-border" role="status"> <span className="visually-hidden">Loading...</span>
                      </div>
-                   
                       </center>
                   ) : (
                     <div className="table-responsive">
                       <table className="table align-middle mb-0 table-hover">
                         <thead className="table-light">
                           <tr>
-                            <th>Merchant Name</th>
-                            <th>Deposit ID</th>
-                            <th>Username[ID]</th>
-                            <th>Amount</th>
-                            <th>Created At</th>
-                            <th>Status</th>
-                            <th>Crypto Wallet Address</th>
+                            <th>Booking ID</th>
+                            <th>Booking By</th>
+                            <th>Room Name</th>
+                            <th>Room Price</th>
+                            <th>Check In/Out</th>
+                            <th>Days</th>
+                            <th className="text-center">Payment Type</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {merchantData.map((data, index) => (
+                          {bookingData.map((data, index) => (
                             <tr key={index}>
-                              <td>{data.merchant_name}</td>
+                              <td>{data.booking_id}</td>
+                              <td>{data.name	}</td>
+                              <td>{data.room_name	}</td>
+                              <td>{data.roomPrice}</td>
                               <td>
-                                <small>{data.depositID}</small>
+                                {data.checkin}<br/>
+                                {data.checkout	}
                               </td>
-                              <td>
-                                <small>
-                                  {data.username}[{data.user_id}]
-                                </small>
-                              </td>
-                              <td>
-                                <small>${data.deposit_amount}</small>
-                              </td>
-                              <td>
-                                <small>{data.created_at}</small>
-                              </td>
-                              <td>
-                                <small>
-                                  <span
-                                    className={`badge ${
-                                      data.status == 0
-                                        ? "bg-gradient-blooker"
-                                        : data.status == 1
-                                        ? "bg-gradient-quepal"
-                                        : data.status == 2
-                                        ? "bg-gradient-bloody"
-                                        : ""
-                                    } text-white shadow-sm w-100`}
-                                  >
-                                    {data.status == 0
-                                      ? "Pending"
-                                      : data.status == 1
-                                      ? "Active"
-                                      : data.status == 2
-                                      ? "Rejected"
-                                      : ""}
-                                  </span>
-                                </small>
-                              </td>
-                              <td>
-                                <small>{data.to_crypto_wallet_address}</small>
-                              </td>
+                               <td>{data.total_booking_days}</td>
+                               <td className="text-center">    {data.paymenttype === 1 ? 'Online' : data.paymenttype === 2 ? 'Offline' : 'N/A'}</td>
                             </tr>
                           ))}
                         </tbody>
