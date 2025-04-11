@@ -20,8 +20,67 @@ class PublicController extends Controller
 {
 
 
+    public function filterBooking(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'check_in'  => 'required|date',
+                'check_out' => 'required|date|after_or_equal:check_in',
+            ],
+            [
+                'check_in.required' => 'The check-in date is required.',
+                'check_in.date'     => 'The check-in must be a valid date.',
+                'check_out.required' => 'The check-out date is required.',
+                'check_out.date'     => 'The check-out must be a valid date.',
+                'check_out.after_or_equal' => 'The check-out date must be after or equal to the check-in date.',
+            ]
+        );
 
-    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+
+        // Fetch available rooms (booking_status = 2 or NULL)
+        $rooms = Room::where('booking_status', 2)
+            ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
+            ->leftJoinSub(
+                \DB::table('room_images')
+                    ->select('room_id', \DB::raw('MIN(id) as min_id')) // Get first image ID
+                    ->groupBy('room_id'),
+                'first_images',
+                'room.id',
+                '=',
+                'first_images.room_id'
+            )
+            ->leftJoin('room_images', 'room_images.id', '=', 'first_images.min_id') // Join first image
+            ->orWhereNull('booking_status')
+            ->select('room.slug', 'room.id', 'room.name', 'room.roomDescription', 'bed_type.name as bed_name', 'roomPrice', 'room_images.roomImage')
+            ->get()
+            ->map(function ($room) {
+                return [
+                    'room_id'         => $room->id,
+                    'name'            => $room->name,
+                    'slug'            => $room->slug,
+                    'bed_name'        => $room->bed_name,
+                    'roomPrice'       => number_format($room->roomPrice, 2),
+                    'roomDescription' =>  Str::limit($room->roomDescription, 50), // Limit to 50 characters,
+                    'roomImage'       => !empty($room->roomImage) ? url($room->roomImage) : ""
+                ];
+            });
+
+
+
+        return response()->json([
+            'message' => 'Available rooms fetched successfully.',
+            'rooms' => $rooms
+        ], 200);
+    }
+
+
+
     public function activeRooms(Request $request)
     {
         try {
@@ -29,10 +88,13 @@ class PublicController extends Controller
             $rowsData = Room::where('room.status', 1)
                 ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
                 ->leftJoinSub(
-                \DB::table('room_images')
-                ->select('room_id', \DB::raw('MIN(id) as min_id')) // Get first image ID
-                ->groupBy('room_id'),
-                'first_images','room.id','=','first_images.room_id'
+                    \DB::table('room_images')
+                        ->select('room_id', \DB::raw('MIN(id) as min_id')) // Get first image ID
+                        ->groupBy('room_id'),
+                    'first_images',
+                    'room.id',
+                    '=',
+                    'first_images.room_id'
                 )
                 ->leftJoin('room_images', 'room_images.id', '=', 'first_images.min_id') // Join first image
                 ->select('room.slug', 'room.id', 'room.name', 'room.roomDescription', 'bed_type.name as bed_name', 'roomPrice', 'room_images.roomImage')
@@ -134,6 +196,5 @@ class PublicController extends Controller
         //Please add email qeue...
 
         return response()->json("Send mail", 200);
-
     }
 }

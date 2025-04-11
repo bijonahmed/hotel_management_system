@@ -24,8 +24,10 @@ const Room = () => {
     }
   };
 
+
   useEffect(() => {
     fetechActiveRooms();
+
   }, []);
 
   return (
@@ -90,6 +92,7 @@ const Room = () => {
                   <div className="room-item shadow rounded overflow-hidden">
                     <div className="position-relative">
                       <img
+                      
                         className="img-fluid"
                         src={room.roomImage || "/img/room-3.jpg"}
                         alt="Room Image"

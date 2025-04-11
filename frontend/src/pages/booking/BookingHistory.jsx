@@ -74,7 +74,9 @@ const BookingHistory = () => {
   useEffect(() => {
     getRoomDetails();
     fetechActiveBookingRooms();
+
   }, []);
+
 
   useEffect(() => {
     if (!token) {

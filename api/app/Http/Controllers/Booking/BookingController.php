@@ -147,8 +147,9 @@ class BookingController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name'      => 'required',
-                'slug'      => 'required',
+                'name'          => 'required',
+                'slug'          => 'required',
+                'paymenttype'   => 'required',
                 'email'     => 'required|email',
                 'checkin'   => 'required|date',
                 'checkout'  => 'required|date|after_or_equal:checkin',
@@ -156,6 +157,7 @@ class BookingController extends Controller
             [
                 'name.required'     => 'Please enter your name.',
                 'email.required'    => 'Email address is required.',
+                'paymenttype.required'     => 'Please select payment type.',
                 'email.email'       => 'Please provide a valid email address.',
                 'checkin.required'  => 'Please select a check-in date.',
                 'checkin.date'      => 'Check-in date must be a valid date.',
@@ -188,6 +190,7 @@ class BookingController extends Controller
 
         // Call the separate method to generate a unique booking ID
         $bookingId = $this->generateUniqueBookingId();
+        $checkRoom = Room::where('id', $checkSlug->id)->first();
 
         $data = [
             'booking_id'  => $bookingId,  // Adding custom unique booking ID
@@ -195,6 +198,8 @@ class BookingController extends Controller
             'email'       => $request->email,
             'checkin'     => $request->checkin,
             'checkout'    => $request->checkout,
+            'roomPrice'   => $checkRoom->roomPrice,
+            'paymenttype' => $request->paymenttype,
             'room_id'     => $checkSlug->id,
             'adult'       => $request->adult,
             'child'       => $request->child,
@@ -204,6 +209,13 @@ class BookingController extends Controller
         ];
 
         Booking::create($data);
+
+        $updateRoom = [
+            'booking_status' => 1,
+        ];
+        Room::where('id', $checkSlug->id)->update($updateRoom);
+
+
 
         return response()->json(['message' => 'Successfully booked.']);
     }

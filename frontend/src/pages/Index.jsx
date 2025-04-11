@@ -187,17 +187,15 @@ const Index = () => {
                   Luxury Living
                 </h6>
                 <h1 className="text-white mb-4">
-                  Discover A Brand Luxurious Hotel
+                Moon Nest 
                 </h1>
                 <p className="text-white mb-4">
-                  Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit.
-                  Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit,
-                  sed stet lorem sit clita duo justo magna dolore erat amet
+                Moon Nest is a very soothing resort. All are wooden bungalow with both sea and hill view sides. There is a bathroom, a couple bed room & a veranda in one bungalow.
                 </p>
-                <a className="btn btn-primary py-md-3 px-md-5 me-3">
+                {/* <a className="btn btn-primary py-md-3 px-md-5 me-3">
                   Our Rooms
                 </a>
-                <a className="btn btn-light py-md-3 px-md-5">Book A Room</a>
+                <a className="btn btn-light py-md-3 px-md-5">Book A Room</a> */}
               </div>
             </div>
             <div className="col-md-6">

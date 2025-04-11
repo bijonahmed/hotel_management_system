@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2025 at 08:18 PM
+-- Generation Time: Apr 10, 2025 at 04:57 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -90,20 +90,42 @@ CREATE TABLE `bed_type` (
 --
 
 INSERT INTO `bed_type` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'King Bed', 'king-bed', 1, '2025-03-30 03:23:26', '2025-03-30 03:23:26'),
-(2, 'Queen Bed', 'queen-bed', 1, '2025-03-30 03:23:34', '2025-03-30 03:23:34'),
-(3, 'Twins Bed', 'twins-bed', 1, '2025-03-30 03:23:42', '2025-03-30 03:23:42'),
-(4, 'dsfsdfsdf sdfasdf sdf sd fsd fsdf', 'dsfsdfsdf-sdfasdf-sdf-sd-fsd-fsdf', 1, '2025-03-30 03:23:47', '2025-04-01 21:29:42'),
-(5, 'Futon Bed', 'futon-bed', 1, '2025-03-30 03:23:59', '2025-03-30 03:23:59'),
-(6, 'Mattress Bed', 'mattress-bed', 1, '2025-03-30 03:24:07', '2025-03-30 03:24:07'),
-(7, 'Air Bed', 'air-bed', 1, '2025-03-30 03:24:14', '2025-03-31 05:46:57'),
-(8, 'Standard Double', 'standard-double', 1, '2025-03-31 06:02:52', '2025-03-31 20:48:24'),
-(9, 'Standard Queen', 'standard-queen', 1, '2025-03-31 20:50:57', '2025-03-31 20:50:57'),
-(10, 'Luxury King', 'luxury-king', 1, '2025-03-31 20:52:09', '2025-03-31 20:52:09'),
-(11, 'Standard Twin', 'standard-twin', 1, '2025-03-31 20:55:22', '2025-03-31 20:55:22'),
-(12, 'Luxury Queen', 'luxury-queen', 1, '2025-03-31 20:56:52', '2025-03-31 20:56:52'),
-(13, 'Standard King', 'standard-king', 1, '2025-03-31 20:58:53', '2025-03-31 20:58:53'),
-(14, 'Normal Bed', 'normal-bed', 1, '2025-03-31 21:02:54', '2025-03-31 21:02:54');
+(1, '1 large double bed', '1-large-double-bed', 1, '2025-04-03 12:03:28', '2025-04-03 12:03:28'),
+(2, '2 large double bed', '2-large-double-bed', 1, '2025-04-03 12:03:57', '2025-04-03 12:03:57'),
+(3, '1 extra-large double bed', '1-extra-large-double-bed', 1, '2025-04-03 12:07:29', '2025-04-03 12:07:29'),
+(4, '2 extra-large double bed', '2-extra-large-double-bed', 1, '2025-04-03 12:17:16', '2025-04-03 12:17:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking`
+--
+
+CREATE TABLE `booking` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `booking_id` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `checkin` date NOT NULL,
+  `checkout` date NOT NULL,
+  `room_id` int(10) UNSIGNED NOT NULL,
+  `adult` int(11) DEFAULT 0,
+  `child` int(11) DEFAULT 0,
+  `room_price` double(10,2) DEFAULT NULL,
+  `message` text DEFAULT NULL,
+  `customer_id` bigint(20) UNSIGNED NOT NULL,
+  `booking_status` int(11) DEFAULT NULL COMMENT '1=Booked\r\n2=Release\r\n3=Cancel',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`id`, `booking_id`, `name`, `email`, `checkin`, `checkout`, `room_id`, `adult`, `child`, `room_price`, `message`, `customer_id`, `booking_status`, `created_at`, `updated_at`) VALUES
+(9, '92523', 'Bijon', 'mdbijon@gmail.com', '2025-04-09', '2025-04-12', 2, 4, 2, NULL, 'ddd', 81, 1, '2025-04-08 14:18:14', '2025-04-08 14:18:14'),
+(11, '21761', 'Ayesha', 'ayesha@gmail.com', '2025-04-10', '2025-04-16', 3, 0, 0, NULL, NULL, 81, 2, '2025-04-09 12:47:54', '2025-04-09 12:47:54');
 
 -- --------------------------------------------------------
 
@@ -678,7 +700,13 @@ INSERT INTO `facility_group` (`id`, `name`, `slug`, `status`, `created_at`, `upd
 (4, 'Kitchen & Dining', 'kitchen-dining', 1, '2025-04-01 15:45:57', '2025-04-01 15:45:57'),
 (5, 'Technology & Security', 'technology-security', 1, '2025-04-01 15:46:04', '2025-04-01 15:46:04'),
 (6, 'Leisure & Extras', 'leisure-extras', 1, '2025-04-01 15:46:11', '2025-04-01 15:46:11'),
-(7, 'Additional Services', 'additional-services', 1, '2025-04-01 15:46:16', '2025-04-01 15:46:16');
+(7, 'Additional Services', 'additional-services', 1, '2025-04-01 15:46:16', '2025-04-01 15:46:16'),
+(8, 'In your private bathroom', 'in-your-private-bathroom', 1, '2025-04-03 06:17:45', '2025-04-03 06:17:45'),
+(9, 'View', 'view', 1, '2025-04-03 06:19:20', '2025-04-03 06:19:20'),
+(10, 'Bungalow facilities', 'bungalow-facilities', 1, '2025-04-03 06:20:15', '2025-04-03 06:20:15'),
+(11, 'Smoking', 'smoking', 1, '2025-04-03 06:41:03', '2025-04-03 06:41:03'),
+(12, 'Bungalow with Sea View', 'bungalow-with-sea-view', 1, '2025-04-03 06:44:46', '2025-04-03 06:44:46'),
+(13, 'Executive Suite', 'executive-suite', 1, '2025-04-03 08:56:39', '2025-04-03 08:56:39');
 
 -- --------------------------------------------------------
 
@@ -695,13 +723,6 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `failed_jobs`
---
-
-INSERT INTO `failed_jobs` (`id`, `uuid`, `connection`, `queue`, `payload`, `exception`, `failed_at`) VALUES
-(1, '5d64097e-af0c-492d-931d-2ec78ed2263f', 'database', 'default', '{\"uuid\":\"5d64097e-af0c-492d-931d-2ec78ed2263f\",\"displayName\":\"App\\\\Jobs\\\\LargeExcelJob\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\LargeExcelJob\",\"command\":\"O:22:\\\"App\\\\Jobs\\\\LargeExcelJob\\\":1:{s:11:\\\"\\u0000*\\u0000filePath\\\";s:53:\\\"huploads\\/yNlsQVYw7dLxM3zU17nsxt6uJUpS0yNnKLANMVXD.csv\\\";}\"}}', 'PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column \'title\' cannot be null in D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\MySqlConnection.php:45\nStack trace:\n#0 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\MySqlConnection.php(45): PDOStatement->execute()\n#1 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(816): Illuminate\\Database\\MySqlConnection->Illuminate\\Database\\{closure}(\'insert into `vi...\', Array)\n#2 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(783): Illuminate\\Database\\Connection->runQueryCallback(\'insert into `vi...\', Array, Object(Closure))\n#3 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\MySqlConnection.php(50): Illuminate\\Database\\Connection->run(\'insert into `vi...\', Array, Object(Closure))\n#4 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Processors\\MySqlProcessor.php(35): Illuminate\\Database\\MySqlConnection->insert(\'insert into `vi...\', Array, \'id\')\n#5 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3549): Illuminate\\Database\\Query\\Processors\\MySqlProcessor->processInsertGetId(Object(Illuminate\\Database\\Query\\Builder), \'insert into `vi...\', Array, \'id\')\n#6 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(1982): Illuminate\\Database\\Query\\Builder->insertGetId(Array, \'id\')\n#7 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1334): Illuminate\\Database\\Eloquent\\Builder->__call(\'insertGetId\', Array)\n#8 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1299): Illuminate\\Database\\Eloquent\\Model->insertAndSetId(Object(Illuminate\\Database\\Eloquent\\Builder), Array)\n#9 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1138): Illuminate\\Database\\Eloquent\\Model->performInsert(Object(Illuminate\\Database\\Eloquent\\Builder))\n#10 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1166): Illuminate\\Database\\Eloquent\\Model->save(Array)\n#11 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(30): Illuminate\\Database\\Eloquent\\Model->Illuminate\\Database\\Eloquent\\{closure}(Object(Illuminate\\Database\\MySqlConnection))\n#12 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1166): Illuminate\\Database\\Connection->transaction(Object(Closure))\n#13 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(167): Illuminate\\Database\\Eloquent\\Model->saveOrFail()\n#14 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Maatwebsite\\Excel\\Imports\\ModelManager->Maatwebsite\\Excel\\Imports\\{closure}(Object(App\\Models\\Video), 0)\n#15 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(172): Illuminate\\Support\\Collection->each(Object(Closure))\n#16 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Maatwebsite\\Excel\\Imports\\ModelManager->Maatwebsite\\Excel\\Imports\\{closure}(Array, 18102)\n#17 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(173): Illuminate\\Support\\Collection->each(Object(Closure))\n#18 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(82): Maatwebsite\\Excel\\Imports\\ModelManager->singleFlush(Object(App\\Imports\\LargeHostersmport))\n#19 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelImporter.php(114): Maatwebsite\\Excel\\Imports\\ModelManager->flush(Object(App\\Imports\\LargeHostersmport), false)\n#20 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelImporter.php(95): Maatwebsite\\Excel\\Imports\\ModelImporter->flush(Object(App\\Imports\\LargeHostersmport), 1, 18102)\n#21 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Sheet.php(258): Maatwebsite\\Excel\\Imports\\ModelImporter->import(Object(PhpOffice\\PhpSpreadsheet\\Worksheet\\Worksheet), Object(App\\Imports\\LargeHostersmport), 1)\n#22 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Reader.php(116): Maatwebsite\\Excel\\Sheet->import(Object(App\\Imports\\LargeHostersmport), 1)\n#23 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(30): Maatwebsite\\Excel\\Reader->Maatwebsite\\Excel\\{closure}(Object(Illuminate\\Database\\MySqlConnection))\n#24 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Transactions\\DbTransactionHandler.php(30): Illuminate\\Database\\Connection->transaction(Object(Closure))\n#25 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Reader.php(130): Maatwebsite\\Excel\\Transactions\\DbTransactionHandler->__invoke(Object(Closure))\n#26 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Excel.php(155): Maatwebsite\\Excel\\Reader->read(Object(App\\Imports\\LargeHostersmport), \'huploads/yNlsQV...\', \'Csv\', NULL)\n#27 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(355): Maatwebsite\\Excel\\Excel->import(Object(App\\Imports\\LargeHostersmport), \'huploads/yNlsQV...\')\n#28 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\app\\Jobs\\largeExcelJob.php(26): Illuminate\\Support\\Facades\\Facade::__callStatic(\'import\', Array)\n#29 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Jobs\\LargeExcelJob->handle()\n#30 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#31 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#32 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#33 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#34 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(128): Illuminate\\Container\\Container->call(Array)\n#35 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#36 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#37 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(132): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#38 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(124): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(App\\Jobs\\LargeExcelJob), false)\n#39 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Queue\\CallQueuedHandler->Illuminate\\Queue\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#40 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#41 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(126): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#42 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(70): Illuminate\\Queue\\CallQueuedHandler->dispatchThroughMiddleware(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(App\\Jobs\\LargeExcelJob))\n#43 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Jobs\\Job.php(102): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Array)\n#44 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(439): Illuminate\\Queue\\Jobs\\Job->fire()\n#45 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(389): Illuminate\\Queue\\Worker->process(\'database\', Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(Illuminate\\Queue\\WorkerOptions))\n#46 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(176): Illuminate\\Queue\\Worker->runJob(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), \'database\', Object(Illuminate\\Queue\\WorkerOptions))\n#47 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(138): Illuminate\\Queue\\Worker->daemon(\'database\', \'default\', Object(Illuminate\\Queue\\WorkerOptions))\n#48 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(121): Illuminate\\Queue\\Console\\WorkCommand->runWorker(\'database\', \'default\')\n#49 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()\n#50 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#51 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#52 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#53 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#54 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)\n#55 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#56 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#57 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#58 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Queue\\Console\\WorkCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#59 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#60 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#61 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#62 {main}\n\nNext Illuminate\\Database\\QueryException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column \'title\' cannot be null (Connection: mysql, SQL: insert into `videos_1` (`video_id`, `category`, `title`, `url`, `thumb_src`, `keywords`, `thumb_size`, `length_sec`, `length_min`, `embed`, `status`, `updated_at`, `created_at`) values (18188, Asian, ?, https://www.eporner.com/video-WsDBaYjd63i//, https://static-ca-cdn.eporner.com/thumbs/static4/1/11/115/11502288/8_240.jpg, medium, 48, amateur, , , brunette, asian, pov, 1677, 27, https://www.eporner.com/embed/WsDBaYjd63i/, 2024-10-20 16:09:02, 2024-10-20 16:09:02)) in D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:829\nStack trace:\n#0 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(783): Illuminate\\Database\\Connection->runQueryCallback(\'insert into `vi...\', Array, Object(Closure))\n#1 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\MySqlConnection.php(50): Illuminate\\Database\\Connection->run(\'insert into `vi...\', Array, Object(Closure))\n#2 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Processors\\MySqlProcessor.php(35): Illuminate\\Database\\MySqlConnection->insert(\'insert into `vi...\', Array, \'id\')\n#3 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3549): Illuminate\\Database\\Query\\Processors\\MySqlProcessor->processInsertGetId(Object(Illuminate\\Database\\Query\\Builder), \'insert into `vi...\', Array, \'id\')\n#4 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(1982): Illuminate\\Database\\Query\\Builder->insertGetId(Array, \'id\')\n#5 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1334): Illuminate\\Database\\Eloquent\\Builder->__call(\'insertGetId\', Array)\n#6 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1299): Illuminate\\Database\\Eloquent\\Model->insertAndSetId(Object(Illuminate\\Database\\Eloquent\\Builder), Array)\n#7 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1138): Illuminate\\Database\\Eloquent\\Model->performInsert(Object(Illuminate\\Database\\Eloquent\\Builder))\n#8 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1166): Illuminate\\Database\\Eloquent\\Model->save(Array)\n#9 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(30): Illuminate\\Database\\Eloquent\\Model->Illuminate\\Database\\Eloquent\\{closure}(Object(Illuminate\\Database\\MySqlConnection))\n#10 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Model.php(1166): Illuminate\\Database\\Connection->transaction(Object(Closure))\n#11 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(167): Illuminate\\Database\\Eloquent\\Model->saveOrFail()\n#12 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Maatwebsite\\Excel\\Imports\\ModelManager->Maatwebsite\\Excel\\Imports\\{closure}(Object(App\\Models\\Video), 0)\n#13 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(172): Illuminate\\Support\\Collection->each(Object(Closure))\n#14 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Maatwebsite\\Excel\\Imports\\ModelManager->Maatwebsite\\Excel\\Imports\\{closure}(Array, 18102)\n#15 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(173): Illuminate\\Support\\Collection->each(Object(Closure))\n#16 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelManager.php(82): Maatwebsite\\Excel\\Imports\\ModelManager->singleFlush(Object(App\\Imports\\LargeHostersmport))\n#17 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelImporter.php(114): Maatwebsite\\Excel\\Imports\\ModelManager->flush(Object(App\\Imports\\LargeHostersmport), false)\n#18 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Imports\\ModelImporter.php(95): Maatwebsite\\Excel\\Imports\\ModelImporter->flush(Object(App\\Imports\\LargeHostersmport), 1, 18102)\n#19 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Sheet.php(258): Maatwebsite\\Excel\\Imports\\ModelImporter->import(Object(PhpOffice\\PhpSpreadsheet\\Worksheet\\Worksheet), Object(App\\Imports\\LargeHostersmport), 1)\n#20 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Reader.php(116): Maatwebsite\\Excel\\Sheet->import(Object(App\\Imports\\LargeHostersmport), 1)\n#21 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(30): Maatwebsite\\Excel\\Reader->Maatwebsite\\Excel\\{closure}(Object(Illuminate\\Database\\MySqlConnection))\n#22 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Transactions\\DbTransactionHandler.php(30): Illuminate\\Database\\Connection->transaction(Object(Closure))\n#23 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Reader.php(130): Maatwebsite\\Excel\\Transactions\\DbTransactionHandler->__invoke(Object(Closure))\n#24 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\maatwebsite\\excel\\src\\Excel.php(155): Maatwebsite\\Excel\\Reader->read(Object(App\\Imports\\LargeHostersmport), \'huploads/yNlsQV...\', \'Csv\', NULL)\n#25 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(355): Maatwebsite\\Excel\\Excel->import(Object(App\\Imports\\LargeHostersmport), \'huploads/yNlsQV...\')\n#26 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\app\\Jobs\\largeExcelJob.php(26): Illuminate\\Support\\Facades\\Facade::__callStatic(\'import\', Array)\n#27 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Jobs\\LargeExcelJob->handle()\n#28 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#29 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#30 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#31 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#32 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(128): Illuminate\\Container\\Container->call(Array)\n#33 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#34 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#35 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(132): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#36 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(124): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(App\\Jobs\\LargeExcelJob), false)\n#37 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Queue\\CallQueuedHandler->Illuminate\\Queue\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#38 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\LargeExcelJob))\n#39 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(126): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#40 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(70): Illuminate\\Queue\\CallQueuedHandler->dispatchThroughMiddleware(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(App\\Jobs\\LargeExcelJob))\n#41 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Jobs\\Job.php(102): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Array)\n#42 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(439): Illuminate\\Queue\\Jobs\\Job->fire()\n#43 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(389): Illuminate\\Queue\\Worker->process(\'database\', Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(Illuminate\\Queue\\WorkerOptions))\n#44 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(176): Illuminate\\Queue\\Worker->runJob(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), \'database\', Object(Illuminate\\Queue\\WorkerOptions))\n#45 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(138): Illuminate\\Queue\\Worker->daemon(\'database\', \'default\', Object(Illuminate\\Queue\\WorkerOptions))\n#46 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(121): Illuminate\\Queue\\Console\\WorkCommand->runWorker(\'database\', \'default\')\n#47 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()\n#48 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#49 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#50 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#51 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#52 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)\n#53 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#54 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#55 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#56 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Queue\\Console\\WorkCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#57 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#58 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#59 D:\\xampp\\htdocs\\apps\\fgames_v2\\api\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#60 {main}', '2024-10-20 10:09:02');
 
 -- --------------------------------------------------------
 
@@ -737,6 +758,30 @@ INSERT INTO `global_wallet_address` (`id`, `name`, `slug`, `status`, `lock_unloc
 (11, 'TXbbicZTeHY3nv3g9v5GWjwpu6f9hGSNVN', NULL, 1, 0, '2024-07-12 18:37:49', '2024-07-12 18:37:49'),
 (12, 'TFpS6PeSvGSRK6xv1GNftPb4dvfTHoeUfh', NULL, 1, 0, '2024-07-12 18:37:49', '2024-07-12 18:37:49'),
 (13, 'TQUiTZzqypMpwSNTaKS1kye2p1MGd4tNvK', 'tquitzzqypmpwsntaks1kye2p1mgd4tnvk', 1, 0, '2024-07-12 18:37:49', '2024-12-09 18:47:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jobs`
+--
+
+CREATE TABLE `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `queue` varchar(255) NOT NULL,
+  `payload` text NOT NULL,
+  `attempts` int(10) UNSIGNED DEFAULT 0,
+  `reserved_at` timestamp NULL DEFAULT NULL,
+  `available_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `jobs`
+--
+
+INSERT INTO `jobs` (`id`, `queue`, `payload`, `attempts`, `reserved_at`, `available_at`, `created_at`) VALUES
+(1, 'default', '{\"uuid\":\"6e08bc6a-fb56-41e5-8b8a-bf44b880f1ca\",\"displayName\":\"App\\\\Mail\\\\Guestsendingmail\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Mail\\\\SendQueuedMailable\",\"command\":\"O:34:\\\"Illuminate\\\\Mail\\\\SendQueuedMailable\\\":15:{s:8:\\\"mailable\\\";O:25:\\\"App\\\\Mail\\\\Guestsendingmail\\\":3:{s:10:\\\"customData\\\";s:47:\\\"email=mdbijon%40gmail.com&password=%23123456%23\\\";s:2:\\\"to\\\";a:1:{i:0;a:2:{s:4:\\\"name\\\";N;s:7:\\\"address\\\";s:17:\\\"mdbijon@gmail.com\\\";}}s:6:\\\"mailer\\\";s:4:\\\"smtp\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:13:\\\"maxExceptions\\\";N;s:17:\\\"shouldBeEncrypted\\\";b:0;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}s:3:\\\"job\\\";N;}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 'default', '{\"uuid\":\"aef278e5-a753-498b-b1b0-acfb138ef995\",\"displayName\":\"App\\\\Mail\\\\Guestsendingmail\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Mail\\\\SendQueuedMailable\",\"command\":\"O:34:\\\"Illuminate\\\\Mail\\\\SendQueuedMailable\\\":15:{s:8:\\\"mailable\\\";O:25:\\\"App\\\\Mail\\\\Guestsendingmail\\\":3:{s:7:\\\"details\\\";s:48:\\\"email=1mdbijon%40gmail.com&password=%23123456%23\\\";s:2:\\\"to\\\";a:1:{i:0;a:2:{s:4:\\\"name\\\";N;s:7:\\\"address\\\";s:18:\\\"1mdbijon@gmail.com\\\";}}s:6:\\\"mailer\\\";s:4:\\\"smtp\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:13:\\\"maxExceptions\\\";N;s:17:\\\"shouldBeEncrypted\\\";b:0;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}s:3:\\\"job\\\";N;}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1019,6 +1064,7 @@ CREATE TABLE `room` (
   `roomDescription` text DEFAULT NULL,
   `reserveCondition` text DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
+  `booking_status` int(11) DEFAULT NULL COMMENT '1=Booked 2=Release 3=Cancel',
   `created_at` varchar(255) DEFAULT NULL,
   `updated_at` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1027,22 +1073,11 @@ CREATE TABLE `room` (
 -- Dumping data for table `room`
 --
 
-INSERT INTO `room` (`id`, `name`, `slug`, `roomType`, `capacity`, `extraCapacity`, `roomPrice`, `bedCharge`, `room_size_id`, `bedNumber`, `bed_type_id`, `roomDescription`, `reserveCondition`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Vip Guest', 'vip-guest', 'Vip Guest', 3, 'YES', 4000.00, 100, 6, '2', 8, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:48:04', '2025-03-31 20:48:38'),
-(2, 'Vip', 'vip', 'Vip', 20, 'YES', 10000.00, 400, 6, '1', 4, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:49:42', '2025-03-31 20:49:42'),
-(3, 'Family Room', 'family-room', 'Family Room', 4, 'YES', 4500.00, 150, 5, '2', 9, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:50:46', '2025-03-31 20:51:06'),
-(4, 'Deluxe Suite', 'deluxe-suite', 'Deluxe Suite', 3, 'YES', 5500.00, 130, 6, '1', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:51:54', '2025-03-31 20:52:21'),
-(5, 'Standard Room', 'standard-room', 'Standard Room', 3, 'YES', 3000.00, 80, 5, '1', 9, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:53:04', '2025-03-31 20:53:04'),
-(6, 'Single Room', 'single-room', 'Single Room', 1, 'YES', 2500.00, 70, 13, '1', 11, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:53:58', '2025-03-31 20:55:32'),
-(7, 'Executive Room', 'executive-room', 'Executive Room', 2, 'YES', 4500.00, 110, 5, '2', 12, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:56:46', '2025-03-31 20:57:02'),
-(8, 'Presidential Suite', 'presidential-suite', 'Presidential Suite', 6, 'YES', 8000.00, 200, 6, '3', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:57:43', '2025-03-31 20:57:43'),
-(9, 'Double Room', 'double-room', 'Double Room', 2, 'YES', 3500.00, 90, 6, '1', 13, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:58:42', '2025-03-31 20:59:00'),
-(10, 'Family Suite', 'family-suite', 'Family Suite', 5, 'YES', 6000.00, 160, 6, '2', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 20:59:37', '2025-03-31 20:59:37'),
-(11, 'Junior Suite', 'junior-suite', 'Junior Suite', 3, 'YES', 4800.00, 140, 5, '1', 12, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:00:24', '2025-03-31 21:00:24'),
-(12, 'King Suite', 'king-suite', 'King Suite', 4, 'YES', 7000.00, 180, 6, '2', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:01:03', '2025-03-31 21:01:03'),
-(13, 'Twin Room', 'twin-room', 'Twin Room', 2, 'YES', 3200.00, 85, 13, '2', 11, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:01:42', '2025-03-31 21:01:42'),
-(14, 'Signal Room', 'signal-room', 'Signal Room', 1, 'YES', 1600.00, 300, 14, '1', 14, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '', 1, '2025-03-31 21:02:34', '2025-03-31 21:12:37'),
-(16, 'Triple Room', 'triple-room', 'Triple Room', 5, 'YES', 500.00, 50, 3, '5', 10, 'Triple Room Triple Room', '', 1, '2025-04-01 12:12:37', '2025-04-01 14:39:10');
+INSERT INTO `room` (`id`, `name`, `slug`, `roomType`, `capacity`, `extraCapacity`, `roomPrice`, `bedCharge`, `room_size_id`, `bedNumber`, `bed_type_id`, `roomDescription`, `reserveCondition`, `status`, `booking_status`, `created_at`, `updated_at`) VALUES
+(1, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 5, '', 7323.00, 0, 0, '', 1, 'Comfy beds, 10 – Based on 1 review\nThis bungalow includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and free toiletries. The unit has air conditioning, sea views, a balcony and fruit is offered for guests. The unit has 1 bed. Bungalow size: 29 m²', '', 1, NULL, '2025-04-03 14:43:03', '2025-04-03 14:52:18'),
+(2, 'Executive Suite', 'executive-suite', 'Executive Suite', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\n\nComfy beds, 10 – Based on 1 review\nThe unit has 2 beds.', '', 1, 1, '2025-04-03 14:56:26', '2025-04-03 14:56:26'),
+(3, 'Deluxe Room', 'Deluxe-room', 'Deluxe-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, 2, '2025-04-03 14:56:26', '2025-04-09 18:47:54'),
+(4, 'King Room', 'king-room', 'king-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, NULL, '2025-04-03 14:56:26', '2025-04-09 18:47:54');
 
 -- --------------------------------------------------------
 
@@ -1088,7 +1123,7 @@ INSERT INTO `room_facility` (`id`, `room_facility_group_id`, `name`, `slug`, `st
 (21, 2, 'Adjustable bed lighting', 'adjustable-bed-lighting', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
 (22, 2, 'Reading lamp', 'reading-lamp', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
 (23, 2, 'Electric blanket (for winter)', 'electric-blanket', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
-(24, 2, 'Mosquito net', 'mosquito-net', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(24, 10, 'Mosquito net', 'mosquito-net', 1, '2025-04-01 18:02:03', '2025-04-03 06:27:26'),
 (25, 2, 'Hypoallergenic bedding', 'hypoallergenic-bedding', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
 (26, 3, 'Private bathroom', 'private-bathroom', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
 (27, 3, 'Rain shower', 'rain-shower', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
@@ -1127,7 +1162,28 @@ INSERT INTO `room_facility` (`id`, `room_facility_group_id`, `name`, `slug`, `st
 (60, 7, 'Express check-in/check-out', 'express-check-in-out', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
 (61, 7, 'Babysitting service', 'babysitting-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
 (62, 7, 'Car rental assistance', 'car-rental-assistance', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
-(63, 7, 'Airport transfer service', 'airport-transfer-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03');
+(63, 7, 'Airport transfer service', 'airport-transfer-service', 1, '2025-04-01 18:02:03', '2025-04-01 18:02:03'),
+(65, 8, 'Free toiletries', 'free-toiletries', 1, '2025-04-03 06:18:02', '2025-04-03 06:18:02'),
+(66, 8, 'Toilet', 'toilet', 1, '2025-04-03 06:18:19', '2025-04-03 06:18:19'),
+(67, 8, 'Shower', 'shower', 1, '2025-04-03 06:18:28', '2025-04-03 06:18:28'),
+(68, 8, 'Toilet paper', 'toilet-paper', 1, '2025-04-03 06:18:37', '2025-04-03 06:18:37'),
+(69, 8, 'Bidet', 'bidet', 1, '2025-04-03 06:18:54', '2025-04-03 06:18:54'),
+(70, 9, 'Balcony', 'balcony', 1, '2025-04-03 06:19:46', '2025-04-03 06:46:39'),
+(71, 9, 'Mountain view', 'mountain-view', 1, '2025-04-03 06:19:53', '2025-04-03 06:19:53'),
+(72, 9, 'Sea view', 'sea-view', 1, '2025-04-03 06:20:00', '2025-04-03 06:20:00'),
+(73, 10, 'Desk', 'desk', 1, '2025-04-03 06:26:27', '2025-04-03 06:26:27'),
+(74, 10, 'Sofa', 'sofa', 1, '2025-04-03 06:26:35', '2025-04-03 06:26:35'),
+(75, 10, 'Fan', 'fan', 1, '2025-04-03 06:26:41', '2025-04-03 06:26:41'),
+(76, 10, 'Towels', 'towels', 1, '2025-04-03 06:26:48', '2025-04-03 06:26:48'),
+(77, 10, 'Seating Area', 'seating-area', 1, '2025-04-03 06:26:53', '2025-04-03 06:26:53'),
+(78, 11, 'Smoking permitted', 'smoking-permitted', 1, '2025-04-03 06:41:16', '2025-04-03 06:41:16'),
+(79, 12, 'Entire bungalow', 'entire-bungalow', 1, '2025-04-03 06:44:59', '2025-04-03 06:44:59'),
+(80, 12, '29 m²', '29-m-', 1, '2025-04-03 06:45:06', '2025-04-03 06:45:06'),
+(81, 12, 'Balcony', 'balcony', 1, '2025-04-03 06:46:16', '2025-04-03 06:46:16'),
+(82, 12, 'Sea view', 'sea-view', 1, '2025-04-03 06:47:04', '2025-04-03 06:47:12'),
+(83, 12, 'Mountain view', 'mountain-view', 1, '2025-04-03 06:47:29', '2025-04-03 06:47:36'),
+(84, 12, 'Private bathroom', 'private-bathroom', 1, '2025-04-03 06:47:52', '2025-04-03 06:47:59'),
+(85, 13, 'Private suite', 'private-suite', 1, '2025-04-03 08:56:49', '2025-04-03 08:56:49');
 
 -- --------------------------------------------------------
 
@@ -1150,11 +1206,20 @@ CREATE TABLE `room_images` (
 --
 
 INSERT INTO `room_images` (`id`, `room_id`, `roomImage`, `roomImgDescription`, `status`, `created_at`, `updated_at`) VALUES
-(8, 1, '/backend/files/t3US2GOQs00sWMIxl13I.jpg', 'VIP-Guest', 1, '2025-04-01 11:58:56', '2025-04-01 11:58:56'),
-(12, 2, '/backend/files/YyOfAYVFO9x8Px0EpK6t.jpg', 'VIP', 1, '2025-04-01 12:03:56', '2025-04-01 12:03:56'),
-(15, 6, '/backend/files/SchwxHa0fnywAk6g2zv9.jpg', 'Single room', 1, '2025-04-01 12:09:40', '2025-04-01 12:09:40'),
-(16, 13, '/backend/files/uqg4GTb01gOoRw97yA6I.jpg', 'Twin Room', 1, '2025-04-01 12:09:57', '2025-04-01 12:09:57'),
-(17, 16, '/backend/files/P2qWAYCEDqUJXPi4NAto.jpg', 'Triple Room', 1, '2025-04-01 12:12:56', '2025-04-01 12:12:56');
+(1, 1, '/backend/files/s1SN4qUmrWizPxuKJarC.jpg', '', 1, '2025-04-03 14:48:09', '2025-04-03 14:48:09'),
+(2, 1, '/backend/files/Ba0w970urOW4I2T6Mvms.jpg', '', 1, '2025-04-03 14:48:19', '2025-04-03 14:48:19'),
+(3, 1, '/backend/files/cwUw8bJYAmoLODFqn88a.jpg', '', 1, '2025-04-03 14:48:27', '2025-04-03 14:48:27'),
+(4, 1, '/backend/files/Dubpa6yUt4rm913yYmGk.jpg', '', 1, '2025-04-03 14:48:35', '2025-04-03 14:48:35'),
+(5, 2, '/backend/files/mx7KULphkqXmCQNgdSGh.jpg', '', 1, '2025-04-03 14:59:21', '2025-04-03 14:59:21'),
+(6, 2, '/backend/files/OQLjTlhmOZU98U93CeMP.jpg', '', 1, '2025-04-03 14:59:30', '2025-04-03 14:59:30'),
+(7, 2, '/backend/files/XeEbspMBRrItpIratdBH.jpg', '', 1, '2025-04-03 14:59:36', '2025-04-03 14:59:36'),
+(8, 2, '/backend/files/uQqq6pQo4KonWwCjs2a9.jpg', '', 1, '2025-04-03 14:59:44', '2025-04-03 14:59:44'),
+(9, 2, '/backend/files/TMC44McTxlWjLA95VPP5.jpg', '', 1, '2025-04-03 14:59:53', '2025-04-03 14:59:53'),
+(10, 2, '/backend/files/LRsLChikzBJ1PHQ3h7Uw.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
+(16, 3, '/backend/files/mx7KULphkqXmCQNgdSGh.jpg', '', 1, '2025-04-03 14:59:21', '2025-04-03 14:59:21'),
+(17, 3, '/backend/files/LRsLChikzBJ1PHQ3h7Uw.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
+(18, 4, '/backend/files/LRsLChikzBJ1PHQ3h7Uw.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
+(19, 4, '/backend/files/Dubpa6yUt4rm913yYmGk.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01');
 
 -- --------------------------------------------------------
 
@@ -1219,74 +1284,68 @@ INSERT INTO `rule` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `select_room_facilities`
+--
+
+CREATE TABLE `select_room_facilities` (
+  `id` bigint(20) NOT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `room_facility_group_id` int(11) DEFAULT NULL,
+  `facilities_id` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `select_room_facilities`
+--
+
+INSERT INTO `select_room_facilities` (`id`, `room_id`, `room_facility_group_id`, `facilities_id`, `status`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 12, 79, 1, 6, '2025-04-03 08:44:06', '2025-04-03 08:44:06'),
+(2, 1, 12, 80, 1, 6, '2025-04-03 08:44:06', '2025-04-03 08:44:06'),
+(3, 1, 12, 81, 1, 6, '2025-04-03 08:44:06', '2025-04-03 08:44:06'),
+(4, 1, 12, 82, 1, 6, '2025-04-03 08:44:06', '2025-04-03 08:44:06'),
+(5, 1, 12, 83, 1, 6, '2025-04-03 08:44:06', '2025-04-03 08:44:06'),
+(6, 1, 12, 84, 1, 6, '2025-04-03 08:44:06', '2025-04-03 08:44:06'),
+(7, 1, 8, 65, 1, 6, '2025-04-03 08:44:18', '2025-04-03 08:44:18'),
+(8, 1, 8, 66, 1, 6, '2025-04-03 08:44:18', '2025-04-03 08:44:18'),
+(9, 1, 8, 67, 1, 6, '2025-04-03 08:44:18', '2025-04-03 08:44:18'),
+(10, 1, 8, 68, 1, 6, '2025-04-03 08:44:18', '2025-04-03 08:44:18'),
+(11, 1, 8, 69, 1, 6, '2025-04-03 08:44:18', '2025-04-03 08:44:18'),
+(12, 1, 9, 70, 1, 6, '2025-04-03 08:44:31', '2025-04-03 08:44:31'),
+(13, 1, 9, 71, 1, 6, '2025-04-03 08:44:31', '2025-04-03 08:44:31'),
+(14, 1, 9, 72, 1, 6, '2025-04-03 08:44:31', '2025-04-03 08:44:31'),
+(15, 1, 10, 24, 1, 6, '2025-04-03 08:45:10', '2025-04-03 08:45:10'),
+(16, 1, 10, 73, 1, 6, '2025-04-03 08:45:10', '2025-04-03 08:45:10'),
+(17, 1, 10, 74, 1, 6, '2025-04-03 08:45:10', '2025-04-03 08:45:10'),
+(18, 1, 10, 75, 1, 6, '2025-04-03 08:45:10', '2025-04-03 08:45:10'),
+(19, 1, 10, 76, 1, 6, '2025-04-03 08:45:10', '2025-04-03 08:45:10'),
+(20, 1, 10, 77, 1, 6, '2025-04-03 08:45:10', '2025-04-03 08:45:10'),
+(21, 1, 11, 78, 1, 6, '2025-04-03 08:45:46', '2025-04-03 08:45:46'),
+(22, 2, 13, 85, 1, 6, '2025-04-03 08:57:15', '2025-04-03 08:57:15'),
+(23, 2, 11, 78, 1, 6, '2025-04-03 08:57:33', '2025-04-03 08:57:33');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `setting`
 --
 
 CREATE TABLE `setting` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `deposit_service_charge` int(11) DEFAULT NULL COMMENT '%',
-  `convert_php_amt` float DEFAULT NULL,
-  `withdraw_service_charge` int(11) DEFAULT NULL COMMENT '%',
-  `withdraw_minimum_amount` int(11) DEFAULT NULL,
-  `withdraw_maximum_amount` int(11) DEFAULT NULL,
-  `minimum_trade_amount` int(11) DEFAULT NULL,
-  `minimum_purchages_amt` int(11) DEFAULT NULL,
-  `minimum_deposit_amount` int(11) DEFAULT NULL,
-  `trade_fee` int(11) DEFAULT NULL COMMENT '%',
-  `tel` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `address` mediumtext NOT NULL,
   `whatsApp` varchar(255) NOT NULL,
-  `emergency` varchar(255) NOT NULL,
-  `photo` varchar(255) DEFAULT NULL,
-  `description` mediumtext NOT NULL,
+  `about_us` mediumtext NOT NULL,
   `copyright` varchar(255) NOT NULL,
-  `status` int(11) NOT NULL,
-  `admin_photo` varchar(244) NOT NULL,
-  `admin_name` varchar(255) NOT NULL,
-  `admin_email` varchar(255) NOT NULL,
-  `admin_phone` varchar(255) NOT NULL,
-  `meta_keywords` mediumtext DEFAULT NULL,
-  `meta_description` mediumtext DEFAULT NULL,
-  `pphoto` varchar(255) NOT NULL,
-  `bg_color` varchar(255) DEFAULT NULL,
-  `currency` varchar(150) DEFAULT NULL,
-  `openinig_balance_date` date DEFAULT NULL,
-  `reffer_bonus` int(11) DEFAULT NULL,
-  `maximum_supply` double(10,2) DEFAULT NULL,
-  `total_supply` varchar(255) DEFAULT NULL,
-  `openinig_balance_comments` mediumtext DEFAULT NULL,
   `fblink` varchar(255) DEFAULT NULL,
   `twitterlink` varchar(255) DEFAULT NULL,
   `linkdinlink` varchar(255) DEFAULT NULL,
   `instragramlink` varchar(255) DEFAULT NULL,
-  `store_policy` longtext DEFAULT NULL,
-  `crypto_wallet_address` varchar(255) DEFAULT NULL,
-  `master_pass_acc_no` varchar(255) DEFAULT NULL,
-  `website` varchar(255) DEFAULT NULL,
-  `telegram` varchar(255) DEFAULT NULL,
-  `register_bonus` int(11) DEFAULT NULL,
-  `mininmum_deposit_amount` double(10,2) DEFAULT NULL,
-  `maximum_deposit_amount` double(10,2) DEFAULT NULL,
-  `minimum_withdrawal` double(10,2) DEFAULT NULL,
-  `maximum_withdrawal` double(10,2) DEFAULT NULL,
-  `level_1_bonus` int(11) DEFAULT NULL,
-  `level_2_bonus` int(11) DEFAULT NULL,
-  `level_3_bonus` int(11) DEFAULT NULL,
-  `ocn_purchage` double(10,2) DEFAULT NULL,
-  `daily_max_withdraw_request` double(10,2) DEFAULT NULL,
-  `withdrawal_free_amount` double(10,2) DEFAULT NULL,
-  `withdrawal_free_on_percentage` double(10,2) DEFAULT NULL,
-  `maximum_supply_level` varchar(255) DEFAULT NULL,
-  `mimumun_transfer_amount_to_other_user` double(10,2) DEFAULT NULL,
-  `maximum_transfer_amount_to_other_user` double(10,2) DEFAULT NULL,
-  `transfer_fee_fixed_amount` double(10,2) DEFAULT NULL,
-  `traansfer_fee_on_percentage` double(10,2) DEFAULT NULL,
-  `total_supply_level` varchar(255) DEFAULT NULL,
-  `liquidity_total_supply` varchar(255) DEFAULT NULL,
-  `beganing_price` varchar(255) DEFAULT NULL,
-  `circlation` varchar(255) DEFAULT NULL,
+  `youtubelink` varchar(255) DEFAULT NULL,
   `update_by` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
@@ -1296,8 +1355,8 @@ CREATE TABLE `setting` (
 -- Dumping data for table `setting`
 --
 
-INSERT INTO `setting` (`id`, `name`, `deposit_service_charge`, `convert_php_amt`, `withdraw_service_charge`, `withdraw_minimum_amount`, `withdraw_maximum_amount`, `minimum_trade_amount`, `minimum_purchages_amt`, `minimum_deposit_amount`, `trade_fee`, `tel`, `email`, `address`, `whatsApp`, `emergency`, `photo`, `description`, `copyright`, `status`, `admin_photo`, `admin_name`, `admin_email`, `admin_phone`, `meta_keywords`, `meta_description`, `pphoto`, `bg_color`, `currency`, `openinig_balance_date`, `reffer_bonus`, `maximum_supply`, `total_supply`, `openinig_balance_comments`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `store_policy`, `crypto_wallet_address`, `master_pass_acc_no`, `website`, `telegram`, `register_bonus`, `mininmum_deposit_amount`, `maximum_deposit_amount`, `minimum_withdrawal`, `maximum_withdrawal`, `level_1_bonus`, `level_2_bonus`, `level_3_bonus`, `ocn_purchage`, `daily_max_withdraw_request`, `withdrawal_free_amount`, `withdrawal_free_on_percentage`, `maximum_supply_level`, `mimumun_transfer_amount_to_other_user`, `maximum_transfer_amount_to_other_user`, `transfer_fee_fixed_amount`, `traansfer_fee_on_percentage`, `total_supply_level`, `liquidity_total_supply`, `beganing_price`, `circlation`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 'OCN TRADE AI', 5, 64, 5, 20, 4000, 5, 20, 20, 6, '+44245454545', 'ocn@abcd.com', 'Addres', '00000055555', '+000000', 'pic/2tAjiUpJ0X8GziIrKJJJ.png', 'Business Description', 'Copyright Â© 2024 uic . All Rights Reserved', 1, 'pic/ZOdc8nsWAMY1YELkp9zH.jpg', 'admin', 'info@admin.com', '+44245454545', NULL, NULL, '', '#ffffff', '$', '2020-05-13', 5, 30000000.00, '4500000', NULL, 'https://www.fiverr.com', 'https://www.facebook.com', 'https://web.whatsapp.com/', '#', '', 'TPpMvdKfhENfJqYZsDJQLgEopMRBy15jeU', '225588996633', 'http://winup360.com', '116898999999', 5, 55.00, 5.00, 20.00, 3690.00, 3, 2, 1, NULL, 5.00, 5.00, 5.00, '30 MILLION', 5.00, 5.00, 5.00, 50.00, '4.5 MILLION', '5000', '0.0011244444', 'null', 2993, '2024-05-12 05:32:50', '2024-05-12 03:42:05');
+INSERT INTO `setting` (`id`, `name`, `email`, `address`, `whatsApp`, `about_us`, `copyright`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `youtubelink`, `update_by`, `created_at`, `updated_at`) VALUES
+(1, 'Moon Nest', 'shahin@moon-nest.com', 'Pechardwip, Cox\'s Bazar, Bangladesh', '+8801830330055', 'Moon Nest is a very soothing resort. All are wooden bungalow with both sea and hill view sides. There is a bathroom, a couple bed room & a veranda in one bungalow. You will get complementary breakfast for 2 person with one bungalow. Also we have a open restaurant, where you can order fresh drinks, food, sea food and so on. The beautiful beach is 6 to 7 mins walking away from our resort.', 'All Right Reserved.Designed By Moon Nest', 'https://www.facebook.com/moon.nest.coxsbazar', NULL, NULL, '#', 'https://www.youtube.com/watch?v=aoJEbllaj2c', NULL, '2024-05-12 05:32:50', '2025-04-04 13:00:37');
 
 -- --------------------------------------------------------
 
@@ -1372,13 +1431,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `fg_id`, `fg_wallet_address`, `inviteCode`, `ref_id`, `employee_id`, `company_name`, `role_id`, `name`, `email`, `username`, `phone`, `available_balance`, `show_password`, `password`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `email_verified_at`, `telegram`, `whtsapp`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
 (1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 'FG IT', 1, 'Black Jons', 'dev1@mail.com', 'dev', '01915728982', NULL, 'dev', '$2y$10$egNt4iHOZ4sWab8IcaHE9..QCyQc3z4oFRYUwesyeTH52KDFzM5.y', NULL, '01915728982', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, NULL, NULL, NULL, NULL, 1, NULL, '127.0.0.1', NULL, '2024-11-22 09:50:10', '2023-06-22 03:20:43', '2024-12-07 10:42:29', 1, NULL),
-(2, 'FG000000002', 'be036e59dd06bfa6d13d36110d3d96a3', '9234087', 0, NULL, 'Dream CareFangs', 3, 'Mamun', 'mrmamun@gmail.com', 'mamun', '01915728983', NULL, 'Password', '$2y$10$VQOKQNqr6/WAhN004ea0Nu.N/j4Tgy2TQL8rzAeEGhm.LBeoUzW5a', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-10-17 07:13:54', '2024-10-17 07:13:54', 1, NULL),
-(3, 'FG000000003', '52f02f16c2f22a233e76a84fe87f73f4', '2843662', 0, NULL, 'FansGame Online', 2, 'Mamun Ahmed', 'mrmamunahmed@gmail.com', 'mamunahmed', '01915728984', NULL, 'dev', '$2y$10$o/S3ILyrSzVNu06bypfKDODM4ZD4wXYbdiX53wiCh7ThvomWrQNJG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '127.0.0.1', NULL, NULL, NULL, '2024-10-17 07:14:44', '2025-01-08 22:24:22', 1, NULL),
-(4, 'FG000000004', '0294d090cc9b186adac2d2f0bd8ced42', '4941998', 0, NULL, 'Facebook', 2, 'Kabir', 'kabirahmed@gmail.com', 'kabirahmed', '01915728985', NULL, 'kabirahmed', '$2y$10$lmzA0KbNyMantkLl55QsWO1VzooI7rpLZXTozHrOatTLhSn3wSZ/i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-10-17 07:18:14', '2024-10-17 07:18:14', 1, NULL),
-(5, 'FG000000005', '08247c76f2cf3eed3bff4456509cc593', '9598693', 0, NULL, 'Google', 2, 'Ibraheem', 'ibraheem@gmail.com', 'Ibraheem', '01915728986', NULL, 'Ibraheem', '$2y$10$6a9KsR/hyDkbiBhu8Qa74.G88m6JzIZ3RgXNFNtAuBqpyMUko2FtC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-10-17 09:05:59', '2024-10-17 09:05:59', 1, NULL),
-(6, 'FG000000006', 'fc375fb7c06ab05b400f730b53754aeb', '0369589', 0, NULL, 'Twitter', 2, 'Ayesha', 'ayesha@gmail.com', 'ayesha', '01915728987', NULL, 'ayesha', '$2y$10$YXGs5Rf7tFbBWeW91LFyW.AXjTLIeX7xRrvMAZaqAtlZ764VJo4Hy', NULL, '', NULL, NULL, '', NULL, NULL, 'http://localhost:5173/my-profile', '', NULL, NULL, 'http://localhost:5173/my-profileTwitter', '', NULL, NULL, NULL, 'http://localhost:5173/my-profileFacebook', NULL, NULL, 'Teelegram', '01954784555', NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-10-17 09:07:16', '2024-10-17 09:07:16', 1, NULL),
-(21, 'FG000000021', '6537aff00a10a37930603165a2da53f4', '2009591', 0, NULL, 'Linkdin', 2, 'Postman', 'postman@gmail.com', 'postman@gmail.com', '01915728988', NULL, 'postman@gmail.com', '$2y$10$0uPrvPrY83vXfd2KJCA9AOkRRC7sdNVAsmB4larhW8FG3g5KL9ZNu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-11-27 07:40:00', '2024-11-27 07:40:00', 1, NULL),
-(22, 'FG000000022', '8e3c461a604cc05851d6461b764ff56d', '7234009', 0, NULL, 'Dropbox', 2, 'Alamin', 'pc@gmail.com', 'pc', '01915728989', NULL, 'bijonpassword', '$2y$10$20dlwRdo55XEHA90nIiNQ.RA6aXq.c12LJ36/N5JVyQyEcxx/uKnG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6, '127.0.0.1', NULL, NULL, NULL, '2024-11-27 09:28:43', '2024-12-07 08:44:05', 1, NULL);
+(81, 'FG000000081', 'c3e3365c079c989d10ad4cbbed2b891c', '8942986', NULL, NULL, NULL, 2, 'Bijon', 'mdbijon@gmail.com', '1889573', NULL, NULL, '#123456#', '$2y$10$KrGVXS1GTt9EWzaXppR9/ON7GzZQUlJ1qQ37MHZqHKSHwBI01Dybm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-08 14:18:09', '2025-04-08 14:18:14', 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1402,6 +1455,15 @@ ALTER TABLE `api_key`
 --
 ALTER TABLE `bed_type`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `booking`
+--
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `booking_id` (`booking_id`),
+  ADD KEY `idx_room_id` (`room_id`),
+  ADD KEY `idx_customer_id` (`customer_id`);
 
 --
 -- Indexes for table `booking_type`
@@ -1459,6 +1521,12 @@ ALTER TABLE `failed_jobs`
 ALTER TABLE `global_wallet_address`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `languages`
@@ -1548,6 +1616,12 @@ ALTER TABLE `rule`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `select_room_facilities`
+--
+ALTER TABLE `select_room_facilities`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `setting`
 --
 ALTER TABLE `setting`
@@ -1589,7 +1663,13 @@ ALTER TABLE `api_key`
 -- AUTO_INCREMENT for table `bed_type`
 --
 ALTER TABLE `bed_type`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `booking`
+--
+ALTER TABLE `booking`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `booking_type`
@@ -1631,19 +1711,25 @@ ALTER TABLE `deposit_request`
 -- AUTO_INCREMENT for table `facility_group`
 --
 ALTER TABLE `facility_group`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `global_wallet_address`
 --
 ALTER TABLE `global_wallet_address`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `languages`
@@ -1697,19 +1783,19 @@ ALTER TABLE `promocode`
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `room_facility`
 --
 ALTER TABLE `room_facility`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `room_images`
 --
 ALTER TABLE `room_images`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `room_size`
@@ -1722,6 +1808,12 @@ ALTER TABLE `room_size`
 --
 ALTER TABLE `rule`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `select_room_facilities`
+--
+ALTER TABLE `select_room_facilities`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `setting`
@@ -1739,7 +1831,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

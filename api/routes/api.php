@@ -66,6 +66,7 @@ Route::group([
     Route::get('checkselectedfacilities', [PublicController::class, 'checkselectedfacilities']);
     Route::get('getGlobalData', [PublicController::class, 'getGlobalData']);
     Route::post('/sendContact', [PublicController::class, 'sendContact']);
+    Route::post('/filterBooking', [PublicController::class, 'filterBooking']);
 });
 
 Route::group([

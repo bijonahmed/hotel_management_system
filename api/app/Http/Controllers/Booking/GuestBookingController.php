@@ -39,14 +39,16 @@ class GuestBookingController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name'      => 'required',
-                'slug'      => 'required',
+                'name'          => 'required',
+                'slug'          => 'required',
+                'paymenttype'   => 'required',
                 'email'     => 'required|email',
                 'checkin'   => 'required|date',
                 'checkout'  => 'required|date|after_or_equal:checkin',
             ],
             [
-                'name.required'     => 'Please enter your name.',
+                'name.required'            => 'Please enter your name.',
+                'paymenttype.required'     => 'Please select payment type.',
                 'email.required'    => 'Email address is required.',
                 'email.email'       => 'Please provide a valid email address.',
                 'checkin.required'  => 'Please select a check-in date.',
@@ -87,6 +89,7 @@ class GuestBookingController extends Controller
             'email'       => $request->email,
             'checkin'     => $request->checkin,
             'checkout'    => $request->checkout,
+            'paymenttype' => $request->paymenttype,
             'room_id'     => $checkSlug->id,
             'adult'       => $request->adult,
             'child'       => $request->child,

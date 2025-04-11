@@ -17,6 +17,7 @@ class Booking extends Authenticatable
         'checkin',
         'checkout',
         'booking_id',
+        'paymenttype',
         'room_id',
         'adult',
         'child',

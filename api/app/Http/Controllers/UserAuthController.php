@@ -8,7 +8,10 @@ use Validator;
 use App\Models\User;
 use App\Models\Setting;
 use App\Models\ApiConfig;
+use App\Models\Booking;
 use App\Models\MakePlayers;
+use App\Models\Room;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,12 +56,18 @@ class UserAuthController extends Controller
             [
                 'name'  => 'required',
                 'email' => 'required|email|unique:users,email',
+                'checkin'   => 'required|date',
+                'checkout'  => 'required|date|after_or_equal:checkin',
             ],
             [
                 'name.required'      => 'Please enter your name.',
                 'email.required'     => 'Email address is required.',
                 'email.email'        => 'Please provide a valid email address.',
                 'email.unique'       => 'This email address is already taken.',
+                'checkin.date'      => 'Check-in date must be a valid date.',
+                'checkout.required' => 'Please select a check-out date.',
+                'checkout.date'     => 'Check-out date must be a valid date.',
+                'checkout.after_or_equal' => 'Check-out date must be the same or after the check-in date.',
             ]
         );
 
@@ -66,6 +75,27 @@ class UserAuthController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+
+
+        $checkSlug = Room::where('slug', $request->slug)->first();
+        //echo $checkSlug->id;exit; 
+
+        $existingBooking = Booking::where('room_id', $checkSlug->id)
+            ->where(function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('checkin', '<', $request->checkout)
+                        ->where('checkout', '>', $request->checkin);
+                });
+            })->first();
+
+        if ($existingBooking) {
+            $nextAvailableDate = Carbon::parse($existingBooking->checkout)->format('Y-m-d');
+            return response()->json([
+                'message' => 'Room already booked for selected dates. Please choose a checkout date after ' . $nextAvailableDate,
+            ], 409); // 409 Conflict
+        }
+
+
 
 
         $password = '#123456#';

@@ -17,12 +17,24 @@ const Booking = () => {
   const [roomimages, setRoomImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [guestloading, setGuestLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const [facilData, setSelectedFacilitiesData] = useState([]);
   const { slug } = useParams();
   const { getToken, token, logout, http, setToken } = AuthUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    } else {
+      setGuestLoading(false);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
   const navigate = useNavigate(); // Make sure this is here
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -88,13 +100,18 @@ const Booking = () => {
     email: "",
     checkin: "",
     checkout: "",
+    paymenttype:"",
     adult: 0,
     child: 0,
     slug: slug,
     message: "",
     account_type: "",
   });
-
+  const imgStyle = {
+    width: "100%",  // Makes the image take up the full width of its container
+    height: "auto", // Maintains the aspect ratio
+    display: "block", // Removes unwanted space below the image
+  };
   // Handle form field changes
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -105,12 +122,29 @@ const Booking = () => {
     });
   };
 
+  useEffect(() => {
+    const savedCheckIn = localStorage.getItem("checkIn");
+    const savedCheckOut = localStorage.getItem("checkOut");
+    const savedAdult = localStorage.getItem("adult");
+    const savedChild = localStorage.getItem("child");
+  
+    // Update formData state if values exist in localStorage
+    setFormData(prevState => ({
+      ...prevState,
+      checkin: savedCheckIn || prevState.checkin,
+      checkout: savedCheckOut || prevState.checkout,
+      adult: savedAdult ? parseInt(savedAdult, 10) : prevState.adult,
+      child: savedChild ? parseInt(savedChild, 10) : prevState.child,
+    }));
+  }, []);
+  
   //Make Guest Account
   const guestAccount = async (e = null) => {
     if (e) e.preventDefault(); // prevent default only if event is passed
 
     try {
       setGuestLoading(true); // Set loading to true when the request starts
+      setCountdown(10); // Start 10-second countdown
       const domain = window.location.origin;
       console.log("Loaded from domain:", domain);
       const response = await axios.post(
@@ -119,6 +153,8 @@ const Booking = () => {
           name: formData.name,
           email: formData.email,
           slug: formData.slug,
+          checkin: formData.checkin,
+          checkout: formData.checkout,
           domain: domain,
         },
         {
@@ -131,6 +167,15 @@ const Booking = () => {
       console.log("userData:" + response.data.user.id);
       await guestHandleSubmit(response.data.user.id);
       setGuestLoading(false);
+
+
+
+
+
+
+
+
+
     } catch (error) {
       if (error.response && error.response.status === 422) {
         // Handle validation errors
@@ -143,7 +188,16 @@ const Booking = () => {
         });
         console.error("Validation errors:", error.response.data.errors);
         setErrors(error.response.data.errors);
+      } else if (error.response && error.response.status === 409) {
+        // Handle booking conflict (room already booked)
+        Swal.fire({
+          icon: "warning",
+          title: "Booking Conflict",
+          text: error.response.data.message,
+        });
+        console.warn("Booking conflict:", error.response.data.message);
       }
+
       console.error("Error submitting form", error);
     }
   };
@@ -186,6 +240,7 @@ const Booking = () => {
         email: "",
         checkin: "",
         checkout: "",
+        paymenttype:"",
         adult: 0,
         child: 0,
         slug: "", // reset slug here if you want to clear it
@@ -360,10 +415,10 @@ const Booking = () => {
                   <div className="col-md-12 m-auto">
                     <div className="py-4 px-2">
                       <div className="form-group mb-2">
-                        <label>Email</label>
+                        <label>Username</label>
                         <input
                           type="text"
-                          placeholder="example@mail.com"
+                          placeholder="Username"
                           className="form-control"
                           value={username}
                           onChange={handleUsernameChange}
@@ -661,18 +716,22 @@ const Booking = () => {
                           Reguster Account
                         </button>
                       </li>
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className="nav-link"
-                          id="guest-tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#guest"
-                          type="button"
-                          role="tab"
-                        >
-                          Guest
-                        </button>
-                      </li>
+                                        {!token && (
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className="nav-link"
+                        id="guest-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#guest"
+                        type="button"
+                        role="tab"
+                      >
+                        Guest
+                      </button>
+                    </li>
+                  )}
+
+
                     </ul>
 
                     <div className="tab-content" id="accountTabContent">
@@ -787,6 +846,15 @@ const Booking = () => {
                                   <option value={8}>8 Adults</option>
                                   <option value={9}>9 Adults</option>
                                   <option value={10}>10 Adults</option>
+                                  <option value={11}>11 Adults</option>
+                                  <option value={12}>12 Adults</option>
+                                  <option value={13}>13 Adults</option>
+                                  <option value={14}>14 Adults</option>
+                                  <option value={15}>15 Adults</option>
+                                  <option value={16}>16 Adults</option>
+                                  <option value={17}>17 Adults</option>
+                                  <option value={18}>18 Adults</option>
+
                                 </select>
                                 <label htmlFor="adult">Adults</label>
                               </div>
@@ -810,8 +878,39 @@ const Booking = () => {
                                   <option value={8}>8 Children</option>
                                   <option value={9}>9 Children</option>
                                   <option value={10}>10 Children</option>
+                                  <option value={11}>11 Children</option>
+                                  <option value={12}>12 Children</option>
+                                  <option value={13}>13 Children</option>
+                                  <option value={14}>14 Children</option>
+                                  <option value={15}>15 Children</option>
+                                  <option value={16}>16 Children</option>
+                                  <option value={17}>17 Children</option>
+                                  <option value={18}>18 Children</option>
+
                                 </select>
                                 <label htmlFor="child">Children</label>
+                              </div>
+                            </div>
+
+                            <div className="col-md-12">
+                              <div className="form-floating">
+                                <select
+                                  className="form-select"
+                                  id="paymenttype"
+                                  value={formData.paymenttype}
+                                  onChange={handleChange}
+                                >
+                                  <option value={0}>Please select</option>
+                                  <option value={1}>Online Payment</option>
+                                  <option value={2}>Offline Payment</option>
+                                </select>
+
+                                <label htmlFor="paymenttype">Payment Type</label>
+                                {errors.paymenttype && (
+                                  <div style={{ color: "red" }}>
+                                    {errors.paymenttype[0]}
+                                  </div>
+                                )}
                               </div>
                             </div>
                             <div className="col-12">
@@ -977,6 +1076,34 @@ const Booking = () => {
                                 <label htmlFor="child">Children</label>
                               </div>
                             </div>
+
+
+
+                            <div className="col-md-12">
+                              <div className="form-floating">
+                                <select
+                                  className="form-select"
+                                  id="paymenttype"
+                                  value={formData.paymenttype}
+                                  onChange={handleChange}
+                                >
+                                  <option value={0}>Please select</option>
+                                  <option value={1}>Online Payment</option>
+                                  <option value={2}>Offline Payment</option>
+                                </select>
+
+                                <label htmlFor="paymenttype">Payment Type</label>
+                                {errors.paymenttype && (
+                                  <div style={{ color: "red" }}>
+                                    {errors.paymenttype[0]}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+
+
+
                             <div className="col-12">
                               <div className="form-floating">
                                 <textarea
@@ -993,27 +1120,37 @@ const Booking = () => {
 
                             <div className="col-12">
                               <button
-                                className="btn btn-primary w-100 py-3 shadow"
-                                type="submit"
-                                disabled={guestloading} // Disable the button if loading
-                              >
-                                {guestloading ? (
-                                  <span>Loading...</span> // Display loading text or spinner
-                                ) : (
-                                  "Book Now"
-                                )}
-                              </button>
+                          className="btn btn-primary w-100 py-3 shadow"
+                          type="submit"
+                          disabled={guestloading}
+                        >
+                          {guestloading ? (
+                            <span>Loading... {countdown > 0 && `${countdown}`}</span>
+                          ) : (
+                            "Book Now"
+                          )}
+                        </button>
                             </div>
                           </div>
                         </form>
+                       
                       </div>
                     </div>
 
+                   
+
                     {/* END */}
                   </div>
+                                
                 </div>
               </div>
             </div>
+
+           
+            <div className="container">
+            <img src="/img/pay.png" style={imgStyle} alt="Payment Image" />
+              </div>
+
             <br />
             <div className="container">
               <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
