@@ -72,6 +72,7 @@ const SuperAdminList = () => {
           searchEmail,
           searchUsername,
           page: currentPage,
+          rule_id: 1,
           merchant_rule,
           pageSize,
         },
@@ -98,7 +99,7 @@ const SuperAdminList = () => {
   };
 
   const handleAddNewClick = () => {
-    navigate("/user/user-add");
+    navigate("/user/user-add-supperadmin");
   };
 
   const handleEdit = (id) => {
@@ -264,10 +265,7 @@ const SuperAdminList = () => {
                                     </span>
                                   )}
                                 </th>
-
-
                                 <th className="text-center">Email</th>
-                                <th className="text-center">Company</th>
                                 <th className="text-center">Phone Number</th>
                                 <th className="text-center">Username</th>
                                 <th className="text-center">Status</th>
@@ -281,8 +279,7 @@ const SuperAdminList = () => {
                                   <tr key={item.id}>
                                     <td>{item.name}</td>
                                     <td className="text-left">{item.email}</td>
-                                    <td className="text-center">{item.company}</td>
-                                    <td className="text-center">{item.whtsApp}</td>
+                                    <td className="text-center">{item.phone}</td>
                                     <td className="text-left">{item.username}</td>
                                     <td className="text-center">{item.status}</td>
                                     <td className="text-center">{item.created_at}</td>

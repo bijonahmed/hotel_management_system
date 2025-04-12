@@ -8,7 +8,7 @@ import axios from "/config/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 
-const UserAdd = () => {
+const CustomerAdd = () => {
 
     const [errors, setErrors] = useState({});
     const [name, setName] = useState("");
@@ -16,10 +16,10 @@ const UserAdd = () => {
     const [phone, setPhone] = useState("");
     const [company, setCompany] = useState("");
     const [username, setUsername] = useState("");
-    const [rule_id, setRuleId] = useState(4);
+    const [rule_id, setRuleId] = useState(2);
     const [password, setPassword] = useState("");
     const [confirmPass, setConfirmPassword] = useState("");
-    const [status, setStatus] = useState("");
+    const [status, setStatus] = useState(1);
     const [roles, setRuleData] = useState([]);
     const token = JSON.parse(sessionStorage.getItem("token"));
     const apiUrl = "/user/getRoles";
@@ -114,7 +114,7 @@ const UserAdd = () => {
             setStatus("");
             setErrors({});
             //console.log(response.data.message);
-            navigate("/user/users-list");
+            navigate("/user/customer-list");
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 Swal.fire({
@@ -134,7 +134,7 @@ const UserAdd = () => {
 
     const navigate = useNavigate();
     const handleAddNewClick = () => {
-        navigate('/user/users-list');
+        navigate('/user/customer-list');
     };
 
     useEffect(() => {
@@ -144,7 +144,7 @@ const UserAdd = () => {
     return (
         <>
             <Helmet>
-                <title>Add User</title>
+                <title>Add Customer</title>
             </Helmet>
 
             <div>
@@ -157,7 +157,7 @@ const UserAdd = () => {
                     <div className="page-wrapper">
                         <div className="page-content">
                             <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                                <div className="breadcrumb-title pe-3">User</div>
+                                <div className="breadcrumb-title pe-3">Customer</div>
                                 <div className="ps-3">
                                     <nav aria-label="breadcrumb">
                                         <ol className="breadcrumb mb-0 p-0">
@@ -344,4 +344,4 @@ const UserAdd = () => {
     );
 };
 
-export default UserAdd;
+export default CustomerAdd;

@@ -25,7 +25,7 @@ const UsersList = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState("asc");
-  const merchant_rule = 2; 
+  const merchant_rule = 3; 
 
   const apiUrl = "/user/allUsers";
 
@@ -71,6 +71,7 @@ const UsersList = () => {
           selectedFilter,
           searchEmail,
           searchUsername,
+          rule_id: 4,
           page: currentPage,
           merchant_rule,
           pageSize,
@@ -264,10 +265,7 @@ const UsersList = () => {
                                     </span>
                                   )}
                                 </th>
-
-
                                 <th className="text-center">Email</th>
-                                <th className="text-center">Company</th>
                                 <th className="text-center">Phone Number</th>
                                 <th className="text-center">Username</th>
                                 <th className="text-center">Status</th>
@@ -281,8 +279,7 @@ const UsersList = () => {
                                   <tr key={item.id}>
                                     <td>{item.name}</td>
                                     <td className="text-left">{item.email}</td>
-                                    <td className="text-center">{item.company}</td>
-                                    <td className="text-center">{item.whtsApp}</td>
+                                    <td className="text-center">{item.phone}</td>
                                     <td className="text-left">{item.username}</td>
                                     <td className="text-center">{item.status}</td>
                                     <td className="text-center">{item.created_at}</td>

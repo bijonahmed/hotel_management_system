@@ -9,7 +9,7 @@ import Pagination from "../../components/Pagination";
 import axios from "/config/axiosConfig";
 import "../../components/css/RoleList.css";
 
-const AdminList = () => {
+const CustomerList = () => {
 
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,8 +71,8 @@ const AdminList = () => {
           selectedFilter,
           searchEmail,
           searchUsername,
+          rule_id: 2,
           page: currentPage,
-          rule_id: 3,
           merchant_rule,
           pageSize,
         },
@@ -99,7 +99,7 @@ const AdminList = () => {
   };
 
   const handleAddNewClick = () => {
-    navigate("/user/user-add-admin");
+    navigate("/user/customer-add");
   };
 
   const handleEdit = (id) => {
@@ -115,7 +115,7 @@ const AdminList = () => {
   return (
     <>
       <Helmet>
-        <title>Admin List</title>
+        <title>Customer List</title>
       </Helmet>
 
       <div>
@@ -128,7 +128,7 @@ const AdminList = () => {
           <div className="page-wrapper">
             <div className="page-content">
               <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div className="breadcrumb-title pe-3">Admin</div>
+                <div className="breadcrumb-title pe-3">Customer List</div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
@@ -246,7 +246,7 @@ const AdminList = () => {
                         </div>
                       ) : (
                         <div className="table-responsive">
-                         <table className="table table-striped table-bordered">
+                          <table className="table table-striped table-bordered">
                             <thead>
                               <tr>
                                 <th className="text-center"
@@ -326,4 +326,4 @@ const AdminList = () => {
   );
 };
 
-export default AdminList;
+export default CustomerList;

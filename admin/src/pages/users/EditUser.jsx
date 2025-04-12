@@ -196,7 +196,7 @@ const EditUser = () => {
                   </nav>
                 </div>
                 <div className="ms-auto">
-                  <button type="button" className="btn btn-black" onClick={handleAddNewClick}>Back</button>
+                  {/* <button type="button" className="btn btn-black" onClick={handleAddNewClick}>Back</button> */}
                 </div>
               </div>
 

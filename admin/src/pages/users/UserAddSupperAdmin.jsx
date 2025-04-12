@@ -8,7 +8,7 @@ import axios from "/config/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 
-const UserAdd = () => {
+const UserAddSupperAdmin = () => {
 
     const [errors, setErrors] = useState({});
     const [name, setName] = useState("");
@@ -16,7 +16,7 @@ const UserAdd = () => {
     const [phone, setPhone] = useState("");
     const [company, setCompany] = useState("");
     const [username, setUsername] = useState("");
-    const [rule_id, setRuleId] = useState(4);
+    const [rule_id, setRuleId] = useState(1);
     const [password, setPassword] = useState("");
     const [confirmPass, setConfirmPassword] = useState("");
     const [status, setStatus] = useState("");
@@ -114,7 +114,7 @@ const UserAdd = () => {
             setStatus("");
             setErrors({});
             //console.log(response.data.message);
-            navigate("/user/users-list");
+            navigate("/user/superadmin-list");
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 Swal.fire({
@@ -134,7 +134,7 @@ const UserAdd = () => {
 
     const navigate = useNavigate();
     const handleAddNewClick = () => {
-        navigate('/user/users-list');
+        navigate('/user/superadmin-list');
     };
 
     useEffect(() => {
@@ -144,7 +144,7 @@ const UserAdd = () => {
     return (
         <>
             <Helmet>
-                <title>Add User</title>
+                <title>Add SupperAdmin</title>
             </Helmet>
 
             <div>
@@ -157,7 +157,7 @@ const UserAdd = () => {
                     <div className="page-wrapper">
                         <div className="page-content">
                             <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                                <div className="breadcrumb-title pe-3">User</div>
+                                <div className="breadcrumb-title pe-3">Supper Admin</div>
                                 <div className="ps-3">
                                     <nav aria-label="breadcrumb">
                                         <ol className="breadcrumb mb-0 p-0">
@@ -344,4 +344,4 @@ const UserAdd = () => {
     );
 };
 
-export default UserAdd;
+export default UserAddSupperAdmin;

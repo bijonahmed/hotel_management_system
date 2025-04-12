@@ -24,14 +24,22 @@ import CheckLogAPI from "../pages/report/CheckLogAPI.jsx";
 import RoleEdit from "../pages/users/EditRole.jsx";
 import UserEdit from "../pages/users/EditUser.jsx";
 import SuperAdminList from "../pages/users/SuperAdminList.jsx";
+import CustomerList from "../pages/users/CustomerList.jsx";
+import UserAddAdmin from "../pages/users/UserAddAdmin.jsx";
+import CustomerAdd from "../pages/users/CustomerAdd.jsx";
+
 import AdminList from "../pages/users/AdminList.jsx";
 import UserAdd from "../pages/users/UserAdd.jsx";
+import UserAddSupperAdmin from "../pages/users/UserAddSupperAdmin.jsx";
 import PostCategoryList from "../pages/category/PostCategoryList.jsx";
 import PostCategoryAdd from "../pages/category/PostCategoryAdd.jsx";
 import PostCategoryEdit from "../pages/category/PostCategoryEdit.jsx";
 import PostList from "../pages/post/PostList.jsx";
 import PostAdd from "../pages/post/PostAdd.jsx";
 import PostEdit from "../pages/post/PostEdit.jsx";
+//Booking
+import RoomStatusList from "../pages/booking/RoomStatusList.jsx";
+
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
 import BedTypeAdd from "../pages/roomsetting/BedTypeAdd.jsx";
@@ -85,10 +93,14 @@ const AppRouter = () => {
       <Route path="/user/role-list" element={<RoleList />} />
       <Route path="/user/role-add" element={<RoleAdd />} />
       <Route path="/user/user-add" element={<UserAdd />} />
+      <Route path="/user/user-add-supperadmin" element={<UserAddSupperAdmin />} />
       <Route path="/user/role-edit/:id" element={<RoleEdit />} />
       <Route path="/user/user-edit/:id" element={<UserEdit />} />
       <Route path="/user/users-list" element={<MerchantList />} />
       <Route path="/user/superadmin-list" element={<SuperAdminList />} />
+      <Route path="/user/customer-list" element={<CustomerList />} />
+      <Route path="/user/user-add-admin" element={<UserAddAdmin />} />
+      <Route path="/user/customer-add" element={<CustomerAdd />} />
       <Route path="/user/admin-list" element={<AdminList />} />
       <Route path="/report/deposit-report" element={<DepositReport />} />
       <Route path="/user/change-password" element={<ChangePassword />} />
@@ -111,6 +123,8 @@ const AppRouter = () => {
       <Route path="/wallet/global-wallet-edit/:id" element={<GlobalWalletAddressEdit />} />
       <Route path="/report/tronscan-api" element={<CheckTronScanAPI />} />
       <Route path="/report/check-api-log" element={<CheckLogAPI />} />
+      {/* Booking */}
+      <Route path="/booking/room-status-list" element={<RoomStatusList />} />
       {/* //ROMM SETTING */}
       <Route path="/roomsetting/bed-type-list" element={<BedTypeList />} />
       <Route path="/roomsetting/add-bed-type" element={<BedTypeAdd />} />

@@ -46,7 +46,7 @@ class BookingController extends Controller
         //dd("User ID: ".$this->userid); // Debugging to see the user ID
     }
 
-   
+
 
     public function getBookingDetails(Request $request)
     {
@@ -245,5 +245,27 @@ class BookingController extends Controller
             'message'  => 'success'
         ];
         return response()->json($response, 200);
+    }
+
+    public function checkroomBookingStatus()
+    {
+
+       
+        $booking_rooms = Booking::where('booking.booking_status', 1)
+            ->leftJoin('room', 'room.id', '=', 'booking.room_id')
+            ->select(
+                'booking.*',
+                'room.roomType',
+                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+            )
+            ->get();
+
+        $roomIds = $booking_rooms->pluck('room_id')->unique()->toArray(); // this is correct
+        $available_rooms = Room::whereNotIn('id', $roomIds)->select('id','roomType','roomPrice')->get();
+
+        $data['booking_rooms'] = $booking_rooms;
+        $data['available_rooms'] = $available_rooms;
+    
+        return response()->json($data, 200);
     }
 }

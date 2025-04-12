@@ -74,7 +74,7 @@ class DashboardController extends Controller
 
     public function getTodayBookingList()
     {
-
+        $checkToday  = date("Y-m-d");
         $bookingData = Booking::where('booking.booking_status', 1)
             ->select(
                 'booking.*',
@@ -86,6 +86,7 @@ class DashboardController extends Controller
                 'bed_type.name as bed_name',
                 \DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
             )
+            ->whereDate('booking.created_at', $checkToday)
             ->leftJoin('room', 'booking.room_id', '=', 'room.id') // Fixing bed_type join
             ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
             ->get();

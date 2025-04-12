@@ -232,9 +232,12 @@ class UserController extends Controller
         return response()->json($history, 200); // Return the result as JSON
     }
 
+ 
+
     public function allUsers(Request $request)
     {
 
+       // dd($request->all());
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
 
@@ -247,8 +250,9 @@ class UserController extends Controller
 
         // dd($selectedFilter);
         $query = User::orderBy('users.id', 'desc')
+            ->where('users.role_id',$request->rule_id)
             ->join('rule', 'users.role_id', '=', 'rule.id')
-            ->select('users.company_name', 'users.created_at', 'users.username', 'lastlogin_country', 'register_ip', 'lastlogin_ip', 'users.ref_id', 'users.telegram', 'users.whtsapp', 'users.role_id', 'users.id', 'users.name', 'users.email', 'users.phone_number', 'users.show_password', 'users.status', 'rule.name as rulename');
+            ->select('users.company_name', 'users.created_at', 'users.username', 'lastlogin_country', 'register_ip', 'lastlogin_ip', 'users.ref_id', 'users.telegram', 'users.phone', 'users.role_id', 'users.id', 'users.name', 'users.email', 'users.phone_number', 'users.show_password', 'users.status', 'rule.name as rulename');
 
         if ($searchQuery !== null) {
             $query->where('users.name', 'like', '%' . $searchQuery . '%');
@@ -265,7 +269,7 @@ class UserController extends Controller
         if ($selectedFilter !== null) {
             $query->where('users.status', $selectedFilter);
         }
-        $query->where('users.role_id', $merchant_rule);
+       // $query->where('users.role_id', $merchant_rule);
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
 
         $modifiedCollection = $paginator->getCollection()->map(function ($item) {
@@ -295,7 +299,7 @@ class UserController extends Controller
                 'company'       => $item->company_name,
                 'username'      => $item->username,
                 'telegram'      => $telegram,
-                'whtsApp'       => $item->phone,
+                'phone'         => $item->phone,
                 'status'        => $status,
             ];
         });
@@ -434,14 +438,14 @@ class UserController extends Controller
 
     public function saveUser(Request $request)
     {
-        //dd($request->all());
+        //  dd($request->all());
         if (empty($request->id)) {
             $validator = Validator::make($request->all(), [
                 'rule_id'    => 'required',
                 'name'       => 'required',
                 'phone'      => 'required',
-                'email'      => 'required|email',
-                'company'    => 'required',
+                'email'      => 'required|unique:users,email|max:255',
+                //'company'    => 'required',
                 'status'     => 'required',
                 'username'   => 'required|unique:users,username|max:255',
                 'password'   => 'min:5|required',
@@ -452,7 +456,7 @@ class UserController extends Controller
                 'name'       => 'required',
                 'phone'      => 'required',
                 'email'      => 'required|email',
-                'company'    => 'required',
+                //'company'    => 'required',
                 'status'     => 'required',
             ]);
         }
@@ -465,6 +469,7 @@ class UserController extends Controller
             'role_id'       => !empty($request->rule_id) ? $request->rule_id : "",
             'name'          => !empty($request->name) ? $request->name : "",
             'phone'         => !empty($request->phone) ? $request->phone : "",
+            'username'      => !empty($request->username) ? $request->username : "",
             'email'         => !empty($request->email) ? $request->email : "",
             'status'        => $request->status,
             'entry_by'      => $this->userid,
