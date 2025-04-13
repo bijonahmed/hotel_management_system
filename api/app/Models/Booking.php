@@ -24,6 +24,8 @@ class Booking extends Authenticatable
         'child',
         'message',
         'customer_id',
+        'arival_from',
+        'update_by',
         'booking_status'
     ];
 }

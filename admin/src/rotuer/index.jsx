@@ -39,6 +39,7 @@ import PostAdd from "../pages/post/PostAdd.jsx";
 import PostEdit from "../pages/post/PostEdit.jsx";
 //Booking
 import RoomStatusList from "../pages/booking/RoomStatusList.jsx";
+import BookingList from "../pages/booking/BookingList.jsx";
 
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
@@ -125,6 +126,7 @@ const AppRouter = () => {
       <Route path="/report/check-api-log" element={<CheckLogAPI />} />
       {/* Booking */}
       <Route path="/booking/room-status-list" element={<RoomStatusList />} />
+      <Route path="/booking/booking-list" element={<BookingList />} />
       {/* //ROMM SETTING */}
       <Route path="/roomsetting/bed-type-list" element={<BedTypeList />} />
       <Route path="/roomsetting/add-bed-type" element={<BedTypeAdd />} />

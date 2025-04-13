@@ -42,7 +42,7 @@ class LeftSideMenuController extends Controller
                 'path' => '#',
                 'icon' => 'bx bx-category',
                 'submenu' => [
-                    ['label' => 'Booking List', 'path' => '#', 'icon' => 'bx bx-radio-circle'],
+                    ['label' => 'Booking List', 'path' => '/booking/booking-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Room Checkout', 'path' => '#', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Room Status', 'path' => '/booking/room-status-list', 'icon' => 'bx bx-radio-circle'],
                 ]

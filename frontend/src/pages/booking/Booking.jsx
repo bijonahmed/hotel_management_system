@@ -169,13 +169,6 @@ const Booking = () => {
       setGuestLoading(false);
 
 
-
-
-
-
-
-
-
     } catch (error) {
       if (error.response && error.response.status === 422) {
         // Handle validation errors

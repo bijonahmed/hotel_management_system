@@ -140,16 +140,10 @@ const RoomStatusList = () => {
                               <table className="table table-striped table-bordered mb-0">
                                 <thead className="thead-dark">
                                   <tr>
-                                    <th className="text-center">ID</th>
-                                    <th
-                                      className="text-center"
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      Room Name
-                                    </th>
-                                    <th className="text-center">
-                                      Check IN/Out
-                                    </th>
+                                    <th className="text-center">Booking ID</th>
+                                    <th className="text-center" style={{ cursor: "pointer" }}> Room Name</th>
+                                    <th className="text-center" style={{ cursor: "pointer" }}> Booking By</th>
+                                    <th className="text-center"> Check IN/Out</th>
                                     <th className="text-center">Days</th>
                                     <th className="text-center">Status</th>
                                   </tr>
@@ -158,11 +152,15 @@ const RoomStatusList = () => {
                                   {bookingrooms.length > 0 ? (
                                     bookingrooms.map((item) => (
                                       <tr key={item.id}>
+                                       
                                         <td className="text-center">
-                                          {item.id}
+                                          {item.booking_id}
                                         </td>
                                         <td className="text-center">
                                           {item.roomType}
+                                        </td>
+                                        <td className="text-center">
+                                          {item.name}
                                         </td>
                                         <td className="text-center">
                                           {item.checkin} <br /> {item.checkout}

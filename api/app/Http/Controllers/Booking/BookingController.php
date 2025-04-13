@@ -36,17 +36,13 @@ class BookingController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api'); // Apply the auth middleware
-
         $user = auth('api')->user();  // Get the user from the token
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401); // If no user is found, return unauthenticated
         }
-
         $this->userid = $user->id;
         //dd("User ID: ".$this->userid); // Debugging to see the user ID
     }
-
-
 
     public function getBookingDetails(Request $request)
     {
@@ -171,8 +167,6 @@ class BookingController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $checkSlug = Room::where('slug', $request->slug)->first();
-        //echo $checkSlug->id;exit; 
-
         $existingBooking = Booking::where('room_id', $checkSlug->id)
             ->where(function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
@@ -214,9 +208,6 @@ class BookingController extends Controller
             'booking_status' => 1,
         ];
         Room::where('id', $checkSlug->id)->update($updateRoom);
-
-
-
         return response()->json(['message' => 'Successfully booked.']);
     }
 
@@ -250,22 +241,168 @@ class BookingController extends Controller
     public function checkroomBookingStatus()
     {
 
-       
         $booking_rooms = Booking::where('booking.booking_status', 1)
             ->leftJoin('room', 'room.id', '=', 'booking.room_id')
             ->select(
                 'booking.*',
                 'room.roomType',
+                'room.slug as roomslug',
                 DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
-            )
-            ->get();
+            )->get();
 
-        $roomIds = $booking_rooms->pluck('room_id')->unique()->toArray(); // this is correct
-        $available_rooms = Room::whereNotIn('id', $roomIds)->select('id','roomType','roomPrice')->get();
+        $roomIds         = $booking_rooms->pluck('room_id')->unique()->toArray(); // this is correct
+        $available_rooms = Room::whereNotIn('id', $roomIds)->select('id', 'roomType', 'roomPrice')->get();
 
         $data['booking_rooms'] = $booking_rooms;
         $data['available_rooms'] = $available_rooms;
-    
+
         return response()->json($data, 200);
+    }
+
+    public function getBookingEditdata(Request $request)
+    {
+        //dd($request->all());
+        $bookingId     = $request->bookingId;
+        $booking_data  = Booking::where('booking.booking_status', 1)
+            ->where('booking.id', $bookingId)
+            ->leftJoin('users', 'users.id', '=', 'booking.customer_id')
+            ->select(
+                'booking.*',
+                'users.phone',
+                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+            )->first();
+
+        $data['booking_data'] = $booking_data;
+        return response()->json($data, 200);
+    }
+
+
+    public function bookingUpdateInOut(Request $request)
+    {
+
+        // dd($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'id'             => 'required', //booking id primary ke
+                'roomslug'       => 'required',
+                'checkin'        => 'required|date',
+                'checkout'       => 'required|date|after_or_equal:checkin',
+            ],
+            [
+                'roomslug.required'    => 'Room slug is required.',
+                'checkin.required'  => 'Please select a check-in date.',
+                'checkin.date'      => 'Check-in date must be a valid date.',
+                'checkout.required' => 'Please select a check-out date.',
+                'checkout.date'     => 'Check-out date must be a valid date.',
+                'checkout.after_or_equal' => 'Check-out date must be the same or after the check-in date.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $checkSlug  = Room::where('slug', $request->roomslug)->first();
+
+        $checkinDate = Carbon::parse($request->checkin)->toDateString();  // Y-m-d
+        $checkoutDate = Carbon::parse($request->checkout)->toDateString();
+
+        $existingBooking = Booking::where('room_id', $checkSlug->id)
+            ->whereDate('checkin', '<', $checkoutDate) // existing booking starts before new checkout
+            ->whereDate('checkout', '>', $checkinDate) // existing booking ends after new checkin
+            ->orderByDesc('id')
+            ->first();
+        // dd($existingBooking);
+
+        if ($existingBooking) {
+            $nextAvailableDate = Carbon::parse($existingBooking->checkout)->format('Y-m-d');
+            return response()->json([
+                'message' => 'Room already booked for selected dates. Please choose a checkout date after ' . $nextAvailableDate,
+            ], 409); // 409 Conflict
+        }
+        //dd($existingBooking);
+        $data = [
+            //'checkin'     => $request->checkin,
+            'checkout'    => $request->checkout,
+            'update_by'   => $this->userid,
+        ];
+        //dd($data);
+        Booking::where('id', $request->id)->update($data);
+        return response()->json(['message' => 'Successfully booked.']);
+    }
+
+    public function bookingUpdate(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'id'             => 'required', //booking id primary ke
+                'bookingName'    => 'required',
+                'roomslug'       => 'required',
+                'checkin'        => 'required|date',
+                'checkout'       => 'required|date|after_or_equal:checkin',
+            ],
+            [
+                'bookingName.required' => 'Please enter your name.',
+                'roomslug.required'    => 'Room slug is required.',
+                'checkin.required'  => 'Please select a check-in date.',
+                'checkin.date'      => 'Check-in date must be a valid date.',
+                'checkout.required' => 'Please select a check-out date.',
+                'checkout.date'     => 'Check-out date must be a valid date.',
+                'checkout.after_or_equal' => 'Check-out date must be the same or after the check-in date.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $booking_id =  $request->id;
+        //dd($booking_id);
+        $checkSlug  = Room::where('slug', $request->roomslug)->first();
+        $existingBooking = Booking::where('room_id', $checkSlug->id)->where('booking.id', $booking_id)
+            ->where(function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('checkin', '<', $request->checkout)
+                        ->where('checkout', '>', $request->checkin);
+                });
+            })->first();
+
+        if ($existingBooking) {
+            $nextAvailableDate = Carbon::parse($existingBooking->checkout)->format('Y-m-d');
+            return response()->json([
+                'message' => 'Room already booked for selected dates. Please choose a checkout date after ' . $nextAvailableDate,
+            ], 409); // 409 Conflict
+        }
+
+        dd($existingBooking);
+
+        // Call the separate method to generate a unique booking ID
+        $bookingId = $this->generateUniqueBookingId();
+        $checkRoom = Room::where('id', $checkSlug->id)->first();
+
+        $data = [
+            'booking_id'  => $bookingId,  // Adding custom unique booking ID
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'checkin'     => $request->checkin,
+            'checkout'    => $request->checkout,
+            'room_price'  => $checkRoom->roomPrice,
+            'paymenttype' => $request->paymenttype,
+            'room_id'     => $checkSlug->id,
+            'adult'       => $request->adult,
+            'child'       => $request->child,
+            'message'     => $request->message,
+            'customer_id' => $this->userid,
+            'booking_status' => 1,
+        ];
+
+        //Booking::create($data);
+
+        $updateRoom = [
+            'booking_status' => 1,
+        ];
+        Room::where('id', $checkSlug->id)->update($updateRoom);
+        return response()->json(['message' => 'Successfully booked.']);
     }
 }
