@@ -44,6 +44,152 @@ class BookingController extends Controller
         //dd("User ID: ".$this->userid); // Debugging to see the user ID
     }
 
+
+
+    public function checkStatusUpdate(Request $request){
+
+        //dd($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'id'             => 'required',
+                'status'         => 'required',
+                'room_id'        => 'required',
+            ],
+            [
+                'id.required'       => 'Please first select id.',
+                'status.required'   => 'Please select a status.',
+                'room_id.required'  => 'Please select a status.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $updateBooking = [
+            'booking_status'   => $request->status,
+            'check_out_reason' => $request->note,
+            'check_out_by'     => $this->userid,
+            
+        ];
+        Booking::where('id', $request->id)->update($updateBooking);
+
+        $updateRoom = [
+            'booking_status' => 2, //Allow only release.
+        ];
+        Room::where('id', $request->room_id)->update($updateRoom);
+
+        return response()->json(['message' => 'Successfully booked.']);
+
+    }
+
+    public function adminBookingRequest(Request $request)
+    {
+        // dd($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name'          => 'required',
+                'email'         => 'required|email',
+                'checkin'       => 'required|date',
+                'checkout'      => 'required|date|after_or_equal:checkin',
+                'paymenttype'   => 'required',
+                'room_id'       => 'required',
+                'phone'         => 'required',
+
+            ],
+            [
+                'name.required'     => 'Please enter your name.',
+                'email.required'    => 'Email address is required.',
+                'email.email'       => 'Please provide a valid email address.',
+                'paymenttype.required'     => 'Please select payment type.',
+                'checkin.required'  => 'Please select a check-in date.',
+                'checkin.date'      => 'Check-in date must be a valid date.',
+                'checkout.required' => 'Please select a check-out date.',
+                'checkout.date'     => 'Check-out date must be a valid date.',
+                'checkout.after_or_equal' => 'Check-out date must be the same or after the check-in date.',
+                'phone.required'    => 'Please enter your phone.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $password = '#123456#';
+        $username = $this->generateUniqueRandomNumber(); // you'll define this method
+
+        $existingUser = User::where('email', $request->email)
+            ->orWhere('phone', $request->phone)
+            ->exists();
+
+            if ($existingUser) {
+                // If user exists, do nothing and return
+                return;
+            }
+
+        $user = User::create([
+            'name'          => $request->name,
+            'email'         => $request->email,
+            'phone'         => $request->phone,
+            'role_id'       => 2,
+            'status'        => 1,
+            'username'      => $username, // generated unique number
+            'register_ip'   => $request->ip(),
+            'inviteCode'    => $this->generateUniqueRandomNumber(),
+            'show_password' => $password, // store plain text (optional, not recommended for security)
+            'password'      => bcrypt($password), // secure hash
+        ]);
+        $lastInsertedId = $user->id;
+
+
+
+
+        $existingBooking = Booking::where('room_id', $request->room_id)
+            ->where(function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('checkin', '<', $request->checkout)
+                        ->where('checkout', '>', $request->checkin);
+                });
+            })->first();
+
+        if ($existingBooking) {
+            $nextAvailableDate = Carbon::parse($existingBooking->checkout)->format('Y-m-d');
+            return response()->json([
+                'message' => 'Room already booked for selected dates. Please choose a checkout date after ' . $nextAvailableDate,
+            ], 409); // 409 Conflict
+        }
+
+        // Call the separate method to generate a unique booking ID
+        $bookingId = $this->generateUniqueBookingId();
+        $checkRoom = Room::where('id', $request->room_id)->first();
+
+        $data = [
+            'booking_id'  => $bookingId,  // Adding custom unique booking ID
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'checkin'     => $request->checkin,
+            'checkout'    => $request->checkout,
+            'room_price'  => $checkRoom->roomPrice,
+            'paymenttype' => $request->paymenttype,
+            'room_id'     => $request->room_id,
+            'adult'       => $request->adult,
+            'child'       => $request->child,
+            'message'     => $request->message,
+            'customer_id' => $lastInsertedId,
+            'booking_status' => 1,
+        ];
+
+        Booking::create($data);
+
+        $updateRoom = [
+            'booking_status' => 1,
+        ];
+        Room::where('id', $request->room_id)->update($updateRoom);
+        return response()->json(['message' => 'Successfully booked.']);
+    }
+
     public function getBookingDetails(Request $request)
     {
         try {
@@ -339,70 +485,52 @@ class BookingController extends Controller
             [
                 'id'             => 'required', //booking id primary ke
                 'bookingName'    => 'required',
-                'roomslug'       => 'required',
-                'checkin'        => 'required|date',
-                'checkout'       => 'required|date|after_or_equal:checkin',
+                'room_slug'      => 'required',
             ],
             [
                 'bookingName.required' => 'Please enter your name.',
-                'roomslug.required'    => 'Room slug is required.',
-                'checkin.required'  => 'Please select a check-in date.',
-                'checkin.date'      => 'Check-in date must be a valid date.',
-                'checkout.required' => 'Please select a check-out date.',
-                'checkout.date'     => 'Check-out date must be a valid date.',
-                'checkout.after_or_equal' => 'Check-out date must be the same or after the check-in date.',
+                'room_slug.required'   => 'Room slug is required.',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        $booking_id =  $request->id;
-        //dd($booking_id);
-        $checkSlug  = Room::where('slug', $request->roomslug)->first();
-        $existingBooking = Booking::where('room_id', $checkSlug->id)->where('booking.id', $booking_id)
-            ->where(function ($query) use ($request) {
-                $query->where(function ($q) use ($request) {
-                    $q->where('checkin', '<', $request->checkout)
-                        ->where('checkout', '>', $request->checkin);
-                });
-            })->first();
+        $booking_id  =  $request->id;
+        $chkCustomer =  Booking::where('id', $booking_id)->select('customer_id')->first();
 
-        if ($existingBooking) {
-            $nextAvailableDate = Carbon::parse($existingBooking->checkout)->format('Y-m-d');
-            return response()->json([
-                'message' => 'Room already booked for selected dates. Please choose a checkout date after ' . $nextAvailableDate,
-            ], 409); // 409 Conflict
-        }
-
-        dd($existingBooking);
-
-        // Call the separate method to generate a unique booking ID
-        $bookingId = $this->generateUniqueBookingId();
-        $checkRoom = Room::where('id', $checkSlug->id)->first();
+        //dd($chkCustomer->customer_id);
 
         $data = [
-            'booking_id'  => $bookingId,  // Adding custom unique booking ID
-            'name'        => $request->name,
-            'email'       => $request->email,
-            'checkin'     => $request->checkin,
-            'checkout'    => $request->checkout,
-            'room_price'  => $checkRoom->roomPrice,
-            'paymenttype' => $request->paymenttype,
-            'room_id'     => $checkSlug->id,
+            'name'        => $request->bookingName,
             'adult'       => $request->adult,
             'child'       => $request->child,
             'message'     => $request->message,
-            'customer_id' => $this->userid,
+            'phone'       => $request->phone,
+            'arival_from' => $request->arival_from,
+            'update_by'   => $this->userid,
             'booking_status' => 1,
         ];
 
-        //Booking::create($data);
+        if (!empty($chkCustomer)) {
+            $udata = [
+                'name'        => $request->bookingName,
+                'phone'       => $request->phone,
+            ];
+            User::where('id', $chkCustomer->customer_id)->update($udata);
+        }
 
-        $updateRoom = [
-            'booking_status' => 1,
-        ];
-        Room::where('id', $checkSlug->id)->update($updateRoom);
+
+        Booking::where('id', $booking_id)->update($data);
         return response()->json(['message' => 'Successfully booked.']);
+    }
+
+    public function generateUniqueRandomNumber()
+    {
+        $microtime = microtime(true); // Get the current microtime as a float
+        $microtimeString = str_replace('.', '', (string)$microtime); // Remove the dot from microtime
+        // Extract the last 5 digits
+        $uniqueId = substr($microtimeString, -7);
+        return $uniqueId; // Since we're generating only one number, return the first (and only) element of the array
     }
 }

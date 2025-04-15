@@ -19,6 +19,7 @@ use App\Http\Controllers\Facility\FacilityController;
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\Booking\GuestBookingController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Report\ReportController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/cc', function () {
@@ -96,6 +97,8 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('/getBookingEditdata', [BookingController::class, 'getBookingEditdata']);
         Route::post('/bookingUpdate', [BookingController::class, 'bookingUpdate']);
         Route::post('/bookingUpdateInOut', [BookingController::class, 'bookingUpdateInOut']);
+        Route::post('/adminBookingRequest', [BookingController::class, 'adminBookingRequest']);
+        Route::post('/checkStatusUpdate', [BookingController::class, 'checkStatusUpdate']);
     });
 
     Route::group([
@@ -208,6 +211,15 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('countBookingData', [DashboardController::class, 'countBookingData']);
         Route::get('getTodayBookingList', [DashboardController::class, 'getTodayBookingList']);
     });
+
+
+    Route::group([
+        'prefix' => 'report'
+    ], function () {
+        Route::get('filterBybookingReport', [ReportController::class, 'filterBybookingReport']);
+       
+    });
+
 
     Route::group([
         'prefix' => 'setting'

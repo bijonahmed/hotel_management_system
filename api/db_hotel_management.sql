@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2025 at 04:57 PM
+-- Generation Time: Apr 15, 2025 at 03:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -106,6 +106,7 @@ CREATE TABLE `booking` (
   `booking_id` varchar(255) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `phone` varchar(255) DEFAULT NULL,
   `checkin` date NOT NULL,
   `checkout` date NOT NULL,
   `room_id` int(10) UNSIGNED NOT NULL,
@@ -113,8 +114,14 @@ CREATE TABLE `booking` (
   `child` int(11) DEFAULT 0,
   `room_price` double(10,2) DEFAULT NULL,
   `message` text DEFAULT NULL,
+  `arival_from` text DEFAULT NULL,
   `customer_id` bigint(20) UNSIGNED NOT NULL,
+  `paymenttype` int(11) DEFAULT NULL COMMENT '1=online,2=offline',
   `booking_status` int(11) DEFAULT NULL COMMENT '1=Booked\r\n2=Release\r\n3=Cancel',
+  `update_by` int(11) DEFAULT NULL,
+  `booking_by` int(11) DEFAULT NULL COMMENT 'this admin entry track which user entry',
+  `check_out_reason` text DEFAULT NULL,
+  `check_out_by` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -123,9 +130,13 @@ CREATE TABLE `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `booking_id`, `name`, `email`, `checkin`, `checkout`, `room_id`, `adult`, `child`, `room_price`, `message`, `customer_id`, `booking_status`, `created_at`, `updated_at`) VALUES
-(9, '92523', 'Bijon', 'mdbijon@gmail.com', '2025-04-09', '2025-04-12', 2, 4, 2, NULL, 'ddd', 81, 1, '2025-04-08 14:18:14', '2025-04-08 14:18:14'),
-(11, '21761', 'Ayesha', 'ayesha@gmail.com', '2025-04-10', '2025-04-16', 3, 0, 0, NULL, NULL, 81, 2, '2025-04-09 12:47:54', '2025-04-09 12:47:54');
+INSERT INTO `booking` (`id`, `booking_id`, `name`, `email`, `phone`, `checkin`, `checkout`, `room_id`, `adult`, `child`, `room_price`, `message`, `arival_from`, `customer_id`, `paymenttype`, `booking_status`, `update_by`, `booking_by`, `check_out_reason`, `check_out_by`, `created_at`, `updated_at`) VALUES
+(1, '66962', 'Guest 1', 'guest1@gmail.com', '019155555111', '2025-04-12', '2025-04-20', 4, 20, 10, 19528.00, 'Living room: 1 sofa bed Comfy beds, 10 – Based on 1 review The unit has 2 beds.', 'Dhaka', 8, 2, 2, 1, NULL, 'this booking id relaease 66962', 1, '2025-04-12 05:58:52', '2025-04-15 11:24:34'),
+(2, '56039', 'Guest 2', 'Guest2@gmail.com', NULL, '2025-04-20', '2025-04-25', 4, 0, 0, 19528.00, NULL, NULL, 9, 2, 2, NULL, NULL, '56039', 1, '2025-04-12 06:00:42', '2025-04-15 11:29:34'),
+(3, '68387', 'Mr. Kamal', 'kamal897@gmail.com', NULL, '2025-04-13', '2025-04-23', 1, 1, 10, 7323.00, NULL, NULL, 9, 2, 2, NULL, NULL, 'testss', 1, '2025-04-12 06:44:51', '2025-04-15 11:31:29'),
+(4, '45783', 'Abdur Rahman', 'abdurrahman@gmail.com', '00114568982', '2025-04-25', '2025-04-27', 1, 0, 0, 7323.00, NULL, NULL, 10, 2, 3, NULL, NULL, 'swss', 1, '2025-04-15 06:27:01', '2025-04-15 11:31:51'),
+(5, '48956', 'Mowloda Begum', 'mowloda@gmail.com', NULL, '2025-04-17', '2025-04-19', 3, 5, 5, 19528.00, NULL, NULL, 10, 2, 1, NULL, NULL, NULL, NULL, '2025-04-15 06:28:15', '2025-04-15 06:28:15'),
+(7, '60174', 'sajibAhmed', 'sajibahmed@gmail.com', '0125647878788', '2025-04-28', '2025-04-30', 2, 7, NULL, 19528.00, NULL, NULL, 14, 2, 1, 1, NULL, NULL, NULL, '2025-04-15 08:31:16', '2025-04-15 08:38:27');
 
 -- --------------------------------------------------------
 
@@ -1074,10 +1085,10 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`id`, `name`, `slug`, `roomType`, `capacity`, `extraCapacity`, `roomPrice`, `bedCharge`, `room_size_id`, `bedNumber`, `bed_type_id`, `roomDescription`, `reserveCondition`, `status`, `booking_status`, `created_at`, `updated_at`) VALUES
-(1, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 5, '', 7323.00, 0, 0, '', 1, 'Comfy beds, 10 – Based on 1 review\nThis bungalow includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and free toiletries. The unit has air conditioning, sea views, a balcony and fruit is offered for guests. The unit has 1 bed. Bungalow size: 29 m²', '', 1, NULL, '2025-04-03 14:43:03', '2025-04-03 14:52:18'),
-(2, 'Executive Suite', 'executive-suite', 'Executive Suite', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\n\nComfy beds, 10 – Based on 1 review\nThe unit has 2 beds.', '', 1, 1, '2025-04-03 14:56:26', '2025-04-03 14:56:26'),
-(3, 'Deluxe Room', 'Deluxe-room', 'Deluxe-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, 2, '2025-04-03 14:56:26', '2025-04-09 18:47:54'),
-(4, 'King Room', 'king-room', 'king-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, NULL, '2025-04-03 14:56:26', '2025-04-09 18:47:54');
+(1, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 5, '', 7323.00, 0, 0, '', 1, 'Comfy beds, 10 – Based on 1 review\nThis bungalow includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and free toiletries. The unit has air conditioning, sea views, a balcony and fruit is offered for guests. The unit has 1 bed. Bungalow size: 29 m²', '', 1, 2, '2025-04-03 14:43:03', '2025-04-15 17:31:51'),
+(2, 'Executive Suite', 'executive-suite', 'Executive Suite', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\n\nComfy beds, 10 – Based on 1 review\nThe unit has 2 beds.', '', 1, 1, '2025-04-03 14:56:26', '2025-04-15 14:31:16'),
+(3, 'Deluxe Room', 'Deluxe-room', 'Deluxe-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, 1, '2025-04-03 14:56:26', '2025-04-15 14:22:28'),
+(4, 'King Room', 'king-room', 'king-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, 2, '2025-04-03 14:56:26', '2025-04-15 17:29:34');
 
 -- --------------------------------------------------------
 
@@ -1278,8 +1289,9 @@ CREATE TABLE `rule` (
 
 INSERT INTO `rule` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Super Admin', 1, '2024-04-16 10:33:46', '2024-04-16 10:33:46'),
-(2, 'Users', 1, '2024-04-16 10:56:15', '2024-04-16 10:56:15'),
-(3, 'Admin', 1, '2024-04-16 10:56:27', '2024-12-06 12:43:05');
+(2, 'Customer', 1, '2024-04-16 10:56:15', '2024-04-16 10:56:15'),
+(3, 'Admin', 1, '2024-04-16 10:56:27', '2024-12-06 12:43:05'),
+(4, 'User', 1, '2024-04-16 10:56:27', '2024-12-06 12:43:05');
 
 -- --------------------------------------------------------
 
@@ -1384,7 +1396,7 @@ CREATE TABLE `users` (
   `ref_id` int(11) DEFAULT NULL,
   `employee_id` int(11) DEFAULT NULL,
   `company_name` varchar(255) DEFAULT NULL,
-  `role_id` int(11) DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL COMMENT '1=Supper admin, 2=Customer, 3=Admin, 4=User',
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
@@ -1419,8 +1431,8 @@ CREATE TABLE `users` (
   `lastlogin_ip` varchar(255) DEFAULT NULL,
   `lastlogin_country` varchar(255) DEFAULT NULL,
   `lastlogin_datetime` datetime DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
   `status` int(11) DEFAULT 0,
   `logged_out` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1430,8 +1442,17 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `fg_id`, `fg_wallet_address`, `inviteCode`, `ref_id`, `employee_id`, `company_name`, `role_id`, `name`, `email`, `username`, `phone`, `available_balance`, `show_password`, `password`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `email_verified_at`, `telegram`, `whtsapp`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
-(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 'FG IT', 1, 'Black Jons', 'dev1@mail.com', 'dev', '01915728982', NULL, 'dev', '$2y$10$egNt4iHOZ4sWab8IcaHE9..QCyQc3z4oFRYUwesyeTH52KDFzM5.y', NULL, '01915728982', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, NULL, NULL, NULL, NULL, 1, NULL, '127.0.0.1', NULL, '2024-11-22 09:50:10', '2023-06-22 03:20:43', '2024-12-07 10:42:29', 1, NULL),
-(81, 'FG000000081', 'c3e3365c079c989d10ad4cbbed2b891c', '8942986', NULL, NULL, NULL, 2, 'Bijon', 'mdbijon@gmail.com', '1889573', NULL, NULL, '#123456#', '$2y$10$KrGVXS1GTt9EWzaXppR9/ON7GzZQUlJ1qQ37MHZqHKSHwBI01Dybm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-08 14:18:09', '2025-04-08 14:18:14', 1, NULL);
+(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 'FG IT', 1, 'Black jons', 'dev1@mail.com', 'dev', '019155555', NULL, 'dev', '$2y$10$egNt4iHOZ4sWab8IcaHE9..QCyQc3z4oFRYUwesyeTH52KDFzM5.y', NULL, '01915728982', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, NULL, NULL, NULL, NULL, 1, NULL, '127.0.0.1', NULL, '2024-11-22 09:50:10', '2023-06-22 03:20:43', '2025-04-15 02:56:37', 1, NULL),
+(2, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'Ibraheem', '12ibraheem@gmail.com', '4888', '045878787888', NULL, 'Ibraheem', '$2y$10$xD8SNrVUclcpYXMtzfx9OeMz98V4bTDYQG/0OwYS.xFv1rwMnufWC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:01:49', '2025-04-12 04:01:56', 1, NULL),
+(3, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'jannat', 'jannat4874878@gmail.com', 'jannat', '458787888', NULL, 'jannat', '$2y$10$bfBvKWL5zKjjpz0IZIdSPeIPRt148zd6FVVDAL.2xRNzgUgiJ5qEK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:01:53', '2025-04-12 04:01:59', 1, NULL),
+(4, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'Rana', 'rana@gmail.com', 'rana', '59898989898', NULL, '124156', '$2y$10$PG63dsfnzkqO4t3OK/mTW.RvcnrD0i8bSeiGvkIgGi7F9bVJ2k1rG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:02:35', '2025-04-12 04:02:35', 1, NULL),
+(5, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'Rabeya', 'rabeya@gmail.com', 'rabeya', '01989898999', NULL, 'rabeya', '$2y$10$O0VXjUpE0VYsFME.BP.R5ehmXaKPGE9gu.gXlsLHjqXdDKAs3BiZC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:12:44', '2025-04-12 04:12:44', 1, NULL),
+(6, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'Ayesha', 'ayesha@gmail.com', 'ayesha123', '00157878788', NULL, 'ayesha123', '$2y$10$4FbfI7bUybzfYjzzRRwddeoUlucC4DgRG3JTMOFO8ED8lPHpmxtGG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:41:06', '2025-04-12 04:41:06', 1, NULL),
+(7, NULL, NULL, NULL, NULL, NULL, NULL, 4, 'Mr. Baker', 'baker@gmail.com', 'baker', '487487878', NULL, 'baker@gmail.com', '$2y$10$ep52U9TPaiqmEMpemLrLveVFdAW9PIlars1YVWuw3CjLRZZ07xNwy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:47:39', '2025-04-12 04:47:39', 1, NULL),
+(8, 'FG000000008', '5a46d1cecb06643d25a2deebba785fca', '5323641', NULL, NULL, NULL, 2, 'Guest 1', 'guest1@gmail.com', '7526828', '019155555111', NULL, '#123456#', '$2y$10$SkClD3jlQdtcbTMZbjbRtuVSm./W5RRX2HPSThPeTbZ2FQuMpMF/W', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-12 05:58:46', '2025-04-15 03:01:14', 1, NULL),
+(9, 'FG000000009', 'bdbc041836c833517298d5ee69aae33b', '6419345', NULL, NULL, NULL, 2, 'Guest 2', 'Guest2@gmail.com', '6373052', NULL, NULL, '#123456#', '$2y$10$r8zc29KV9lGrSbAAMzOB5uad5YyZwzRT4W0mVYjvBCIwU84helSC2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-12 06:00:37', '2025-04-12 06:00:41', 1, NULL),
+(10, 'FG000000010', '28b93c18baa87438434183fe1f293c08', '4211879', NULL, NULL, NULL, 2, 'Abdur Rahman', 'abdurrahman@gmail.com', '4155513', '00114568982', NULL, '#123456#', '$2y$10$Hqb5IjRaWxyDGICoiOyZf.BepJC2g5uUuqJ6DjM9lz5i4cScDaK.u', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-15 06:26:55', '2025-04-15 06:27:01', 1, NULL),
+(14, NULL, NULL, '8763605', NULL, NULL, NULL, 2, 'sajibAhmed', 'sajibahmed@gmail.com', '8763605', '0125647878788', NULL, '#123456#', '$2y$10$yvwxVqRN3Rpnd/PyxJHJ4OQY.j.obDaSkQs6k7WUD2zk9JnWDNGcu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-15 08:31:16', '2025-04-15 08:38:27', 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1669,7 +1690,7 @@ ALTER TABLE `bed_type`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `booking_type`
@@ -1807,7 +1828,7 @@ ALTER TABLE `room_size`
 -- AUTO_INCREMENT for table `rule`
 --
 ALTER TABLE `rule`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `select_room_facilities`
@@ -1831,7 +1852,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

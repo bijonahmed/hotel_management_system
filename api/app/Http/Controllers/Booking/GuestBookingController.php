@@ -40,6 +40,7 @@ class GuestBookingController extends Controller
             $request->all(),
             [
                 'name'          => 'required',
+                'phone'         => 'required',
                 'slug'          => 'required',
                 'paymenttype'   => 'required',
                 'email'     => 'required|email',
@@ -48,6 +49,7 @@ class GuestBookingController extends Controller
             ],
             [
                 'name.required'            => 'Please enter your name.',
+                'phone.required'           => 'Please enter your phone.',
                 'paymenttype.required'     => 'Please select payment type.',
                 'email.required'    => 'Email address is required.',
                 'email.email'       => 'Please provide a valid email address.',
@@ -88,6 +90,7 @@ class GuestBookingController extends Controller
             'booking_id'  => $bookingId,  // Adding custom unique booking ID
             'name'        => $request->name,
             'email'       => $request->email,
+            'phone'       => $request->phone,
             'checkin'     => $request->checkin,
             'checkout'    => $request->checkout,
             'paymenttype' => $request->paymenttype,

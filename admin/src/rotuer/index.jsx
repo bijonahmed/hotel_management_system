@@ -17,7 +17,7 @@ import MerchantList from "../pages/users/UsersList.jsx";
 import RoleList from "../pages/users/RoleList.jsx";
 import RoleAdd from "../pages/users/Addrole.jsx";
 import BulkAddress from "../pages/configration/address/BulkAddress.jsx";
-import DepositReport from "../pages/report/DepositReport.jsx";
+import TransactionReport from "../pages/report/TransactionReport.jsx";
 import CheckLogAPI from "../pages/report/CheckLogAPI.jsx";
 
 
@@ -40,7 +40,8 @@ import PostEdit from "../pages/post/PostEdit.jsx";
 //Booking
 import RoomStatusList from "../pages/booking/RoomStatusList.jsx";
 import BookingList from "../pages/booking/BookingList.jsx";
-
+import AddNewBooking from "../pages/booking/AddNewBooking.jsx";
+import CheckOutList from "../pages/booking/CheckOutList.jsx";
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
 import BedTypeAdd from "../pages/roomsetting/BedTypeAdd.jsx";
@@ -103,7 +104,7 @@ const AppRouter = () => {
       <Route path="/user/user-add-admin" element={<UserAddAdmin />} />
       <Route path="/user/customer-add" element={<CustomerAdd />} />
       <Route path="/user/admin-list" element={<AdminList />} />
-      <Route path="/report/deposit-report" element={<DepositReport />} />
+      <Route path="/report/transaction-report" element={<TransactionReport />} />
       <Route path="/user/change-password" element={<ChangePassword />} />
       <Route path="/category/post-category-list" element={<PostCategoryList />} />
       <Route path="/category/post-categoryAdd" element={<PostCategoryAdd />} />
@@ -127,6 +128,8 @@ const AppRouter = () => {
       {/* Booking */}
       <Route path="/booking/room-status-list" element={<RoomStatusList />} />
       <Route path="/booking/booking-list" element={<BookingList />} />
+      <Route path="/booking/add-new-booking" element={<AddNewBooking />} />
+      <Route path="/booking/checkout-list" element={<CheckOutList />} />
       {/* //ROMM SETTING */}
       <Route path="/roomsetting/bed-type-list" element={<BedTypeList />} />
       <Route path="/roomsetting/add-bed-type" element={<BedTypeAdd />} />

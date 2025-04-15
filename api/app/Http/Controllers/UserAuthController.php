@@ -56,14 +56,16 @@ class UserAuthController extends Controller
             [
                 'name'  => 'required',
                 'email' => 'required|email|unique:users,email',
+                'phone' => 'required',
                 'checkin'   => 'required|date',
                 'checkout'  => 'required|date|after_or_equal:checkin',
             ],
             [
-                'name.required'      => 'Please enter your name.',
-                'email.required'     => 'Email address is required.',
-                'email.email'        => 'Please provide a valid email address.',
-                'email.unique'       => 'This email address is already taken.',
+                'name.required'     => 'Please enter your name.',
+                'phone.required'    => 'Please enter your phone.',
+                'email.required'    => 'Email address is required.',
+                'email.email'       => 'Please provide a valid email address.',
+                'email.unique'      => 'This email address is already taken.',
                 'checkin.date'      => 'Check-in date must be a valid date.',
                 'checkout.required' => 'Please select a check-out date.',
                 'checkout.date'     => 'Check-out date must be a valid date.',
@@ -99,6 +101,7 @@ class UserAuthController extends Controller
         $user = User::create([
             'name'          => $request->name,
             'email'         => $request->email,
+            'phone'         => $request->phone,
             'role_id'       => 2,
             'status'        => 1,
             'username'      => $username, // generated unique number

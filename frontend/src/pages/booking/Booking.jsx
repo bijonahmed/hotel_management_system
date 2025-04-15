@@ -98,6 +98,7 @@ const Booking = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone:"",
     checkin: "",
     checkout: "",
     paymenttype:"",
@@ -152,6 +153,7 @@ const Booking = () => {
         {
           name: formData.name,
           email: formData.email,
+          phone: formData.phone,
           slug: formData.slug,
           checkin: formData.checkin,
           checkout: formData.checkout,
@@ -207,10 +209,7 @@ const Booking = () => {
 
     setErrors({}); // Clear previous errors
     try {
-      const response = await axios.post(
-        "/public/bookingRequest",
-        updatedFormData
-      );
+      const response = await axios.post("/public/bookingRequest",updatedFormData);
 
       const Toast = Swal.mixin({
         toast: true,
@@ -231,6 +230,7 @@ const Booking = () => {
       setFormData({
         name: "",
         email: "",
+        phone: "",
         checkin: "",
         checkout: "",
         paymenttype:"",
@@ -778,6 +778,27 @@ const Booking = () => {
                                 <label htmlFor="email">Your Email</label>
                               </div>
                             </div>
+                            <div className="col-md-12">
+                              <div className="form-floating">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="phone"
+                                  placeholder="Your Phone"
+                                  value={formData.phone}
+                                  onChange={handleChange}
+                                  onFocus={() => {
+                                    if (!token) loginbyModal();
+                                  }}
+                                />
+                                {errors.phone && (
+                                  <div style={{ color: "red" }}>
+                                    {errors.phone[0]}
+                                  </div>
+                                )}
+                                <label htmlFor="phone">Your Phone</label>
+                              </div>
+                            </div>
                             <div className="col-md-6">
                               <div className="form-floating">
                                 <input
@@ -985,6 +1006,24 @@ const Booking = () => {
                                   </div>
                                 )}
                                 <label htmlFor="email">Your Email</label>
+                              </div>
+                            </div>
+                            <div className="col-md-12">
+                              <div className="form-floating">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="phone"
+                                  placeholder="Your Phone"
+                                  value={formData.phone}
+                                  onChange={handleChange}
+                                />
+                                {errors.phone && (
+                                  <div style={{ color: "red" }}>
+                                    {errors.phone[0]}
+                                  </div>
+                                )}
+                                <label htmlFor="phone">Your Phone</label>
                               </div>
                             </div>
                             <div className="col-md-6">

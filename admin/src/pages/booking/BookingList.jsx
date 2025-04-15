@@ -30,6 +30,7 @@ const BookingList = () => {
     bookingId: editingItemId,
     room_slug: "",
     bookingName: "",
+    phone:"",
     adult: "",
     child: "",
     message: "",
@@ -144,7 +145,7 @@ const BookingList = () => {
         icon: "success",
         title: "Your data has been successfully saved.",
       });
-
+      fetchData();
       console.log("Booking Submitted:", formData);
       const modal = window.bootstrap.Modal.getInstance(
         document.getElementById("bookingModal")
@@ -195,6 +196,7 @@ const BookingList = () => {
         message: booking.message || "",
         phone: booking.phone || "",
         arival_from: booking.arival_from || "",
+        phone: booking.phone || "",
       });
 
       setFormDataInOut({
@@ -227,14 +229,24 @@ const BookingList = () => {
       });
       setBookingRooms(response.data.booking_rooms);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      if (error.response && error.response.status === 422) {
+        Swal.fire({
+          icon: "error",
+          title: "Validation Errors",
+          html: Object.values(error.response.data.errors)
+            .map((err) => `<div>${err.join("<br>")}</div>`)
+            .join(""),
+        });
+        console.error("Validation errors:", error.response.data.errors);
+        setErrors(error.response.data.errors);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddNewClick = () => {
-    navigate("/roomsetting/add-room");
+    navigate("/booking/add-new-booking");
   };
 
   // Correctly closed useEffect hook
@@ -319,6 +331,9 @@ const BookingList = () => {
                   {/* Tabs Content */}
                   <div className="tab-content" id="bookingTabContent">
                     {/* Booking Information Tab */}
+
+
+                    <form onSubmit={handleSubmit}>
                     <div
                       className="tab-pane fade show active"
                       id="info"
@@ -395,6 +410,9 @@ const BookingList = () => {
                         </button>
                       </div>
                     </div>
+                    </form>
+
+
 
                     {/* Check IN/OUT Tab */}
                     <div
@@ -544,7 +562,7 @@ const BookingList = () => {
                                             onClick={() => handleEdit(item)}
                                           >
                                             <i className="lni lni-pencil-alt"></i>
-                                            &nbsp;Booking Update
+                                            &nbsp;Update
                                           </a>
                                         </td>
                                       </tr>

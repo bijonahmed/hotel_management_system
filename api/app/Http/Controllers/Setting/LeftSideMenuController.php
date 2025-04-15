@@ -33,7 +33,7 @@ class LeftSideMenuController extends Controller
             ],
             [
                 'label' => 'Transaction Report',
-                'path' => '/report/deposit-report',
+                'path' => '/report/transaction-report',
                 'icon' => 'bx bx-repeat',
                 'submenu' => []
             ],
@@ -43,7 +43,7 @@ class LeftSideMenuController extends Controller
                 'icon' => 'bx bx-category',
                 'submenu' => [
                     ['label' => 'Booking List', 'path' => '/booking/booking-list', 'icon' => 'bx bx-radio-circle'],
-                    ['label' => 'Room Checkout', 'path' => '#', 'icon' => 'bx bx-radio-circle'],
+                    ['label' => 'Checkout', 'path' => '/booking/checkout-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Room Status', 'path' => '/booking/room-status-list', 'icon' => 'bx bx-radio-circle'],
                 ]
             ],

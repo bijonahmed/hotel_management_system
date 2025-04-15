@@ -14,6 +14,7 @@ class Booking extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'checkin',
         'checkout',
         'booking_id',
@@ -26,6 +27,8 @@ class Booking extends Authenticatable
         'customer_id',
         'arival_from',
         'update_by',
+        'check_out_reason',
+        'check_out_by',
         'booking_status'
     ];
 }
