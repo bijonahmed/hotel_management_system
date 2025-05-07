@@ -157,6 +157,7 @@ const Booking = () => {
           slug: formData.slug,
           checkin: formData.checkin,
           checkout: formData.checkout,
+          paymenttype: formData.paymenttype,
           domain: domain,
         },
         {
@@ -760,7 +761,7 @@ const Booking = () => {
                             <div className="col-md-6">
                               <div className="form-floating">
                                 <input
-                                  type="email"
+                                  type="text"
                                   className="form-control"
                                   id="email"
                                   placeholder="Your Email"

@@ -57,12 +57,14 @@ class UserAuthController extends Controller
                 'name'  => 'required',
                 'email' => 'required|email|unique:users,email',
                 'phone' => 'required',
+                'paymenttype' => 'required',
                 'checkin'   => 'required|date',
                 'checkout'  => 'required|date|after_or_equal:checkin',
             ],
             [
                 'name.required'     => 'Please enter your name.',
                 'phone.required'    => 'Please enter your phone.',
+                'paymenttype.required' => 'Payment type required.',
                 'email.required'    => 'Email address is required.',
                 'email.email'       => 'Please provide a valid email address.',
                 'email.unique'      => 'This email address is already taken.',
@@ -113,7 +115,7 @@ class UserAuthController extends Controller
 
 
         $domain   = $request->domain;
-        $loginUrl = $domain . '/login';
+        $loginUrl = "https://moon-nest.com/login";//$domain . '/login';
        
         $customData = [
             'username'   => $username,
@@ -121,7 +123,55 @@ class UserAuthController extends Controller
             'password'   => $password
         ];
         // Send email
-        Mail::to($request->email)->send(new Guestsendingmail($customData));
+        
+        
+        $to = $request->email;
+        $subject = 'Moon Nest Account';
+        
+        $headers  = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+        $headers .= "From: Moon Nest <info@moon-nest.com>\r\n";
+        
+        $message = "
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset='UTF-8'>
+            <title>Moon Nest Account</title>
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+                .email-container { background-color: #ffffff; max-width: 600px; margin: 40px auto; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+                h2 { color: #2c3e50; margin-bottom: 20px; }
+                p { font-size: 16px; line-height: 1.6; color: #333; }
+                ul { list-style-type: none; padding: 0; }
+                ul li { font-size: 16px; margin-bottom: 10px; background-color: #f9f9f9; padding: 10px 15px; border-radius: 6px; }
+                .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #4CAF50; color: white; text-decoration: none; font-weight: bold; border-radius: 5px; }
+                .footer { margin-top: 30px; font-size: 14px; color: #888; }
+            </style>
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2>Welcome to Moon Nest!</h2>
+                <p>Dear user,</p>
+                <p>Thank you for registering. Below are your login credentials:</p>
+                <ul>
+                    <li><strong>Username:</strong> {$customData['username']}</li>
+                    <li><strong>Password:</strong> {$customData['password']}</li>
+                </ul>
+                <p>Please keep this information safe and do not share it with anyone.</p>
+                <p><a href='{$customData['login_url']}' class='btn'>Login to Moon Nest</a></p>
+                <div class='footer'>
+                    <p>Best regards,<br><strong>Moon Nest Team</strong></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        ";
+        
+        mail($to, $subject, $message, $headers);
+                
+        
+       // Mail::to($request->email)->send(new Guestsendingmail($customData));
         //end
 
         $inviteCode               = $this->generateUniqueRandomNumber();

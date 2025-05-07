@@ -30,7 +30,6 @@ const BookingList = () => {
     bookingId: editingItemId,
     room_slug: "",
     bookingName: "",
-    phone:"",
     adult: "",
     child: "",
     message: "",
@@ -194,7 +193,6 @@ const BookingList = () => {
         adult: booking.adult || "", 
         child: booking.child || "", 
         message: booking.message || "",
-        phone: booking.phone || "",
         arival_from: booking.arival_from || "",
         phone: booking.phone || "",
       });
