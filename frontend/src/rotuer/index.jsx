@@ -14,7 +14,7 @@ import Contact from "../pages/Contact.jsx";
 import Service from "../pages/Service.jsx";
 import Room from "../pages/Room.jsx";
 import ChangePassword from "../pages/users/ChangePassword.jsx";
-//For Admin Panel 
+//For Admin Panel
 import Dashboard from "../pages/Dashboard";
 import BookingHistory from "../pages/booking/BookingHistory.jsx";
 import MyProfile from "../pages/users/MyProfile.jsx";
@@ -24,13 +24,11 @@ import MyProfile from "../pages/users/MyProfile.jsx";
 // import RoleAdd from "../pages/users/Addrole.jsx";
 //import BulkAddress from "../pages/configration/address/BulkAddress.jsx";
 
-
 // import RoleEdit from "../pages/users/EditRole.jsx";
 // import UserEdit from "../pages/users/EditUser.jsx";
 // import SuperAdminList from "../pages/users/SuperAdminList.jsx";
 // import AdminList from "../pages/users/AdminList.jsx";
 // import UserAdd from "../pages/users/UserAdd.jsx";
-
 
 const AppRouter = () => {
   return (

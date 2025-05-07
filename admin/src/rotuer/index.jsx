@@ -80,6 +80,8 @@ import ConfigrrationApiKeyEdit from "../pages/configration/ConfigrationApiKeyEdi
 import StatusEdit from "../pages/report/StatusEdit.jsx";
 import CheckTronScanAPI from "../pages/report/CheckTronScanAPI.jsx";
 import GlobalSetting from "../pages/setting/GlobalSetting.jsx";
+import Slider from "../pages/setting/Slider.jsx";
+import Service from "../pages/setting/Service.jsx";
 
 const AppRouter = () => {
   return (
@@ -157,6 +159,8 @@ const AppRouter = () => {
       <Route path="/facilites/facilites-add" element={<FacilitesAdd />} />
       <Route path="/roomsetting/facilites-edit/:id" element={<FacilitesEdit />} />
       <Route path="/setting/global-setting" element={<GlobalSetting />} />
+      <Route path="/setting/slider-list" element={<Slider />} />
+      <Route path="/setting/service-list" element={<Service />} />
 
 
       <Route path="/dashboard" element={<Dashboard />} />

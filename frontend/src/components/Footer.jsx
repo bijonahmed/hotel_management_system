@@ -5,7 +5,7 @@ import axios from "/config/axiosConfig";
 const Footer = () => {
   const { content } = useContext(LanguageContext);
   const [name, setName] = useState("");
-
+  const [serviceData, setServiceData] = useState([]);
   const fetechGlobalData = async () => {
     try {
       const response = await axios.get(`/public/getGlobalData`);
@@ -16,8 +16,20 @@ const Footer = () => {
     }
   };
 
+  const fetechActiveService = async () => {
+   
+    try {
+      const response = await axios.get(`/public/getServiceList`);
+      //console.log("Service:", response.data); // Log the response
+      setServiceData(response.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
   useEffect(() => {
     fetechGlobalData();
+    fetechActiveService();
   }, []);
 
   return (
@@ -37,11 +49,8 @@ const Footer = () => {
                 </Link>
                 <p className="text-white mb-0">
                   Download{" "}
-                  <a
-                    className="text-dark fw-medium"
-                    href="#"
-                  >
-                    🌙 Moon Nest – Download our customer app for Android today
+                  <a className="text-dark fw-medium" href="#">
+                    🌙 {name.name} – Download our customer app for Android today
                     and enjoy seamless access to all our services on the go! 📱
                   </a>
                 </p>
@@ -100,7 +109,7 @@ const Footer = () => {
                     Contact Us
                   </Link>
                   <Link className="btn btn-link" to="/service">
-                   Service
+                    Service
                   </Link>
                   <Link className="btn btn-link" to="/room">
                     Room
@@ -108,30 +117,17 @@ const Footer = () => {
                   <Link className="btn btn-link" to="/contact">
                     Support
                   </Link>
-                
                 </div>
                 <div className="col-md-6">
                   <h6 className="section-title text-start text-primary text-uppercase mb-4">
                     Services
                   </h6>
-                  <a className="btn btn-link" href="#">
-                  Coffee Bar
-                  </a>
-                  <a className="btn btn-link" href="#">
-                  Restaurant
-                  </a>
-                  <a className="btn btn-link" href="#">
-                  Room Service
-                  </a>
-                  <a className="btn btn-link" href="#">
-                  24x7 Reception
-                  </a>
-                  <a className="btn btn-link" href="#">
-                  Car Rental
-                  </a>
-                  <a className="btn btn-link" href="#">
-                  Secure Wi-Fi
-                  </a>
+
+                  {serviceData?.map((service, index) => (
+                    <a className="btn btn-link" href="#"  key={service.id}>
+                      {service.name}
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
@@ -145,14 +141,13 @@ const Footer = () => {
                 {/*/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. *** /*/}
                 Designed By{" "}
                 <a className="border-bottom" href="/">
-                  Moon Nest
+                {name.name}
                 </a>
               </div>
               <div className="col-md-6 text-center text-md-end">
                 <div className="footer-menu">
                   <Link to="/">Home</Link>
                   <Link to="/contact">Help</Link>
-                 
                 </div>
               </div>
             </div>

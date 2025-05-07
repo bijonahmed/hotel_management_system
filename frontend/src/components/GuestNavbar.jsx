@@ -64,7 +64,7 @@ const Navbar = () => {
                       fontStyle: "italic", // Italic style added here
                     }}
                   >
-                    Moon Nest is a very soothing resort.
+                    {name.slugan}
                   </p>
                 </div>
                 <div className="h-100 d-inline-flex align-items-center py-2">

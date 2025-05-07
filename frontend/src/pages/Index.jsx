@@ -12,14 +12,41 @@ const Index = () => {
   const baseURL = axios.defaults.baseURL;
   const [errors, setErrors] = useState({});
   const [roomData, setRoomData] = useState([]);
+  const [serviceData, setServiceData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [baner_img, setBImg] = useState("");
+
+  const fetechGlobalData = async () => {
+    try {
+      const response = await axios.get(`/public/getGlobalSettingdata`);
+      console.log("Baner Img:", response.data.banner_image); // Log the response
+      setName(response.data.data);
+      setBImg(response.data.banner_image);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
 
   const fetechActiveRooms = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`/public/activeRooms`);
-      console.log("API Response:", response.data); // Log the response
+      //console.log("API Response:", response.data); // Log the response
       setRoomData(response.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetechActiveService = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/public/getServiceList`);
+      //console.log("Service:", response.data); // Log the response
+      setServiceData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
     } finally {
@@ -29,6 +56,8 @@ const Index = () => {
 
   useEffect(() => {
     fetechActiveRooms();
+    fetechActiveService();
+    fetechGlobalData();
   }, []);
 
   return (
@@ -38,13 +67,13 @@ const Index = () => {
         <Sliders />
 
         {/* Booking Start */}
-        <BookingFilter/>
+        <BookingFilter />
         {/* Booking End */}
         {/* About Start */}
         <div className="container-xxl py-5">
           <div className="container">
             <div className="row g-5 align-items-center">
-              <div className="col-lg-6">
+              <div className="col-lg-12">
                 <h6 className="section-title text-start text-primary text-uppercase">
                   About Us
                 </h6>
@@ -56,16 +85,10 @@ const Index = () => {
                   className="mb-4 text-justify"
                   style={{ textAlign: "justify" }}
                 >
-                  Moon Nest is a very soothing resort. All are wooden bungalow
-                  with both sea and hill view sides. There is a bathroom, a
-                  couple bed room & a veranda in one bungalow. You will get
-                  complementary breakfast for 2 person with one bungalow. Also
-                  we have a open restaurant, where you can order fresh drinks,
-                  food, sea food and so on. The beautiful beach is 6 to 7 mins
-                  walking away from our resort.
+                 {name.about_us}
                 </p>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-6 d-none">
                 <div className="row g-3">
                   <div className="col-6 text-end">
                     <img
@@ -145,7 +168,8 @@ const Index = () => {
                       </div>
                       <div className="d-flex mb-3">
                         <small className="border-end me-3 pe-3">
-                          <i className="fa fa-bed text-primary me-2" /> {room.bed_name}
+                          <i className="fa fa-bed text-primary me-2" />{" "}
+                          {room.bed_name}
                         </small>
                         {/* <small className="border-end me-3 pe-3">
                           <i className="fa fa-bath text-primary me-2" /> 2 Bath
@@ -158,10 +182,16 @@ const Index = () => {
                         {room.roomDescription || ""}
                       </p>
                       <div className="d-flex justify-content-between">
-                        <Link to={`/booking-details/${room.slug}`} className="btn btn-sm btn-primary rounded py-2 px-4">
+                        <Link
+                          to={`/booking-details/${room.slug}`}
+                          className="btn btn-sm btn-primary rounded py-2 px-4"
+                        >
                           View Detail
                         </Link>
-                        <Link to={`/booking-details/${room.slug}`} className="btn btn-sm btn-dark rounded py-2 px-4">
+                        <Link
+                          to={`/booking-details/${room.slug}`}
+                          className="btn btn-sm btn-dark rounded py-2 px-4"
+                        >
                           Book Now
                         </Link>
                       </div>
@@ -174,8 +204,8 @@ const Index = () => {
         </div>
         {/* Room End */}
         {/* Video Start */}
-        <WhatsApp/>
-      
+        <WhatsApp />
+
         <div
           className="container-xxl py-5 px-0 wow zoomIn"
           data-wow-delay="0.1s"
@@ -186,11 +216,9 @@ const Index = () => {
                 <h6 className="section-title text-start text-white text-uppercase mb-3">
                   Luxury Living
                 </h6>
-                <h1 className="text-white mb-4">
-                Moon Nest 
-                </h1>
+                <h1 className="text-white mb-4">Moon Nest</h1>
                 <p className="text-white mb-4">
-                Moon Nest is a very soothing resort. All are wooden bungalow with both sea and hill view sides. There is a bathroom, a couple bed room & a veranda in one bungalow.
+                {name.about_us}
                 </p>
                 {/* <a className="btn btn-primary py-md-3 px-md-5 me-3">
                   Our Rooms
@@ -204,7 +232,7 @@ const Index = () => {
                   type="button"
                   className="btn-play"
                   data-bs-toggle="modal"
-                  data-src="https://www.youtube.com/embed/DWRcNpR6Kdc"
+                  data-src={name.youtubelink}
                   data-bs-target="#videoModal"
                 >
                   <span />
@@ -213,7 +241,7 @@ const Index = () => {
             </div>
           </div>
           <br />
-          <img className="img-fluid" src="/img/Landing_01.jpg" alt="Images" />
+          <img className="img-fluid" src={baner_img} alt="Images" />
         </div>
         <div
           className="modal fade"
@@ -241,7 +269,7 @@ const Index = () => {
                   <iframe
                     width="560"
                     height="315"
-                    src="https://www.youtube.com/embed/aoJEbllaj2c?si=kIVLuI-hWyoV19NH"
+                    src={name.youtubelink}
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerPolicy="strict-origin-when-cross-origin"
@@ -267,73 +295,23 @@ const Index = () => {
               </h1>
             </div>
             <div className="row g-4">
-  <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-    <a className="service-item rounded" href="#">
-      <div className="service-icon bg-transparent border rounded p-1">
-        <div className="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-          <i className="fas fa-mug-hot fa-2x text-primary" />
-        </div>
-      </div>
-      <h5 className="mb-3">Coffee Bar</h5>
-    </a>
-  </div>
-
-  <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-    <a className="service-item rounded" href="#">
-      <div className="service-icon bg-transparent border rounded p-1">
-        <div className="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-          <i className="fas fa-utensils fa-2x text-primary" />
-        </div>
-      </div>
-      <h5 className="mb-3">Restaurant</h5>
-    </a>
-  </div>
-
-  <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-    <a className="service-item rounded" href="#">
-      <div className="service-icon bg-transparent border rounded p-1">
-        <div className="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-          <i className="fas fa-concierge-bell fa-2x text-primary" />
-        </div>
-      </div>
-      <h5 className="mb-3">Room Service</h5>
-    </a>
-  </div>
-
-  <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
-    <a className="service-item rounded" href="#">
-      <div className="service-icon bg-transparent border rounded p-1">
-        <div className="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-          <i className="fas fa-concierge-bell fa-2x text-primary" />
-        </div>
-      </div>
-      <h5 className="mb-3">24x7 Reception</h5>
-    </a>
-  </div>
-
-  <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-    <a className="service-item rounded" href="#">
-      <div className="service-icon bg-transparent border rounded p-1">
-        <div className="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-          <i className="fas fa-car fa-2x text-primary" />
-        </div>
-      </div>
-      <h5 className="mb-3">Car Rental</h5>
-    </a>
-  </div>
-
-  <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-    <a className="service-item rounded" href="#">
-      <div className="service-icon bg-transparent border rounded p-1">
-        <div className="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-          <i className="fas fa-wifi fa-2x text-primary" />
-        </div>
-      </div>
-      <h5 className="mb-3">Secure Wi-Fi</h5>
-    </a>
-  </div>
-</div>
-
+              {serviceData?.map((service, index) => (
+                <div
+                  key={service.id}
+                  className="col-lg-4 col-md-6 wow fadeInUp"
+                  data-wow-delay={`0.${index + 1}s`}
+                >
+                  <a className="service-item rounded" href="#">
+                    <div className="service-icon bg-transparent border rounded p-1 d-none">
+                      <div className="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
+                        <i className={`${service.icon} fa-2x text-primary`} />
+                      </div>
+                    </div>
+                    <h5 className="mb-3">{service.name}</h5>
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         {/* Service End */}

@@ -10,7 +10,9 @@ use App\Models\Booking;
 use App\Models\Room;
 use App\Models\RoomImages;
 use App\Models\SelectedRoomFacility;
+use App\Models\Service;
 use App\Models\Setting;
+use App\Models\Sliders;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Validator;
@@ -117,10 +119,27 @@ class PublicController extends Controller
     }
 
 
+    public function getSliders(Request $request)
+    {
+        try {
+            $sliderImg = Sliders::where('status', 1)
+                ->get()
+                ->map(function ($slider) {
+                    return [
+                        'id'              => $slider->id,
+                        'title_name'      => $slider->title_name,
+                        'sliderImage'     => !empty($slider->sliderImage) ? url($slider->sliderImage) : ""
+                    ];
+                });
+
+            return response()->json(['data' => $sliderImg], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
     public function getRoomDetails(Request $request)
     {
-
         try {
 
             $roomParticular = Room::where('room.status', 1)->where('room.slug', $request->slug)
@@ -148,6 +167,9 @@ class PublicController extends Controller
         }
     }
 
+
+
+
     public function checkselectedfacilities(Request $request)
     {
 
@@ -170,7 +192,6 @@ class PublicController extends Controller
 
     public function getGlobalData()
     {
-
         try {
             $data = Setting::where('id', 1)->first();
             return response()->json($data);
@@ -178,6 +199,39 @@ class PublicController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+    public function getGlobalSettingdata()
+    {
+        try {
+            $data = Setting::where('id', 1)->first();
+
+            $response = [
+                'data'         => $data,
+                'banner_image' => !empty($data->banner_image) ? url($data->banner_image) : "",
+                'message' => 'success'
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+
+    public function getServiceList()
+    {
+
+        try {
+            $data = Service::where('status', 1)->get();
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+
 
     public function sendContact(Request $request)
     {

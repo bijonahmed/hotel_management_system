@@ -16,6 +16,7 @@ class Setting extends Authenticatable
   
     protected $fillable = [
       'id',
+      'slugan',
       'name',
     ];
 

@@ -101,8 +101,9 @@ class LeftSideMenuController extends Controller
                 'submenu' => [
                     ['label' => 'Global Category', 'path' => '/category/global-category-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Frontend Setting', 'path' => '/setting/global-setting', 'icon' => 'bx bx-radio-circle'],
-                    //['label' => 'Global Wallet Address', 'path' => '/wallet/global-wallet-address-list', 'icon' => 'bx bx-radio-circle'],
-                    // ['label' => 'Confirgration API Key', 'path' => '/configration/config-api-key-list', 'icon' => 'bx bx-radio-circle'],
+                     // ['label' => 'Booking Type List', 'path' => '/roomsetting/booking-type-list', 'icon' => 'bx bx-radio-circle'],
+                    ['label' => 'Slider', 'path' => '/setting/slider-list', 'icon' => 'bx bx-radio-circle'],
+                    ['label' => 'Service List', 'path' => '/setting/service-list', 'icon' => 'bx bx-radio-circle'],
                     // ['label' => 'Merchant Request', 'path' => '/configration/config-api-key-list', 'icon' => 'bx bx-radio-circle']
                 ]
             ]

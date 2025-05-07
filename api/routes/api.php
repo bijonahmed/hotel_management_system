@@ -63,13 +63,17 @@ Route::group([
 ], function () {
     Route::post('bookingRequest', [GuestBookingController::class, 'bookingRequest']);
     Route::get('/activeRooms', [PublicController::class, 'activeRooms']);
+    Route::get('/getServiceList', [PublicController::class, 'getServiceList']);
     Route::get('/getRoomDetails', [PublicController::class, 'getRoomDetails']);
+    Route::get('/getSliders', [PublicController::class, 'getSliders']);
     Route::post('/getMerchentRequest', [PublicController::class, 'getMerchentRequest']);
     Route::get('/getApiReport', [PublicController::class, 'getTronApiReport']);
     Route::get('checkselectedfacilities', [PublicController::class, 'checkselectedfacilities']);
     Route::get('getGlobalData', [PublicController::class, 'getGlobalData']);
+    Route::get('getGlobalSettingdata', [PublicController::class, 'getGlobalSettingdata']);
     Route::post('/sendContact', [PublicController::class, 'sendContact']);
     Route::post('/filterBooking', [PublicController::class, 'filterBooking']);
+
 });
 /*
 Route::group([
@@ -173,6 +177,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('getsRoomSize', [RoomSettingController::class, 'getsRoomSize']);
         Route::get('getsRoomTypes', [RoomSettingController::class, 'getsRoomTypes']);
         Route::get('getsRoomImages', [RoomSettingController::class, 'getsRoomImages']);
+
         Route::get('getsBetType', [RoomSettingController::class, 'getsBetType']);
         Route::post('roomSizeSave', [RoomSettingController::class, 'roomSizeSave']);
         Route::get('checkPromoCodeRow', [RoomSettingController::class, 'checkPromoCodeRow']);
@@ -217,7 +222,6 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         'prefix' => 'report'
     ], function () {
         Route::get('filterBybookingReport', [ReportController::class, 'filterBybookingReport']);
-       
     });
 
 
@@ -234,5 +238,12 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('getLanguageList', [SettingController::class, 'getLanguageList']);
         Route::get('getLanguageActiveList', [SettingController::class, 'getLanguageActiveList']);
         Route::get('languagerow/{id}', [SettingController::class, 'chkLanguagerow']);
+        Route::get('getsSliderImages', [SettingController::class, 'getsSliderImages']);
+        Route::get('getsServiceList', [SettingController::class, 'getsServiceList']);
+
+        Route::get('delteSliderImages', [SettingController::class, 'delteSliderImages']);
+        Route::get('deleteService', [SettingController::class, 'deleteService']);
+        Route::post('sliderImagesSave', [SettingController::class, 'sliderSave']);
+        Route::post('servicedataSave', [SettingController::class, 'servicedataSave']);
     });
 });

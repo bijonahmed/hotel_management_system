@@ -10,14 +10,14 @@ use App\Models\AttributeValues;
 use AuthorizesRequests;
 use DB;
 
-class Sliders extends Authenticatable
+class Service extends Authenticatable
 {
   use HasApiTokens, HasFactory, Notifiable;
-  public $table = "slider_images";
+  public $table = "service";
   
   protected $fillable = [
-    'title_name',
-    'sliderImage',
+    'name',
+    'slug',
     'status',
   ];
   
