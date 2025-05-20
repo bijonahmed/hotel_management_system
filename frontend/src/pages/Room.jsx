@@ -24,10 +24,8 @@ const Room = () => {
     }
   };
 
-
   useEffect(() => {
     fetechActiveRooms();
-
   }, []);
 
   return (
@@ -92,10 +90,14 @@ const Room = () => {
                   <div className="room-item shadow rounded overflow-hidden">
                     <div className="position-relative">
                       <img
-                      
-                        className="img-fluid"
+                        className="img-responsive"
                         src={room.roomImage || "/img/room-3.jpg"}
                         alt="Room Image"
+                        style={{
+                          height: "250px",
+                          width: "100%",
+                          objectFit: "cover",
+                        }}
                       />
                       <small className="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">
                         BDT.&nbsp;{room.roomPrice}/Night
@@ -125,7 +127,8 @@ const Room = () => {
                                 </small> */}
                       </div>
                       <p className="text-body mb-3">
-                        {room.roomDescription || ""}
+                        {/* {room.roomDescription || ""} */}
+                        <div dangerouslySetInnerHTML={{ __html: room.roomDescription }} />
                       </p>
                       <div className="d-flex justify-content-between">
                         <Link
@@ -148,7 +151,8 @@ const Room = () => {
             </div>
           </div>
         </div>
-        <br/><br/>
+        <br />
+        <br />
         {/* Room End */}
 
         {/* end */}

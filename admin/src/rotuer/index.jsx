@@ -42,6 +42,8 @@ import RoomStatusList from "../pages/booking/RoomStatusList.jsx";
 import BookingList from "../pages/booking/BookingList.jsx";
 import AddNewBooking from "../pages/booking/AddNewBooking.jsx";
 import CheckOutList from "../pages/booking/CheckOutList.jsx";
+import CheckInList from "../pages/booking/CheckInList.jsx";
+import CheckInDetails from "../pages/booking/CheckInDetails.jsx";
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
 import BedTypeAdd from "../pages/roomsetting/BedTypeAdd.jsx";
@@ -132,6 +134,8 @@ const AppRouter = () => {
       <Route path="/booking/booking-list" element={<BookingList />} />
       <Route path="/booking/add-new-booking" element={<AddNewBooking />} />
       <Route path="/booking/checkout-list" element={<CheckOutList />} />
+      <Route path="/booking/checkin-list" element={<CheckInList />} />
+      <Route path="/booking/checking-details" element={<CheckInDetails />} />  
       {/* //ROMM SETTING */}
       <Route path="/roomsetting/bed-type-list" element={<BedTypeList />} />
       <Route path="/roomsetting/add-bed-type" element={<BedTypeAdd />} />

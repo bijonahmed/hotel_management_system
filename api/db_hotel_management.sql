@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2025 at 04:29 AM
+-- Generation Time: May 20, 2025 at 08:34 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -106,20 +106,38 @@ CREATE TABLE `booking` (
   `booking_id` varchar(255) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `country_code` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `checkin` date NOT NULL,
   `checkout` date NOT NULL,
   `room_id` int(10) UNSIGNED NOT NULL,
+  `room_no` varchar(255) DEFAULT NULL,
   `adult` int(11) DEFAULT 0,
   `child` int(11) DEFAULT 0,
+  `booking_type` varchar(255) DEFAULT NULL,
   `room_price` double(10,2) DEFAULT NULL,
+  `advance_amount` decimal(10,2) DEFAULT NULL,
   `message` text DEFAULT NULL,
+  `customer_title` varchar(255) DEFAULT NULL,
+  `customer_first_name` varchar(255) DEFAULT NULL,
+  `customer_last_name` varchar(255) DEFAULT NULL,
+  `customer_father_name` varchar(255) DEFAULT NULL,
+  `customer_gender` varchar(255) DEFAULT NULL,
+  `customer_occupation` varchar(255) DEFAULT NULL,
+  `customer_dob` date DEFAULT NULL,
+  `customer_nationality` varchar(255) DEFAULT NULL,
+  `customer_contact_type` varchar(255) DEFAULT NULL,
+  `customer_contact_address` text DEFAULT NULL,
+  `customer_contact_email` varchar(255) DEFAULT NULL,
   `arival_from` text DEFAULT NULL,
   `customer_id` bigint(20) UNSIGNED NOT NULL,
   `paymenttype` int(11) DEFAULT NULL COMMENT '1=online,2=offline',
   `booking_status` int(11) DEFAULT NULL COMMENT '1=Booked\r\n2=Release\r\n3=Cancel',
   `update_by` int(11) DEFAULT NULL,
   `booking_by` int(11) DEFAULT NULL COMMENT 'this admin entry track which user entry',
+  `booking_reference_no` varchar(255) DEFAULT NULL,
+  `pupose_of_visit` varchar(255) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
   `check_out_reason` text DEFAULT NULL,
   `check_out_by` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -130,13 +148,13 @@ CREATE TABLE `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `booking_id`, `name`, `email`, `phone`, `checkin`, `checkout`, `room_id`, `adult`, `child`, `room_price`, `message`, `arival_from`, `customer_id`, `paymenttype`, `booking_status`, `update_by`, `booking_by`, `check_out_reason`, `check_out_by`, `created_at`, `updated_at`) VALUES
-(1, '66962', 'Guest 1', 'guest1@gmail.com', '019155555111', '2025-04-12', '2025-04-20', 4, 20, 10, 19528.00, 'Living room: 1 sofa bed Comfy beds, 10 – Based on 1 review The unit has 2 beds.', 'Dhaka', 8, 2, 2, 1, NULL, 'this booking id relaease 66962', 1, '2025-04-12 05:58:52', '2025-04-15 11:24:34'),
-(2, '56039', 'Guest 2', 'Guest2@gmail.com', NULL, '2025-04-20', '2025-04-25', 4, 0, 0, 19528.00, NULL, NULL, 9, 2, 2, NULL, NULL, '56039', 1, '2025-04-12 06:00:42', '2025-04-15 11:29:34'),
-(3, '68387', 'Mr. Kamal', 'kamal897@gmail.com', NULL, '2025-04-13', '2025-04-23', 1, 1, 10, 7323.00, NULL, NULL, 9, 2, 2, NULL, NULL, 'testss', 1, '2025-04-12 06:44:51', '2025-04-15 11:31:29'),
-(4, '45783', 'Abdur Rahman', 'abdurrahman@gmail.com', '00114568982', '2025-04-25', '2025-04-27', 1, 0, 0, 7323.00, NULL, NULL, 10, 2, 3, NULL, NULL, 'swss', 1, '2025-04-15 06:27:01', '2025-04-15 11:31:51'),
-(5, '48956', 'Mowloda Begum', 'mowloda@gmail.com', NULL, '2025-04-17', '2025-04-19', 3, 5, 5, 19528.00, NULL, NULL, 10, 2, 1, NULL, NULL, NULL, NULL, '2025-04-15 06:28:15', '2025-04-15 06:28:15'),
-(7, '60174', 'sajibAhmed', 'sajibahmed@gmail.com', '0125647878788', '2025-04-28', '2025-04-30', 2, 7, NULL, 19528.00, NULL, NULL, 14, 2, 1, 1, NULL, NULL, NULL, '2025-04-15 08:31:16', '2025-04-15 08:38:27');
+INSERT INTO `booking` (`id`, `booking_id`, `name`, `email`, `country_code`, `phone`, `checkin`, `checkout`, `room_id`, `room_no`, `adult`, `child`, `booking_type`, `room_price`, `advance_amount`, `message`, `customer_title`, `customer_first_name`, `customer_last_name`, `customer_father_name`, `customer_gender`, `customer_occupation`, `customer_dob`, `customer_nationality`, `customer_contact_type`, `customer_contact_address`, `customer_contact_email`, `arival_from`, `customer_id`, `paymenttype`, `booking_status`, `update_by`, `booking_by`, `booking_reference_no`, `pupose_of_visit`, `remarks`, `check_out_reason`, `check_out_by`, `created_at`, `updated_at`) VALUES
+(1, '66962', 'Guest 1', 'guest1@gmail.com', NULL, '019155555111', '2025-04-12', '2025-04-20', 4, NULL, 20, 10, NULL, 19528.00, NULL, 'Living room: 1 sofa bed Comfy beds, 10 – Based on 1 review The unit has 2 beds.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Dhaka', 8, 2, 2, 1, NULL, NULL, NULL, NULL, 'this booking id relaease 66962', 1, '2025-04-12 05:58:52', '2025-04-15 11:24:34'),
+(2, '56039', 'Guest 2', 'Guest2@gmail.com', NULL, NULL, '2025-04-20', '2025-04-25', 4, NULL, 0, 0, NULL, 19528.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 9, 2, 2, NULL, NULL, NULL, NULL, NULL, '56039', 1, '2025-04-12 06:00:42', '2025-04-15 11:29:34'),
+(3, '68387', 'Mr. Kamal', 'kamal897@gmail.com', NULL, NULL, '2025-04-13', '2025-04-23', 1, NULL, 1, 10, NULL, 7323.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 9, 2, 2, NULL, NULL, NULL, NULL, NULL, 'testss', 1, '2025-04-12 06:44:51', '2025-04-15 11:31:29'),
+(4, '45783', 'Abdur Rahman', 'abdurrahman@gmail.com', NULL, '00114568982', '2025-04-25', '2025-04-27', 1, NULL, 0, 0, NULL, 7323.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 10, 2, 3, NULL, NULL, NULL, NULL, NULL, 'swss', 1, '2025-04-15 06:27:01', '2025-04-15 11:31:51'),
+(5, '48956', 'Mowloda Begum', 'mowloda@gmail.com', '88', '00114568982', '2025-04-17', '2025-04-19', 3, '1002', 5, 5, 'Groups', 19528.00, 500.00, NULL, 'Mr', 'Gazi', 'Giash Uddin', 'Md. Harunur Rashid', 'Male', 'Programmer', '2025-05-20', 'Bangladeshi', 'Home', 'Mirpur-1, Dhaka, Bangladesh', 'jons@gmail.com', 'Dhaka, Mirpur-1', 10, 2, 1, 1, NULL, '15689', 'For Visit', 'Remarks', NULL, NULL, '2025-04-15 06:28:15', '2025-05-20 12:15:40'),
+(7, '60174', 'sajibAhmed', 'sajibahmed@gmail.com', NULL, '0125647878788', '2025-04-28', '2025-04-30', 2, NULL, 7, NULL, NULL, 19528.00, 500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 14, 2, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-15 08:31:16', '2025-05-20 12:15:49');
 
 -- --------------------------------------------------------
 
@@ -1085,10 +1103,11 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`id`, `name`, `slug`, `roomType`, `capacity`, `extraCapacity`, `roomPrice`, `bedCharge`, `room_size_id`, `bedNumber`, `bed_type_id`, `roomDescription`, `reserveCondition`, `status`, `booking_status`, `created_at`, `updated_at`) VALUES
-(1, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 5, '', 7323.00, 0, 0, '', 1, 'Comfy beds, 10 – Based on 1 review\nThis bungalow includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and free toiletries. The unit has air conditioning, sea views, a balcony and fruit is offered for guests. The unit has 1 bed. Bungalow size: 29 m²', '', 1, 2, '2025-04-03 14:43:03', '2025-04-15 17:31:51'),
+(1, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 5, '', 7323.00, 0, 0, '', 1, 'Comfy beds, 10 – Based on 1 review\r\nThis bungalow includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and free toiletries. The unit has air conditioning, sea views, a balcony and fruit is offered for guests. The unit has 1 bed. Bungalow size: 29 m²', '', 0, 2, '2025-04-03 14:43:03', '2025-05-20 10:33:03'),
 (2, 'Executive Suite', 'executive-suite', 'Executive Suite', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\n\nComfy beds, 10 – Based on 1 review\nThe unit has 2 beds.', '', 1, 1, '2025-04-03 14:56:26', '2025-04-15 14:31:16'),
 (3, 'Deluxe Room', 'Deluxe-room', 'Deluxe-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, 1, '2025-04-03 14:56:26', '2025-04-15 14:22:28'),
-(4, 'King Room', 'king-room', 'king-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, 2, '2025-04-03 14:56:26', '2025-04-15 17:29:34');
+(4, 'King Room', 'king-room', 'king-room', 5, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.', '', 1, 2, '2025-04-03 14:56:26', '2025-04-15 17:29:34'),
+(5, 'Test', 'test', 'Test', 3, '', 20000.00, 0, 0, '', 1, '<p><strong>Test &nbsp;Room DescriptionRoom DescriptionRoom DescriptionRoom </strong><em>DescriptionRoom Description</em><strong><br></strong></p>\r\n<p>Room DescriptionRoom DescriptionRoom<strong> DescriptionRoom DescriptionRoom Description</strong></p>\r\n<p><strong>Room DescriptionRoom DescriptionRoom DescriptionRoom DescriptionRoom Description</strong></p>', '', 1, NULL, '2025-05-20 11:04:22', '2025-05-20 12:01:35');
 
 -- --------------------------------------------------------
 
@@ -1230,7 +1249,11 @@ INSERT INTO `room_images` (`id`, `room_id`, `roomImage`, `roomImgDescription`, `
 (16, 3, '/backend/files/mx7KULphkqXmCQNgdSGh.jpg', '', 1, '2025-04-03 14:59:21', '2025-04-03 14:59:21'),
 (17, 3, '/backend/files/LRsLChikzBJ1PHQ3h7Uw.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
 (18, 4, '/backend/files/LRsLChikzBJ1PHQ3h7Uw.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
-(19, 4, '/backend/files/Dubpa6yUt4rm913yYmGk.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01');
+(19, 4, '/backend/files/Dubpa6yUt4rm913yYmGk.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
+(21, 5, '/backend/files/foInlr4UvwID6XMYplAe.jpg', NULL, 1, '2025-05-20 12:08:29', '2025-05-20 12:08:29'),
+(22, 5, '/backend/files/G9YmrjYLV4IaxriZzLmT.jpg', NULL, 1, '2025-05-20 12:08:29', '2025-05-20 12:08:29'),
+(23, 5, '/backend/files/MUAHKLZal9Y3LSnLDnZQ.jpg', NULL, 1, '2025-05-20 12:08:29', '2025-05-20 12:08:29'),
+(24, 5, '/backend/files/RP0dKlDp90nsMjMSlypO.jpg', NULL, 1, '2025-05-20 12:08:29', '2025-05-20 12:08:29');
 
 -- --------------------------------------------------------
 
@@ -1342,6 +1365,33 @@ INSERT INTO `select_room_facilities` (`id`, `room_id`, `room_facility_group_id`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `service`
+--
+
+CREATE TABLE `service` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `service`
+--
+
+INSERT INTO `service` (`id`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(7, 'Coffee Bar', NULL, 1, '2025-05-07 19:05:26', '2025-05-07 19:05:26'),
+(8, 'Restaurant', NULL, 1, '2025-05-07 19:08:34', '2025-05-07 19:08:34'),
+(9, 'Room Service', NULL, 1, '2025-05-07 19:08:41', '2025-05-07 19:08:41'),
+(10, '24x7 Reception', NULL, 1, '2025-05-07 19:08:47', '2025-05-07 19:08:47'),
+(11, 'Car Rental', NULL, 1, '2025-05-07 19:08:52', '2025-05-07 19:08:52'),
+(12, 'Secure Wi-Fi', NULL, 1, '2025-05-07 19:08:59', '2025-05-07 19:08:59');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `setting`
 --
 
@@ -1357,6 +1407,8 @@ CREATE TABLE `setting` (
   `twitterlink` varchar(255) DEFAULT NULL,
   `linkdinlink` varchar(255) DEFAULT NULL,
   `instragramlink` varchar(255) DEFAULT NULL,
+  `slugan` varchar(255) DEFAULT NULL,
+  `banner_image` varchar(255) DEFAULT NULL,
   `youtubelink` varchar(255) DEFAULT NULL,
   `update_by` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
@@ -1367,8 +1419,31 @@ CREATE TABLE `setting` (
 -- Dumping data for table `setting`
 --
 
-INSERT INTO `setting` (`id`, `name`, `email`, `address`, `whatsApp`, `about_us`, `copyright`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `youtubelink`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 'Moon Nest', 'shahin@moon-nest.com', 'Pechardwip, Cox\'s Bazar, Bangladesh', '+8801830330055', 'Moon Nest is a very soothing resort. All are wooden bungalow with both sea and hill view sides. There is a bathroom, a couple bed room & a veranda in one bungalow. You will get complementary breakfast for 2 person with one bungalow. Also we have a open restaurant, where you can order fresh drinks, food, sea food and so on. The beautiful beach is 6 to 7 mins walking away from our resort.', 'All Right Reserved.Designed By Moon Nest', 'https://www.facebook.com/moon.nest.coxsbazar', NULL, NULL, '#', 'https://www.youtube.com/watch?v=aoJEbllaj2c', NULL, '2024-05-12 05:32:50', '2025-04-04 13:00:37');
+INSERT INTO `setting` (`id`, `name`, `email`, `address`, `whatsApp`, `about_us`, `copyright`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `slugan`, `banner_image`, `youtubelink`, `update_by`, `created_at`, `updated_at`) VALUES
+(1, 'Moon Nest', 'shahin@moon-nest.com', 'Pechardwip, Cox\'s Bazar, Bangladesh', '+8801830330055', 'Moon Nest is a very soothing resort. All are wooden bungalow with both sea and hill view sides. There is a bathroom, a couple bed room & a veranda in one bungalow. You will get complementary breakfast for 2 person with one bungalow. Also we have a open restaurant, where you can order fresh drinks, food, sea food and so on. The beautiful beach is 6 to 7 mins walking away from our resort.', 'All Right Reserved.Designed By Moon Nest', 'https://www.facebook.com/moon.nest.coxsbazar', NULL, NULL, '#', 'Moon Nest is a very soothing resort', '/backend/files/RNaNyRHYbJLp8uPIORm7.jpg', 'https://www.youtube.com/embed/aoJEbllaj2c?si=kIVLuI-hWyoV19NH', NULL, '2024-05-12 05:32:50', '2025-05-07 20:01:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `slider_images`
+--
+
+CREATE TABLE `slider_images` (
+  `id` bigint(20) NOT NULL,
+  `title_name` varchar(255) DEFAULT NULL,
+  `sliderImage` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(255) DEFAULT NULL,
+  `updated_at` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `slider_images`
+--
+
+INSERT INTO `slider_images` (`id`, `title_name`, `sliderImage`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Moon Nest is a very soothing resort', '/backend/files/WDPgDQyckbVBgOPGGKT6.jpg', 1, '2025-05-08 00:03:20', '2025-05-08 00:03:20'),
+(2, 'Moon Nest is a very soothing resort', '/backend/files/1PTZ9MbBtlkpESjADLfJ.jpg', 1, '2025-05-08 00:03:29', '2025-05-08 00:03:29');
 
 -- --------------------------------------------------------
 
@@ -1451,8 +1526,8 @@ INSERT INTO `users` (`id`, `fg_id`, `fg_wallet_address`, `inviteCode`, `ref_id`,
 (7, NULL, NULL, NULL, NULL, NULL, NULL, 4, 'Mr. Baker', 'baker@gmail.com', 'baker', '487487878', NULL, 'baker@gmail.com', '$2y$10$ep52U9TPaiqmEMpemLrLveVFdAW9PIlars1YVWuw3CjLRZZ07xNwy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:47:39', '2025-04-12 04:47:39', 1, NULL),
 (8, 'FG000000008', '5a46d1cecb06643d25a2deebba785fca', '5323641', NULL, NULL, NULL, 2, 'Guest 1', 'guest1@gmail.com', '7526828', '019155555111', NULL, '#123456#', '$2y$10$SkClD3jlQdtcbTMZbjbRtuVSm./W5RRX2HPSThPeTbZ2FQuMpMF/W', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-12 05:58:46', '2025-04-15 03:01:14', 1, NULL),
 (9, 'FG000000009', 'bdbc041836c833517298d5ee69aae33b', '6419345', NULL, NULL, NULL, 2, 'Guest 2', 'Guest2@gmail.com', '6373052', NULL, NULL, '#123456#', '$2y$10$r8zc29KV9lGrSbAAMzOB5uad5YyZwzRT4W0mVYjvBCIwU84helSC2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-12 06:00:37', '2025-04-12 06:00:41', 1, NULL),
-(10, 'FG000000010', '28b93c18baa87438434183fe1f293c08', '4211879', NULL, NULL, NULL, 2, 'Abdur Rahman', 'abdurrahman@gmail.com', '4155513', '00114568982', NULL, '#123456#', '$2y$10$Hqb5IjRaWxyDGICoiOyZf.BepJC2g5uUuqJ6DjM9lz5i4cScDaK.u', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-15 06:26:55', '2025-04-15 06:27:01', 1, NULL),
-(14, NULL, NULL, '8763605', NULL, NULL, NULL, 2, 'sajibAhmed', 'sajibahmed@gmail.com', '8763605', '0125647878788', NULL, '#123456#', '$2y$10$yvwxVqRN3Rpnd/PyxJHJ4OQY.j.obDaSkQs6k7WUD2zk9JnWDNGcu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-15 08:31:16', '2025-04-15 08:38:27', 1, NULL);
+(10, 'FG000000010', '28b93c18baa87438434183fe1f293c08', '4211879', NULL, NULL, NULL, 2, 'Mowloda Begum', 'abdurrahman@gmail.com', '4155513', '00114568982', NULL, '#123456#', '$2y$10$Hqb5IjRaWxyDGICoiOyZf.BepJC2g5uUuqJ6DjM9lz5i4cScDaK.u', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-15 06:26:55', '2025-05-20 12:15:40', 1, NULL),
+(14, NULL, NULL, '8763605', NULL, NULL, NULL, 2, 'sajibAhmed', 'sajibahmed@gmail.com', '8763605', '0125647878788', NULL, '#123456#', '$2y$10$yvwxVqRN3Rpnd/PyxJHJ4OQY.j.obDaSkQs6k7WUD2zk9JnWDNGcu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-04-15 08:31:16', '2025-05-20 12:15:49', 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1643,9 +1718,21 @@ ALTER TABLE `select_room_facilities`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `service`
+--
+ALTER TABLE `service`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `setting`
 --
 ALTER TABLE `setting`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `slider_images`
+--
+ALTER TABLE `slider_images`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1804,7 +1891,7 @@ ALTER TABLE `promocode`
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `room_facility`
@@ -1816,7 +1903,7 @@ ALTER TABLE `room_facility`
 -- AUTO_INCREMENT for table `room_images`
 --
 ALTER TABLE `room_images`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `room_size`
@@ -1837,10 +1924,22 @@ ALTER TABLE `select_room_facilities`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
+-- AUTO_INCREMENT for table `service`
+--
+ALTER TABLE `service`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `setting`
 --
 ALTER TABLE `setting`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `slider_images`
+--
+ALTER TABLE `slider_images`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `states`

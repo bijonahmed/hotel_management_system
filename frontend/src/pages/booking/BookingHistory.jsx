@@ -256,9 +256,8 @@ const BookingHistory = () => {
 
         <div style={{ marginTop: "25px" }}>
           <strong>Room Description:</strong>
-          <p style={{ textAlign: "justify", marginTop: "8px", color: "#333" }}>
-            {facilitiesData.roomDescription}
-          </p>
+             <div style={{ textAlign: "justify", marginTop: "8px", color: "#333" }} dangerouslySetInnerHTML={{ __html: facilitiesData.roomDescription }} />
+         
         </div>
       </div>
 

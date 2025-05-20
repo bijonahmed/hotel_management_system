@@ -7,6 +7,7 @@ import LeftSideBarComponent from "../../components/LeftSideBarComponent";
 import axios from "/config/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import EditorComponent from "../../components/EditorComponent";
 
 const RoomAdd = () => {
   const [errors, setErrors] = useState({});
@@ -29,7 +30,6 @@ const RoomAdd = () => {
       console.error("Error fetching user data:", error);
     }
   };
-
 
   const getBedTypes = async () => {
     try {
@@ -61,9 +61,20 @@ const RoomAdd = () => {
     status: "1", // Default value
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleChange = (eOrValue, name) => {
+    if (typeof eOrValue === "object" && eOrValue.target) {
+      const { name, value } = eOrValue.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else {
+      // For EditorComponent or other custom components
+      setFormData((prev) => ({
+        ...prev,
+        [name]: eOrValue,
+      }));
+    }
   };
 
   const handleNumericChange = (e) => {
@@ -353,13 +364,17 @@ const RoomAdd = () => {
                         Room Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-sm-9">
-                        <textarea
+
+                        <EditorComponent
                           className="form-control"
-                          name="roomDescription"
                           value={formData.roomDescription}
-                          onChange={handleChange}
-                          rows="2"
-                        ></textarea>
+                          name="roomDescription"
+                          onChange={(value) =>
+                            handleChange(value, "roomDescription")
+                          }
+                        />
+
+
                         {errors.roomDescription && (
                           <div style={{ color: "red" }}>
                             {errors.roomDescription}
@@ -367,8 +382,6 @@ const RoomAdd = () => {
                         )}
                       </div>
                     </div>
-
-                    
 
                     <div className="row mb-3">
                       <label className="col-sm-3 col-form-label">

@@ -8,6 +8,7 @@ import axios from "/config/axiosConfig";
 import $ from "jquery";
 
 const BookingFilter = () => {
+  const today = new Date().toISOString().split("T")[0]; // "2025-05-20"
   const navigate = useNavigate();
   const [checkIn, setCheckIn] = useState(localStorage.getItem("checkIn") || "");
   const [checkOut, setCheckOut] = useState(
@@ -29,6 +30,20 @@ const BookingFilter = () => {
     localStorage.setItem("adult", adult);
     localStorage.setItem("child", child);
   }, [checkIn, checkOut, adult, child]);
+
+  const isValidDate = (dateStr) => {
+    const today = new Date().toISOString().split("T")[0];
+    return dateStr >= today;
+  };
+
+  const handleCheckInChange = (e) => {
+    const value = e.target.value;
+    if (!isValidDate(value)) {
+      alert("Please select a valid check-in date.");
+      return;
+    }
+    setCheckIn(value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
@@ -85,10 +100,12 @@ const BookingFilter = () => {
                   </label>
                   <input
                     type="date"
+                    inputMode="none"
                     className="form-control border-primary shadow-sm"
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
+                    min={today}
+                    onFocus={(e) => e.target.showPicker?.()}
                   />
                 </div>
 
@@ -99,10 +116,12 @@ const BookingFilter = () => {
                   </label>
                   <input
                     type="date"
+                    inputMode="none"
                     className="form-control border-primary shadow-sm"
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
+                    min={today}
+                    onFocus={(e) => e.target.showPicker?.()}
                   />
                 </div>
 

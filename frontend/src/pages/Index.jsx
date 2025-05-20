@@ -147,10 +147,12 @@ const Index = () => {
                   <div className="room-item shadow rounded overflow-hidden">
                     <div className="position-relative">
                       <img
-                        className="img-fluid"
-                        src={room.roomImage || "/img/room-3.jpg"}
-                        alt="Room Image"
-                      />
+  className="img-responsive"
+  src={room.roomImage || "/img/room-3.jpg"}
+  alt="Room Image"
+  style={{ height: "250px", width: "100%", objectFit: "cover" }}
+/>
+
                       <small className="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">
                         BDT.&nbsp;{room.roomPrice}/Night
                       </small>
@@ -179,7 +181,8 @@ const Index = () => {
                         </small> */}
                       </div>
                       <p className="text-body mb-3">
-                        {room.roomDescription || ""}
+                       
+                        <div style={{ textAlign: "justify", marginTop: "8px", color: "#333" }} dangerouslySetInnerHTML={{ __html: room.roomDescription }} />
                       </p>
                       <div className="d-flex justify-content-between">
                         <Link

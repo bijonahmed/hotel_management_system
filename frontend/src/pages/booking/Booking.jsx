@@ -611,7 +611,8 @@ const Booking = () => {
                   <br />
                   <div style={{ textAlign: "justify" }}>
                     <strong>Room Description :</strong>{" "}
-                    {facilitiesData.roomDescription}
+                   
+                    <div dangerouslySetInnerHTML={{ __html: facilitiesData.roomDescription }} />
                   </div>
                   <br />
                   <div className="table-responsive">

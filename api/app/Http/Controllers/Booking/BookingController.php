@@ -46,7 +46,8 @@ class BookingController extends Controller
 
 
 
-    public function checkStatusUpdate(Request $request){
+    public function checkStatusUpdate(Request $request)
+    {
 
         //dd($request->all());
         $validator = Validator::make(
@@ -71,7 +72,7 @@ class BookingController extends Controller
             'booking_status'   => $request->status,
             'check_out_reason' => $request->note,
             'check_out_by'     => $this->userid,
-            
+
         ];
         Booking::where('id', $request->id)->update($updateBooking);
 
@@ -81,7 +82,6 @@ class BookingController extends Controller
         Room::where('id', $request->room_id)->update($updateRoom);
 
         return response()->json(['message' => 'Successfully booked.']);
-
     }
 
     public function adminBookingRequest(Request $request)
@@ -124,10 +124,10 @@ class BookingController extends Controller
             ->orWhere('phone', $request->phone)
             ->exists();
 
-            if ($existingUser) {
-                // If user exists, do nothing and return
-                return;
-            }
+        if ($existingUser) {
+            // If user exists, do nothing and return
+            return;
+        }
 
         $user = User::create([
             'name'          => $request->name,
@@ -421,6 +421,27 @@ class BookingController extends Controller
         $data['booking_data'] = $booking_data;
         return response()->json($data, 200);
     }
+
+
+
+    public function checkBookingRow(Request $request)
+    {
+        //dd($request->all());
+        $bookingId     = $request->bookingId;
+        $booking_data  = Booking::where('booking.booking_status', 1)
+            ->where('booking.booking_id', $bookingId)
+            ->leftJoin('users', 'users.id', '=', 'booking.customer_id')
+            ->select(
+                'booking.*',
+                'users.phone',
+                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+            )->first();
+
+        $data['booking_data'] = $booking_data;
+        return response()->json($data, 200);
+    }
+
+
 
 
     public function bookingUpdateInOut(Request $request)

@@ -37,15 +37,12 @@ const BookingList = () => {
     phone: "",
   });
 
-
   const [formDataInOut, setFormDataInOut] = useState({
     id: "",
     roomslug: "",
     checkin: "",
     checkout: "",
-   
   });
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,64 +54,67 @@ const BookingList = () => {
     setFormDataInOut((prev) => ({ ...prev, [name]: value }));
   };
 
-    const handleSubmitCheckInOut = async (e)=>{
-      e.preventDefault();
-      try {
-        const token = JSON.parse(sessionStorage.getItem("token"));
-        const response = await axios.post("/booking/bookingUpdateInOut", formDataInOut, {
+  const handleSubmitCheckInOut = async (e) => {
+    e.preventDefault();
+    try {
+      const token = JSON.parse(sessionStorage.getItem("token"));
+      const response = await axios.post(
+        "/booking/bookingUpdateInOut",
+        formDataInOut,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
-        });
-  
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-  
-        Toast.fire({
-          icon: "success",
-          title: "Your data has been successfully saved.",
-        });
-  
-        console.log("Booking Submitted:", formData);
-        const modal = window.bootstrap.Modal.getInstance(
-          document.getElementById("bookingModal")
-        );
-        modal.hide();
-      } catch (error) {
-        if (error.response && error.response.status === 422) {
-          Swal.fire({
-            icon: "error",
-            title: "Validation Errors",
-            html: Object.values(error.response.data.errors)
-              .map((err) => `<div>${err.join("<br>")}</div>`)
-              .join(""),
-          });
-          console.error("Validation errors:", error.response.data.errors);
-          setErrors(error.response.data.errors);
-        } else if (error.response && error.response.status === 409) {
-          // Handle booking conflict (room already booked)
-          Swal.fire({
-            icon: "warning",
-            title: "Booking Conflict",
-            text: error.response.data.message,
-          });
-          console.warn("Booking conflict:", error.response.data.message);
-        }else{
-          console.error("Error updating user:", error);
         }
-      }
+      );
 
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "Your data has been successfully saved.",
+      });
+
+      console.log("Booking Submitted:", formData);
+      const modal = window.bootstrap.Modal.getInstance(
+        document.getElementById("bookingModal")
+      );
+      modal.hide();
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        Swal.fire({
+          icon: "error",
+          title: "Validation Errors",
+          html: Object.values(error.response.data.errors)
+            .map((err) => `<div>${err.join("<br>")}</div>`)
+            .join(""),
+        });
+        console.error("Validation errors:", error.response.data.errors);
+        setErrors(error.response.data.errors);
+      } else if (error.response && error.response.status === 409) {
+        // Handle booking conflict (room already booked)
+        Swal.fire({
+          icon: "warning",
+          title: "Booking Conflict",
+          text: error.response.data.message,
+        });
+        console.warn("Booking conflict:", error.response.data.message);
+      } else {
+        console.error("Error updating user:", error);
+      }
     }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -190,8 +190,8 @@ const BookingList = () => {
         id: item.id || "", //this booking id
         bookingName: booking.name || "",
         room_slug: item.roomslug || "",
-        adult: booking.adult || "", 
-        child: booking.child || "", 
+        adult: booking.adult || "",
+        child: booking.child || "",
         message: booking.message || "",
         arival_from: booking.arival_from || "",
         phone: booking.phone || "",
@@ -203,8 +203,6 @@ const BookingList = () => {
         checkin: booking.checkin || "",
         checkout: booking.checkout || "",
       });
-
-
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -310,149 +308,93 @@ const BookingList = () => {
                         Booking Information
                       </button>
                     </li>
-                    <li className="nav-item" role="presentation">
-                      <button
-                        className="nav-link"
-                        id="checkinout-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#checkinout"
-                        type="button"
-                        role="tab"
-                        aria-controls="checkinout"
-                        aria-selected="false"
-                      >
-                        Check IN/OUT
-                      </button>
-                    </li>
+                  
                   </ul>
 
                   {/* Tabs Content */}
                   <div className="tab-content" id="bookingTabContent">
                     {/* Booking Information Tab */}
 
-
                     <form onSubmit={handleSubmit}>
-                    <div
-                      className="tab-pane fade show active"
-                      id="info"
-                      role="tabpanel"
-                      aria-labelledby="info-tab"
-                    >
-                      <div className="mb-3">
-                        <label className="form-label">Booking By</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="bookingName"
-                          value={formData.bookingName}
-                          onChange={handleChange}
-                        />
-                      </div>
+                      <div
+                        className="tab-pane fade show active"
+                        id="info"
+                        role="tabpanel"
+                        aria-labelledby="info-tab"
+                      >
+                        <div className="mb-3">
+                          <label className="form-label">Booking By</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="bookingName"
+                            value={formData.bookingName}
+                            onChange={handleChange}
+                          />
+                        </div>
 
-                      <div className="mb-3">
-                        <label className="form-label">Adult</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="adult"
-                          value={formData.adult}
-                          onChange={handleChange}
-                        />
-                      </div>
+                        <div className="mb-3">
+                          <label className="form-label">Adult</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="adult"
+                            value={formData.adult}
+                            onChange={handleChange}
+                          />
+                        </div>
 
-                      <div className="mb-3">
-                        <label className="form-label">Child</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="child"
-                          value={formData.child}
-                          onChange={handleChange}
-                        />
-                      </div>
+                        <div className="mb-3">
+                          <label className="form-label">Child</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="child"
+                            value={formData.child}
+                            onChange={handleChange}
+                          />
+                        </div>
 
-                      <div className="mb-3">
-                        <label className="form-label">Phone</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                        />
-                      </div>
+                        <div className="mb-3">
+                          <label className="form-label">Phone</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                          />
+                        </div>
 
-                      <div className="mb-3">
-                        <label className="form-label">Arival From</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="arival_from"
-                          value={formData.arival_from}
-                          onChange={handleChange}
-                        />
-                      </div>
+                        <div className="mb-3">
+                          <label className="form-label">Arival From</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="arival_from"
+                            value={formData.arival_from}
+                            onChange={handleChange}
+                          />
+                        </div>
 
-                      <div className="mb-3">
-                        <label className="form-label">Special Request</label>
-                        <textarea
-                          className="form-control"
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                        ></textarea>
+                        <div className="mb-3">
+                          <label className="form-label">Special Request</label>
+                          <textarea
+                            className="form-control"
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
+                          ></textarea>
+                        </div>
+                        <div className="modal-footer">
+                          <button type="submit" className="btn btn-primary">
+                            Save Booking
+                          </button>
+                        </div>
                       </div>
-                      <div className="modal-footer">
-                        <button type="submit" className="btn btn-primary">
-                          Save Booking
-                        </button>
-                      </div>
-                    </div>
                     </form>
 
-
-
-                    {/* Check IN/OUT Tab */}
-                    <div
-                      className="tab-pane fade"
-                      id="checkinout"
-                      role="tabpanel"
-                      aria-labelledby="checkinout-tab">
-
-                  <form onSubmit={handleSubmitCheckInOut}>
-                      <div className="mb-3">
-                        <label className="form-label">Check-In Date</label>
-                        <input
-                          type="date"
-                          className="form-control"
-                          name="checkin"
-                          value={formDataInOut.checkin}
-                          onChange={handleChangeInOut}
-                        />
-                      </div>
-
-                      <div className="mb-3">
-                        <label className="form-label">Check-Out Date</label>
-                        <input
-                          type="date"
-                          className="form-control"
-                          name="checkout"
-                          value={formDataInOut.checkout}
-                          onChange={handleChangeInOut}
-                        />
-                      </div>
-
-                      <div className="modal-footer d-none">
-                        <button type="submit" className="btn btn-primary">
-                          Save Booking
-                        </button>
-                      </div>
-                      </form>
-
-
-
-
-                    </div>
+                   
                   </div>
                 </div>
               </div>
@@ -532,7 +474,7 @@ const BookingList = () => {
                                       Check IN/Out
                                     </th>
                                     <th className="text-center">Days</th>
-                                    <th className="text-center">Status</th>
+                                    <th className="text-center">Action</th>
                                   </tr>
                                 </thead>
                                 <tbody>

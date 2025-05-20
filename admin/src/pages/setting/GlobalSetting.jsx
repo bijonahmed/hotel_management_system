@@ -185,6 +185,7 @@ const GlobalSetting = () => {
                         className="form-control"
                         placeholder="About Us"
                         value={about_us}
+                        rows={10}
                         onChange={(e) => setAboutus(e.target.value)}
                       ></textarea>
                       {errors.about_us && (

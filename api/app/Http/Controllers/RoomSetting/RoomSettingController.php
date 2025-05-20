@@ -129,6 +129,83 @@ class RoomSettingController extends Controller
         return response()->json($response);
     }
 
+
+
+    public function roomImagesSaveMultiple(Request $request)
+    {
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'room_id'        => 'required',
+            'roomImage'      => 'required|array',
+            'roomImage.*'    => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'status'         => 'required',
+        ], [
+            'room_id.required'       => 'Please select a room type.',
+            'roomImage.required'     => 'Please upload at least one room image.',
+            'roomImage.*.image'      => 'Each file must be an image.',
+            'roomImage.*.mimes'      => 'Only JPG, JPEG, and PNG images are allowed.',
+            'roomImage.*.max'        => 'Each image must be less than 2MB.',
+            'status.required'        => 'Please select the room status.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $data = array(
+            'room_id'                => $request->room_id,
+            'roomImgDescription'     => !empty($request->roomImgDescription) ? $request->roomImgDescription : "",
+            'status'                 => $request->status,
+        );
+
+        if (!empty($request->file('roomImage'))) {
+            $images = $request->file('roomImage');
+
+            foreach ($images as $image) {
+                $fileName = Str::random(20) . '.' . $image->getClientOriginalExtension();
+                $uploadPath = 'backend/files/';
+                $image->move(public_path($uploadPath), $fileName);
+
+                RoomImages::create([
+                    'room_id' => $request->room_id,
+                    'roomImage' => '/' . $uploadPath . $fileName,
+                    'status' => $request->status,
+                ]);
+            }
+
+            /*
+            $files = $request->file('roomImage');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['roomImage'] = $file_url;
+            */
+        }
+
+
+        // if (empty($request->id)) {
+        //     RoomImages::create($data);
+        // } else {
+        //     RoomImages::where('id', $request->id)->update($data);
+        // }
+
+        $response = [
+            'message' => 'Successfull insert',
+        ];
+        return response()->json($response);
+    }
+
+
+
+
     public function roomImagesSave(Request $request)
     {
         // dd($request->all());
@@ -485,19 +562,19 @@ class RoomSettingController extends Controller
 
 
     public function filterRoomImage(Request $request)
-        {
-            $allImages = RoomImages::where('room_id',$request->id)->get();
-            $data = [];
-            foreach ($allImages as $key => $v) {
-                $data[] = [
-                    'id'        => $v->id,
-                    'room_id'   => $v->room_id,
-                    'roomImage' => !empty($v->roomImage) ? url($v->roomImage) : ""
-                ];
-            }
-            return response()->json($data, 200);
+    {
+        $allImages = RoomImages::where('room_id', $request->id)->get();
+        $data = [];
+        foreach ($allImages as $key => $v) {
+            $data[] = [
+                'id'        => $v->id,
+                'room_id'   => $v->room_id,
+                'roomImage' => !empty($v->roomImage) ? url($v->roomImage) : ""
+            ];
         }
-    
+        return response()->json($data, 200);
+    }
+
 
 
     public function roomList(Request $request)
@@ -692,6 +769,28 @@ class RoomSettingController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+    public function getsRoomImagesrows(Request $request)
+    {
+
+        try {
+            $allImages = RoomImages::where('room_id', $request->id)->where('status', 1)->get();
+            //dd($allImages);
+            $data = [];
+            foreach ($allImages as $key => $v) {
+                $data[] = [
+                    'id'        => $v->id,
+                    'roomImage' => !empty($v->roomImage) ? url($v->roomImage) : ""
+                ];
+            }
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
     public function getsBetType()
     {
