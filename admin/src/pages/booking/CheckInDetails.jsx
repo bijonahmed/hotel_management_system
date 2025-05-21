@@ -106,6 +106,7 @@ const CheckInDetails = () => {
         icon: "success",
         title: "Successfully update.",
       });
+      navigate(`/booking/checking-preview?booking_id=${booking_id}`);
     } catch (error) {
       if (error.response?.status === 422) {
         Swal.fire({
@@ -1069,65 +1070,70 @@ const CheckInDetails = () => {
                                           <div className="col-md-12">
                                             <label>Identity Upload</label>
                                           </div>
-                                          <div className="col-md-12">
-                                            <div className="form-group">
-                                              <label className="form-label text-muted">
-                                                Front Side Document
-                                              </label>
-                                              <div className="input-group">
-                                                <span className="input-group-text">
-                                                  <i className="bi bi-images" />
-                                                </span>
-                                                <input
-                                                  type="file"
-                                                  className="form-control"
-                                                  onChange={(e) =>
-                                                    handleFileChange(
-                                                      e,
-                                                      "front_side_document"
-                                                    )
-                                                  }
-                                                />
-                                              </div>
-                                              {preview.front && (
-                                                <img
-                                                  src={preview.front}
-                                                  alt="Front Preview"
-                                                  className="mt-2"
-                                                  style={{ height: 100 }}
-                                                />
-                                              )}
-                                            </div>
-                                          </div>
 
-                                          <div className="col-md-12">
-                                            <div className="form-group">
-                                              <label className="form-label text-muted">
-                                                Back Side Document
-                                              </label>
-                                              <div className="input-group">
-                                                <span className="input-group-text">
-                                                  <i className="bi bi-images" />
-                                                </span>
-                                                <input
-                                                  type="file"
-                                                  className="form-control"
-                                                  onChange={(e) =>
-                                                    handleFileChange(
-                                                      e,
-                                                      "back_side_document"
-                                                    )
-                                                  }
-                                                />
+                                          <div className="row">
+                                            {/* Left Side - Front Side Document */}
+                                            <div className="col-md-6">
+                                              <div className="form-group">
+                                                <label className="form-label text-muted">
+                                                  Front Side Document
+                                                </label>
+                                                <div className="input-group">
+                                                  <span className="input-group-text">
+                                                    <i className="bi bi-images" />
+                                                  </span>
+                                                  <input
+                                                    type="file"
+                                                    className="form-control"
+                                                    onChange={(e) =>
+                                                      handleFileChange(
+                                                        e,
+                                                        "front_side_document"
+                                                      )
+                                                    }
+                                                  />
+                                                </div>
+                                                {preview.front && (
+                                                  <img
+                                                    src={preview.front}
+                                                    alt="Front Preview"
+                                                    className="mt-2"
+                                                    style={{ height: 100 }}
+                                                  />
+                                                )}
                                               </div>
-                                              {preview.back && (
-                                                <img
-                                                  src={preview.back}
-                                                  alt="Back Preview"
-                                                  className="mt-2"
-                                                  style={{ height: 100 }}
-                                                />
-                                              )}
+                                            </div>
+
+                                            {/* Right Side - Back Side Document */}
+                                            <div className="col-md-6">
+                                              <div className="form-group">
+                                                <label className="form-label text-muted">
+                                                  Back Side Document
+                                                </label>
+                                                <div className="input-group">
+                                                  <span className="input-group-text">
+                                                    <i className="bi bi-images" />
+                                                  </span>
+                                                  <input
+                                                    type="file"
+                                                    className="form-control"
+                                                    onChange={(e) =>
+                                                      handleFileChange(
+                                                        e,
+                                                        "back_side_document"
+                                                      )
+                                                    }
+                                                  />
+                                                </div>
+                                                {preview.back && (
+                                                  <img
+                                                    src={preview.back}
+                                                    alt="Back Preview"
+                                                    className="mt-2"
+                                                    style={{ height: 100 }}
+                                                  />
+                                                )}
+                                              </div>
                                             </div>
                                           </div>
                                         </div>

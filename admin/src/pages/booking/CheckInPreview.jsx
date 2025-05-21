@@ -36,6 +36,7 @@ const CheckInPreview = () => {
     room_no: "",
     adult: "",
     booking_id: "",
+    room_name:"",
     child: "",
     country_code: "88",
     phone: "",
@@ -111,6 +112,7 @@ const CheckInPreview = () => {
         customer_contact_type: bookingData.customer_contact_type || "",
         customer_contact_email: bookingData.customer_contact_email || "",
         customer_contact_address: bookingData.customer_contact_address || "",
+        room_name: bookingData.room_name || "",
         id_no: bookingData.id_no || "",
         room_price: formatCurrency(bookingData.room_price) || "0.00",
         advance_amount: formatCurrency(bookingData.advance_amount) || "0.00",
@@ -257,6 +259,7 @@ const CheckInPreview = () => {
                         {renderRow("Arrival From", booking.arival_from)}
                         {renderRow("Check In", booking.checkin)}
                         {renderRow("Check Out", booking.checkout)}
+                        {renderRow("Room Name", booking.room_name)}
                         {renderRow("Room No", booking.room_no)}
                         {renderRow("Adult", booking.adult)}
                         {renderRow("Child", booking.child)}

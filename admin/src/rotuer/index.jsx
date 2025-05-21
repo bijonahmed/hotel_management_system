@@ -44,6 +44,7 @@ import AddNewBooking from "../pages/booking/AddNewBooking.jsx";
 import CheckOutList from "../pages/booking/CheckOutList.jsx";
 import CheckInList from "../pages/booking/CheckInList.jsx";
 import CheckInDetails from "../pages/booking/CheckInDetails.jsx";
+import CheckOutInvoice from "../pages/booking/CheckOutInvoice.jsx";
 import CheckInPreview from "../pages/booking/CheckInPreview.jsx";
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
@@ -85,6 +86,10 @@ import CheckTronScanAPI from "../pages/report/CheckTronScanAPI.jsx";
 import GlobalSetting from "../pages/setting/GlobalSetting.jsx";
 import Slider from "../pages/setting/Slider.jsx";
 import Service from "../pages/setting/Service.jsx";
+import ItemList from "../pages/setting/ItemList.jsx";
+import ItemAdd from "../pages/setting/ItemAdd.jsx";
+import ItemEdit from "../pages/setting/ItemEdit.jsx";
+
 
 const AppRouter = () => {
   return (
@@ -137,6 +142,7 @@ const AppRouter = () => {
       <Route path="/booking/checkout-list" element={<CheckOutList />} />
       <Route path="/booking/checkin-list" element={<CheckInList />} />
       <Route path="/booking/checking-details" element={<CheckInDetails />} />  
+      <Route path="//booking/checkout-invoice" element={<CheckOutInvoice />} />
       <Route path="/booking/checking-preview" element={<CheckInPreview />} />  
       {/* //ROMM SETTING */}
       <Route path="/roomsetting/bed-type-list" element={<BedTypeList />} />
@@ -167,6 +173,9 @@ const AppRouter = () => {
       <Route path="/setting/global-setting" element={<GlobalSetting />} />
       <Route path="/setting/slider-list" element={<Slider />} />
       <Route path="/setting/service-list" element={<Service />} />
+      <Route path="/setting/item-list" element={<ItemList />} />
+      <Route path="/setting/add-item" element={<ItemAdd />} />
+            <Route path="/setting/item-edit/:id" element={<ItemEdit />} />
 
 
       <Route path="/dashboard" element={<Dashboard />} />

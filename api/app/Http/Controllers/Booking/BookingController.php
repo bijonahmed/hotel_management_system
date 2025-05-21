@@ -431,9 +431,11 @@ class BookingController extends Controller
         $booking_data  = Booking::where('booking.booking_status', 1)
             ->where('booking.booking_id', $bookingId)
             ->leftJoin('users', 'users.id', '=', 'booking.customer_id')
+             ->leftJoin('room', 'room.id', '=', 'booking.room_id')
             ->select(
                 'booking.*',
                 'users.phone',
+                'room.name as room_name','room.roomPrice as perday_roomprice',
                 DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
             )->first();
 
@@ -532,8 +534,6 @@ class BookingController extends Controller
                 'errors'  => $validator->errors(),
             ], 422);
         }
-
-
         /*
         $checkinDate  = Carbon::parse($request->checkin)->toDateString();  // Y-m-d
         $checkoutDate = Carbon::parse($request->checkout)->toDateString();
@@ -552,8 +552,6 @@ class BookingController extends Controller
             ], 409); // 409 Conflict
         }
         */
-      
-
         //dd($request->all());
         $bookingId = $request->booking_id;
         $chkPoint  = Booking::where('booking_id', $bookingId)->select('id')->first();

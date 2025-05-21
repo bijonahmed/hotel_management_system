@@ -15,6 +15,7 @@ const GlobalSetting = () => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [fblink, setFacebookPagesLink] = useState("");
+  const [tax_percentag, setTax_percentag] = useState("");
   const [youtubelink, setYoutubeChaneelLink] = useState("");
   const [about_us, setAboutus] = useState("");
   const [bannerImage, setBannerImage] = useState(null);
@@ -54,6 +55,7 @@ const GlobalSetting = () => {
       setWhatsApp(userData.whatsApp || "");
       setFacebookPagesLink(userData.fblink || "");
       setYoutubeChaneelLink(userData.youtubelink || "");
+      setTax_percentag(userData.tax_percentag || "");
       setAboutus(userData.about_us || "");
 
       setPreview(bannerimage || "");
@@ -74,6 +76,7 @@ const GlobalSetting = () => {
       formData.append("whatsApp", whatsApp);
       formData.append("fblink", fblink);
       formData.append("youtubelink", youtubelink);
+      formData.append("tax_percentag", tax_percentag);
       if (bannerImage) {
         formData.append("banner_image", bannerImage);
       }
@@ -153,16 +156,59 @@ const GlobalSetting = () => {
               <div className="card-body p-4">
                 <form onSubmit={handleSubmit}>
                   {[
-                    { label: "Company Name", value: name, setter: setName, key: "name" },
-                    { label: "Slugan", value: slugan, setter: setSugan, key: "slugan" },
-                    { label: "WhatsApp Number", value: whatsApp, setter: setWhatsApp, key: "whatsApp" },
-                    { label: "Email", value: email, setter: setEmail, key: "email" },
-                    { label: "Address", value: address, setter: setAddress, key: "address" },
-                    { label: "Facebook Page Link", value: fblink, setter: setFacebookPagesLink, key: "fblink" },
-                    { label: "Youtube Channel Link", value: youtubelink, setter: setYoutubeChaneelLink, key: "youtubelink" },
+                    {
+                      label: "Company Name",
+                      value: name,
+                      setter: setName,
+                      key: "name",
+                    },
+                    {
+                      label: "Slugan",
+                      value: slugan,
+                      setter: setSugan,
+                      key: "slugan",
+                    },
+                    {
+                      label: "WhatsApp Number",
+                      value: whatsApp,
+                      setter: setWhatsApp,
+                      key: "whatsApp",
+                    },
+                    {
+                      label: "Email",
+                      value: email,
+                      setter: setEmail,
+                      key: "email",
+                    },
+                    {
+                      label: "Address",
+                      value: address,
+                      setter: setAddress,
+                      key: "address",
+                    },
+                    {
+                      label: "Facebook Page Link",
+                      value: fblink,
+                      setter: setFacebookPagesLink,
+                      key: "fblink",
+                    },
+                    {
+                      label: "Tax Percentage",
+                      value: tax_percentag,
+                      setter: setTax_percentag,
+                      key: "fblink",
+                    },
+                    {
+                      label: "Youtube Channel Link",
+                      value: youtubelink,
+                      setter: setYoutubeChaneelLink,
+                      key: "youtubelink",
+                    },
                   ].map((field) => (
                     <div className="row mb-3" key={field.key}>
-                      <label className="col-sm-3 col-form-label">{field.label}</label>
+                      <label className="col-sm-3 col-form-label">
+                        {field.label}
+                      </label>
                       <div className="col-sm-9">
                         <input
                           type="text"
@@ -172,7 +218,9 @@ const GlobalSetting = () => {
                           onChange={(e) => field.setter(e.target.value)}
                         />
                         {errors[field.key] && (
-                          <div style={{ color: "red" }}>{errors[field.key][0]}</div>
+                          <div style={{ color: "red" }}>
+                            {errors[field.key][0]}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -195,7 +243,9 @@ const GlobalSetting = () => {
                   </div>
 
                   <div className="row mb-3">
-                    <label className="col-sm-3 col-form-label">Banner Image</label>
+                    <label className="col-sm-3 col-form-label">
+                      Banner Image
+                    </label>
                     <div className="col-sm-9">
                       <input
                         type="file"

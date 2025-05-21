@@ -191,7 +191,6 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
     Route::group([
         'prefix' => 'roomfacility'
     ], function () {
-
         Route::get('getsFacilityGruop', [FacilityController::class, 'getsFacilityGruop']);
         Route::post('roomFacilitySave', [FacilityController::class, 'roomFacilitySave']);
         Route::get('roomfacility_group_list', [FacilityController::class, 'roomfacilityGroupList']);
@@ -231,12 +230,15 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('getLanguageList', [SettingController::class, 'getLanguageList']);
         Route::get('getLanguageActiveList', [SettingController::class, 'getLanguageActiveList']);
         Route::get('languagerow/{id}', [SettingController::class, 'chkLanguagerow']);
+        Route::get('checkItemRow', [SettingController::class, 'checkItemRow']);
         Route::get('getsSliderImages', [SettingController::class, 'getsSliderImages']);
         Route::get('getsServiceList', [SettingController::class, 'getsServiceList']);
-
         Route::get('delteSliderImages', [SettingController::class, 'delteSliderImages']);
         Route::get('deleteService', [SettingController::class, 'deleteService']);
         Route::post('sliderImagesSave', [SettingController::class, 'sliderSave']);
         Route::post('servicedataSave', [SettingController::class, 'servicedataSave']);
+        Route::get('itemList', [SettingController::class, 'itemList']);
+        Route::post('itemSave', [SettingController::class, 'itemSave']);
+
     });
 });

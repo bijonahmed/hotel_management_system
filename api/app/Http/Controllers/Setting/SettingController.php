@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use App\Rules\MatchOldPassword;
 use App\Http\Controllers\Controller;
 use App\Models\BulkAddress;
+use App\Models\Items;
 use App\Models\Service as ModelsService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -76,6 +77,52 @@ class SettingController extends Controller
         return response()->json($response);
     }
 
+
+
+
+    public function itemList(Request $request)
+    {
+
+        $page = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 10);
+        // Get search query from the request
+        $searchQuery    = $request->searchQuery;
+        $selectedFilter = (int)$request->selectedFilter;
+        // dd($selectedFilter);
+        $query = Items::orderBy('id', 'desc');
+
+        if ($searchQuery !== null) {
+            $query->where('name', 'like', '%' . $searchQuery . '%');
+        }
+
+        if ($selectedFilter !== null) {
+
+            $query->where('status', $selectedFilter);
+        }
+        // $query->whereNotIn('users.role_id', [2]);
+        $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
+
+        $modifiedCollection = $paginator->getCollection()->map(function ($item) {
+            return [
+                'id'            => $item->id,
+                'name'          => $item->name,
+                'quantity'      => $item->quantity,
+                'unit_price'    => $item->unit_price,
+                'notes'         => $item->notes,
+                'created_at'    => date("Y-M-d H:i:s", strtotime($item->created_at)),
+                'updated_at'    => date("Y-M-d H:i:s", strtotime($item->updated_at)),
+                'status'        => $item->status ? 'Active' : "Inactive",
+            ];
+        });
+        // Return the modified collection along with pagination metadata
+        return response()->json([
+            'data' => $modifiedCollection,
+            'current_page' => $paginator->currentPage(),
+            'total_pages' => $paginator->lastPage(),
+            'total_records' => $paginator->total(),
+        ], 200);
+    }
+
     public function getLanguageList(Request $request)
     {
 
@@ -123,6 +170,13 @@ class SettingController extends Controller
         return response()->json($chkpoint);
     }
 
+
+    public function checkItemRow(Request $request)
+    {
+
+        $chkpoint = Items::where('id', $request->id)->first();
+        return response()->json($chkpoint);
+    }
 
     public function searchByConfigrationApiKey(Request $request)
     {
@@ -234,6 +288,7 @@ class SettingController extends Controller
             'slugan'        => 'required',
             'email'         => 'required',
             'address'       => 'required',
+            'tax_percentag' => 'required',
             'whatsApp'      => 'required',
             'about_us'      => 'required',
         ]);
@@ -253,6 +308,7 @@ class SettingController extends Controller
             'about_us'            => $request->about_us,
             'fblink'              => $request->fblink,
             'youtubelink'         => $request->youtubelink,
+            'tax_percentag'       => $request->tax_percentag,
         );
 
         if (!empty($request->file('banner_image'))) {
@@ -323,6 +379,42 @@ class SettingController extends Controller
         }
         return response()->json($resdata);
     }
+
+
+
+
+    public function itemSave(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'name'       => 'required|unique:items',
+            'quantity'   => 'required',
+            'unit_price' => 'required',
+            'status'     => 'required',
+        ], [
+            'name.required'             => 'The name is required.',
+            'quantity.required'         => 'The quantity is required.',
+            'unit_price.required'       => 'The unit price is required.',
+            'status.required'           => 'The status field is required.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $data = array(
+            'name'                => $request->name,
+            'quantity'            => $request->quantity,
+            'unit_price'          => $request->unit_price,
+            'status'              => $request->status,
+        );
+        if (empty($request->id)) {
+            $resdata['id']         = Items::insertGetId($data);
+        } else {
+            $resdata['id']         = Items::where('id', $request->id)->update($data);
+        }
+        return response()->json($resdata);
+    }
+
 
 
     public function insertLanguageAdd(Request $request)
