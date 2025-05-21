@@ -1,0 +1,20 @@
+@media print {
+  .print-table,
+  .print-table th,
+  .print-table td {
+    border: none !important;
+  }
+
+  .print-img {
+    display: block;
+    margin: 0 auto;
+    height: 100px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  th,
+  td {
+    padding: 0;
+  }
+}

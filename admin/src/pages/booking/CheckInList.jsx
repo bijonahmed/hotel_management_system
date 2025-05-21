@@ -18,7 +18,13 @@ const CheckInList = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const bookingTabRef = useRef(null);
-  
+  const [searchId, setSearchId] = useState(""); // <-- new
+
+  // inside your component render (or above return)
+  const filteredRooms = bookingrooms.filter((item) =>
+    item.booking_id.toString().includes(searchId.trim())
+  );
+
   useEffect(() => {
     // Optional: Set default active tab if needed
     if (bookingTabRef.current) {
@@ -31,6 +37,11 @@ const CheckInList = () => {
   const handleClick = (item) => {
     console.log("booking_id...." + item.booking_id);
     navigate(`/booking/checking-details?booking_id=${item.booking_id}`);
+  };
+
+  const handleClickPreview = (item) => {
+    console.log("booking_id...." + item.booking_id);
+    navigate(`/booking/checking-preview?booking_id=${item.booking_id}`);
   };
 
   const fetchData = async () => {
@@ -96,9 +107,15 @@ const CheckInList = () => {
                     </ol>
                   </nav>
                 </div>
-
-                
               </div>
+
+              <input
+                type="text"
+                className="form-control"
+                placeholder="🔍 Search by Booking ID"
+                value={searchId}
+                onChange={(e) => setSearchId(e.target.value)}
+              />
 
               <div className="card radius-10">
                 <div className="card-body">
@@ -135,86 +152,82 @@ const CheckInList = () => {
                         role="tabpanel"
                         aria-labelledby="booking-tab"
                       >
-                        {loading ? (
-                          <div className="d-flex justify-content-center mt-3">
+                        {/* Optionally show loader */}
+                        {loading && (
+                          <div className="text-center my-3">
                             <div className="spinner-border" role="status">
                               <span className="visually-hidden">
                                 Loading...
                               </span>
                             </div>
                           </div>
-                        ) : (
-                          <div className="table-responsive">
-                            <div className="card mt-4">
-                              <div className="card-body p-0">
-                                <table className="table table-striped table-bordered mb-0">
-                                  <thead className="thead-dark">
-                                    <tr>
-                                      <th className="text-center">
-                                        Booking ID
-                                      </th>
-                                      <th className="text-center">Room Name</th>
-                                      <th className="text-center">
-                                        Booking By
-                                      </th>
-                                      <th className="text-center">
-                                        Check IN/Out
-                                      </th>
-                                      <th className="text-center">Days</th>
-                                      <th className="text-center">Action</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {bookingrooms.length > 0 ? (
-                                      bookingrooms.map((item) => (
-                                        <tr key={item.id}>
-                                          <td className="text-center">
-                                            {item.booking_id}
-                                          </td>
-                                          <td className="text-center">
-                                            {item.roomType}
-                                          </td>
-                                          <td className="text-center">
-                                            {item.name}
-                                          </td>
-                                          <td className="text-center">
-                                            {item.checkin} <br />{" "}
-                                            {item.checkout}
-                                          </td>
-                                          <td className="text-center">
-                                            {item.total_booking_days}
-                                          </td>
-                                          <td className="text-center">
-                                            <span
-                                              style={{
-                                                color: "green",
-                                                fontWeight: "bold",
-                                                cursor: "pointer",
-                                              }}
-                                              onClick={() => handleClick(item)}
-                                            >
-                                              <i className="fas fa-eye"></i>{" "}
-                                              Details
-                                            </span>
-                                          </td>
-                                        </tr>
-                                      ))
-                                    ) : (
-                                      <tr>
-                                        <td
-                                          colSpan="6"
-                                          className="text-center text-muted"
-                                        >
-                                          No data found
-                                        </td>
-                                      </tr>
-                                    )}
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
                         )}
+
+                        {/* Table */}
+                        <table className="table table-striped table-bordered mb-0">
+                          <thead className="thead-dark">
+                            <tr>
+                              <th className="text-center">Booking ID</th>
+                              <th className="text-center">Room Name</th>
+                              <th className="text-center">Booking By</th>
+                              <th className="text-center">Check IN/Out</th>
+                              <th className="text-center">Days</th>
+                              <th className="text-center">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredRooms.length > 0 ? (
+                              filteredRooms.map((item) => (
+                                <tr key={item.id}>
+                                  <td className="text-center">
+                                    {item.booking_id}
+                                  </td>
+                                  <td className="text-center">
+                                    {item.roomType}
+                                  </td>
+                                  <td className="text-center">{item.name}</td>
+                                  <td className="text-center">
+                                    {item.checkin}
+                                    <br />
+                                    {item.checkout}
+                                  </td>
+                                  <td className="text-center">
+                                    {item.total_booking_days}
+                                  </td>
+                                  <td className="text-center">
+                                    <div className="btn-group" role="group">
+                                      <button
+                                        type="button"
+                                        className="btn btn-sm btn-outline-success"
+                                        onClick={() => handleClick(item)}
+                                      >
+                                        <i className="fas fa-eye fa-lg"></i>{" "}
+                                        Details
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="btn btn-sm btn-outline-primary"
+                                        onClick={() => handleClickPreview(item)}
+                                      >
+                                        <i className="fa-solid fa-magnifying-glass-plus fa-lg"></i>{" "}
+                                        Preview
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td
+                                  colSpan="6"
+                                  className="text-center text-muted"
+                                >
+                                  No data found
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>

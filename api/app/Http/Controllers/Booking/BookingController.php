@@ -438,6 +438,8 @@ class BookingController extends Controller
             )->first();
 
         $data['booking_data'] = $booking_data;
+        $data['front'] = !empty($booking_data->front_side_document) ? url($booking_data->front_side_document) : "";
+        $data['back']  = !empty($booking_data->back_side_document) ? url($booking_data->back_side_document) : "";
         return response()->json($data, 200);
     }
 
@@ -497,6 +499,128 @@ class BookingController extends Controller
         Booking::where('id', $request->id)->update($data);
         return response()->json(['message' => 'Successfully booked.']);
     }
+
+
+
+    public function updateCheckInDetails(Request $request)
+    {
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'checkin'     => 'required', // booking id (primary)
+                'checkout'    => 'required',
+                'arival_from' => 'required',
+                'room_id'     => 'required',
+                'phone'       => 'required',
+                'id_no'       => 'required',
+            ],
+            [
+                'checkin.required'     => 'Check-in date is required.',
+                'checkout.required'    => 'Check-out date is required.',
+                'arival_from.required' => 'Arrival location is required.',
+                'room_id.required'     => 'Room ID is required.',
+                'phone.required'       => 'Phone number is required.',
+                'id_no.required'       => 'ID number is required.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Validation failed. Please check the required fields.',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+
+        /*
+        $checkinDate  = Carbon::parse($request->checkin)->toDateString();  // Y-m-d
+        $checkoutDate = Carbon::parse($request->checkout)->toDateString();
+        
+        $existingBooking = Booking::where('room_id', $request->room_id)
+            ->whereDate('checkin', '<', $checkoutDate) // existing booking starts before new checkout
+            ->whereDate('checkout', '>', $checkinDate) // existing booking ends after new checkin
+            ->orderByDesc('id')
+            ->first();
+        // dd($existingBooking);
+
+        if ($existingBooking) {
+            $nextAvailableDate = Carbon::parse($existingBooking->checkout)->format('Y-m-d');
+            return response()->json([
+                'message' => 'Room already booked for selected dates. Please choose a checkout date after ' . $nextAvailableDate,
+            ], 409); // 409 Conflict
+        }
+        */
+      
+
+        //dd($request->all());
+        $bookingId = $request->booking_id;
+        $chkPoint  = Booking::where('booking_id', $bookingId)->select('id')->first();
+        $booking   = Booking::findOrFail($chkPoint->id);
+        //dd($booking);
+
+        $data = $request->only([
+            "checkin",
+            "checkout",
+            "customer_dob",
+            "booking_type",
+            "booking_reference_no",
+            "pupose_of_visit",
+            "remarks",
+            "arival_from",
+            "room_id",
+            "room_no",
+            "adult",
+            "child",
+            "country_code",
+            "phone",
+            "customer_title",
+            "customer_first_name",
+            "customer_last_name",
+            "customer_father_name",
+            "customer_gender",
+            "customer_occupation",
+            "customer_nationality",
+            "customer_contact_type",
+            "customer_contact_email",
+            "customer_contact_address",
+            "id_no",
+            "room_price",
+            "advance_amount",
+        ]);
+
+        // Handle file uploads (optional)
+        if (!empty($request->file('front_side_document'))) {
+            $files = $request->file('front_side_document');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['front_side_document'] = $file_url;
+        }
+
+        if (!empty($request->file('back_side_document'))) {
+            $files = $request->file('back_side_document');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['back_side_document'] = $file_url;
+        }
+
+
+        $booking->update($data);
+
+        return response()->json(['message' => 'Booking updated successfully.']);
+    }
+
 
     public function bookingUpdate(Request $request)
     {

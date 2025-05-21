@@ -88,6 +88,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('/activeBookingRooms', [BookingController::class, 'activeBookingRooms']);
         Route::get('/checkroomBookingStatus', [BookingController::class, 'checkroomBookingStatus']);
         Route::get('/getBookingEditdata', [BookingController::class, 'getBookingEditdata']);
+        Route::post('/updateCheckInDetails', [BookingController::class, 'updateCheckInDetails']);
         Route::get('/checkBookingRow', [BookingController::class, 'checkBookingRow']);
         Route::post('/bookingUpdate', [BookingController::class, 'bookingUpdate']);
         Route::post('/bookingUpdateInOut', [BookingController::class, 'bookingUpdateInOut']);
