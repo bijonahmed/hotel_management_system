@@ -429,20 +429,24 @@ class BookingController extends Controller
         //dd($request->all());
         $bookingId     = $request->bookingId;
         $booking_data  = Booking::where('booking.booking_status', 1)
-            ->where('booking.booking_id', $bookingId)
-            ->leftJoin('users', 'users.id', '=', 'booking.customer_id')
-             ->leftJoin('room', 'room.id', '=', 'booking.room_id')
-            ->select(
-                'booking.*',
-                'users.phone',
-                'room.name as room_name','room.roomPrice as perday_roomprice',
-                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
-            )->first();
+        ->where('booking.booking_id', $bookingId)
+        ->leftJoin('users', 'users.id', '=', 'booking.customer_id')
+        ->leftJoin('room', 'room.id', '=', 'booking.room_id')
+        ->select(
+            'booking.*',
+            'users.phone',
+            'room.name as room_name','room.roomPrice as perday_roomprice',
+            DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+        )->first();
+        
+        $setting       = Setting::where('id',1)->first();
+        $taxPercentage = !empty($setting->tax_percentag) ? $setting->tax_percentag: "0";
 
         $data['booking_data']   = $booking_data;
         $data['front']          = !empty($booking_data->front_side_document) ? url($booking_data->front_side_document) : "";
         $data['back']           = !empty($booking_data->back_side_document) ? url($booking_data->back_side_document) : "";
         $data['total_amount']   = $booking_data->perday_roomprice * $booking_data->total_booking_days;
+        $data['tax_percentage'] = $taxPercentage;
         return response()->json($data, 200);
     }
 

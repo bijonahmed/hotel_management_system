@@ -238,6 +238,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::post('sliderImagesSave', [SettingController::class, 'sliderSave']);
         Route::post('servicedataSave', [SettingController::class, 'servicedataSave']);
         Route::get('itemList', [SettingController::class, 'itemList']);
+        Route::get('activeItemList', [SettingController::class, 'activeItemList']);
         Route::post('itemSave', [SettingController::class, 'itemSave']);
 
     });

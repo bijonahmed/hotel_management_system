@@ -14,15 +14,30 @@ import withReactContent from "sweetalert2-react-content";
 import ReactDOMServer from "react-dom/server";
 
 const CheckOutInvoice = () => {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const { getToken, token, logout, http, setToken } = AuthUser();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [itemData, setItemData] = useState([]);
+  const [selectedItemId, setSelectedItemId] = useState("");
+  const [qty, setQty] = useState("");
+  const [price, setPrice] = useState("");
+  const [itemGrandTotal, setGrandTotal] = useState(0);
+  const [dueAmt, setDueAmount] = useState(0);
+  const [addedItems, setAddedItems] = useState([]);
   const booking_id = searchParams.get("booking_id");
-  const [roomData, setRoomData] = useState([]);
-  console.log("Received booking_id:", booking_id);
+  //console.log("Received booking_id:", booking_id);
   const MySwal = withReactContent(Swal);
+  const [discount_amt, setdiscountAmt] = useState("");
+  const [finalDiscountAmt, setFinalDiscountAmt] = useState(0);
+
+  const handleChangeDiscount = (e) => {
+    const discountValue = parseFloat(e.target.value) || 0;
+    setdiscountAmt(discountValue);
+    const finalAmount = dueAmt - discountValue;
+    setFinalDiscountAmt(finalAmount);
+  };
 
   const [preview, setPreview] = useState({
     front: null,
@@ -61,6 +76,7 @@ const CheckOutInvoice = () => {
     perday_roomprice: "",
     advance_amount: "",
     id_no: "",
+    tax_percentage: "",
     front_side_document: null,
     back_side_document: null,
   });
@@ -77,7 +93,7 @@ const CheckOutInvoice = () => {
           bookingId: booking_id, // replace this with your actual variable or value
         },
       });
-      console.log("API Response:", response.data.booking_front); // Log the response
+      console.log("API Response:", response.data.tax_percentage); // Log the response
 
       const bookingData = response.data.booking_data;
       setPreview({
@@ -143,6 +159,7 @@ const CheckOutInvoice = () => {
         id_no: bookingData.id_no || "",
         room_price: bookingData.room_price || "0.00",
         advance_amount: bookingData.advance_amount || "0.00",
+        tax_percentage: response.data.tax_percentage || "0",
       });
     } catch (error) {
       console.error("Error fetching data", error);
@@ -151,6 +168,36 @@ const CheckOutInvoice = () => {
     }
   };
 
+  const taxAmount = (finalDiscountAmt * booking.tax_percentage) / 100;
+  const totalWithTax = taxAmount;
+
+  const grandTotal = parseFloat(finalDiscountAmt) + parseFloat(taxAmount) + parseFloat(itemGrandTotal);
+    const convGrandTotal = grandTotal.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const perDay = parseFloat(booking?.perday_roomprice) || 0;
+  const days = parseFloat(booking?.total_booking_days) || 0;
+  const tbill = perDay * days;
+
+   useEffect(() => {
+    setFinalDiscountAmt(dueAmt - 0);
+  }, [dueAmt]); // run whenever dueAmt changes
+
+  useEffect(() => {
+    const dAmount =
+      parseFloat(tbill || 0) - parseFloat(booking.advance_amount || 0);
+    setDueAmount(dAmount);
+  }, [tbill, booking.advance_amount]);
+
+  // Format for display
+  const due_amount = dueAmt.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  // Format as currency (example in USD)
+  const total_bill = tbill.toLocaleString("en-US");
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
     return new Date(dateStr).toISOString().split("T")[0]; // "2024-09-01"
@@ -162,9 +209,100 @@ const CheckOutInvoice = () => {
     </tr>
   );
 
+  const formatCurrency = (amount) => {
+    return Number(amount).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
+  const defaultFetchItems = async () => {
+    try {
+      const response = await axios.get(`/setting/activeItemList`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      //const userData = response.data;
+      if (response.data) {
+        setItemData(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  // Find selected item object
+  const selectedItems = itemData.find(
+    (item) => item.id === Number(selectedItemId)
+  );
+  // When item changes, set qty and price from selected item
+  React.useEffect(() => {
+    if (selectedItems) {
+      setQty(selectedItems.quantity);
+      setPrice(selectedItems.unit_price);
+    } else {
+      setQty("");
+      setPrice("");
+    }
+  }, [selectedItems]);
+  // Calculate total
+  const total = qty && price ? (qty * price).toFixed(2) : "";
+  // Add item to list
+  // Calculate grand total whenever addedItems changes
+  useEffect(() => {
+    const sum = addedItems.reduce((acc, item) => acc + item.total, 0);
+    setGrandTotal(sum.toFixed(2));
+  }, [addedItems]);
+
+  function handleAdd() {
+    if (!selectedItemId || !qty || !price) return;
+
+    const selectedItem = itemData.find(
+      (item) => item.id === Number(selectedItemId)
+    );
+    if (!selectedItem) return;
+
+    setAddedItems((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) => item.id === Number(selectedItemId)
+      );
+
+      if (existingIndex !== -1) {
+        const updatedItems = [...prev];
+        const existingItem = updatedItems[existingIndex];
+        const newQty = existingItem.qty + Number(qty);
+        updatedItems[existingIndex] = {
+          ...existingItem,
+          qty: newQty,
+          total: Number((newQty * existingItem.price).toFixed(2)),
+        };
+        return updatedItems;
+      } else {
+        return [
+          ...prev,
+          {
+            id: selectedItem.id,
+            name: selectedItem.name,
+            qty: Number(qty),
+            price: Number(price),
+            total: Number((qty * price).toFixed(2)),
+          },
+        ];
+      }
+    });
+
+    setSelectedItemId("");
+    setQty("");
+    setPrice("");
+    setTotal("");
+  }
+  // Remove item by index
+  function handleRemove(index) {
+    setAddedItems((prev) => prev.filter((_, i) => i !== index));
+  }
   useEffect(() => {
     fetechData();
-    // fetechActiveRooms();
+    defaultFetchItems();
   }, []);
 
   return (
@@ -183,9 +321,7 @@ const CheckOutInvoice = () => {
           <div className="page-wrapper">
             <div className="page-content">
               <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div className="breadcrumb-title pe-3">
-                Invoice
-                </div>
+                <div className="breadcrumb-title pe-3">Invoice</div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
@@ -279,55 +415,33 @@ const CheckOutInvoice = () => {
                                   <thead>
                                     <tr>
                                       <th>#</th>
-                                      <th>Item Name</th>
-                                      <th>Quantity</th>
-                                      <th>Unit Price (TK)</th>
-                                      <th>Total (TK)</th>
-                                      <th>Action</th>
+                                      <th>Item</th>
+                                      <th>Qty</th>
+                                      <th>Price</th>
+                                      <th>Total</th>
+                                      <th>Add</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {/* Static example row */}
                                     <tr>
-                                      <td>1</td>
-                                      <td>Water Bottle</td>
-                                      <td>2</td>
-                                      <td>20</td>
-                                      <td>40</td>
+                                      <td>--</td>
                                       <td>
-                                        <button className="btn btn-sm btn-danger">
-                                          Remove
-                                        </button>
-                                      </td>
-                                    </tr>
-                                    {/* Another example row */}
-                                    <tr>
-                                      <td>2</td>
-                                      <td>Extra Bed</td>
-                                      <td>1</td>
-                                      <td>500</td>
-                                      <td>500</td>
-                                      <td>
-                                        <button className="btn btn-sm btn-danger">
-                                          Remove
-                                        </button>
-                                      </td>
-                                    </tr>
-                                    {/* Add item input row */}
-                                    <tr>
-                                      <td>#</td>
-                                      <td>
-                                        <select className="form-control">
-                                          <option value>Select item</option>
-                                          <option value="Water Bottle">
-                                            Water Bottle
-                                          </option>
-                                          <option value="Extra Bed">
-                                            Extra Bed
-                                          </option>
-                                          <option value="Room Service">
-                                            Room Service
-                                          </option>
+                                        <select
+                                          className="form-control"
+                                          value={selectedItemId}
+                                          onChange={(e) =>
+                                            setSelectedItemId(e.target.value)
+                                          }
+                                        >
+                                          <option value="">Select item</option>
+                                          {itemData.map((item) => (
+                                            <option
+                                              key={item.id}
+                                              value={item.id}
+                                            >
+                                              {item.name}
+                                            </option>
+                                          ))}
                                         </select>
                                       </td>
                                       <td>
@@ -335,6 +449,11 @@ const CheckOutInvoice = () => {
                                           type="number"
                                           className="form-control"
                                           placeholder="Qty"
+                                          min="1"
+                                          value={qty}
+                                          onChange={(e) =>
+                                            setQty(e.target.value)
+                                          }
                                         />
                                       </td>
                                       <td>
@@ -342,6 +461,9 @@ const CheckOutInvoice = () => {
                                           type="number"
                                           className="form-control"
                                           placeholder="Price"
+                                          value={price}
+                                          disabled
+                                          readOnly
                                         />
                                       </td>
                                       <td>
@@ -349,17 +471,63 @@ const CheckOutInvoice = () => {
                                           type="text"
                                           className="form-control"
                                           placeholder="Total"
+                                          value={total}
                                           disabled
+                                          readOnly
                                         />
                                       </td>
                                       <td>
-                                        <button className="btn btn-sm btn-success">
+                                        <button
+                                          className="btn btn-sm btn-success"
+                                          onClick={handleAdd}
+                                          disabled={
+                                            !selectedItemId || !qty || qty <= 0
+                                          }
+                                        >
                                           Add
                                         </button>
                                       </td>
                                     </tr>
                                   </tbody>
                                 </table>
+
+                                {addedItems.length > 0 && (
+                                  <>
+                                    <table className="table table-bordered">
+                                      <thead>
+                                        <tr>
+                                          <th>#</th>
+                                          <th>Item</th>
+                                          <th className="text-center">Qty</th>
+                                          <th className="text-center">Price</th>
+                                          <th className="text-center">Total</th>
+                                          <th className="text-center">Remove</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {addedItems.map((item, index) => (
+                                          <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{item.name}</td>
+                                            <td className="text-center">{item.qty}</td>
+                                            <td className="text-center">{item.price}</td>
+                                            <td className="text-center">{item.total}</td>
+                                            <td className="text-center">
+                                              <button
+                                                className="btn btn-sm btn-danger"
+                                                onClick={() =>
+                                                  handleRemove(index)
+                                                }
+                                              >
+                                                Remove
+                                              </button>
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </>
+                                )}
 
                                 {/* END */}
 
@@ -388,13 +556,10 @@ const CheckOutInvoice = () => {
                                       <td>
                                         {booking.perday_roomprice} x{" "}
                                         {booking.total_booking_days} ={" "}
-                                        {(
+                                        {formatCurrency(
                                           booking.perday_roomprice *
-                                          booking.total_booking_days
-                                        ).toLocaleString("en-US", {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2,
-                                        })}{" "}
+                                            booking.total_booking_days
+                                        )}
                                         TK
                                       </td>
                                     </tr>
@@ -402,37 +567,48 @@ const CheckOutInvoice = () => {
                                   <tfoot>
                                     <tr>
                                       <th colSpan={6} className="text-end">
-                                        Subtotal
+                                      Amount
                                       </th>
                                       <td>
-                                        {(
-                                          booking.perday_roomprice *
-                                          booking.total_booking_days
-                                        ).toLocaleString("en-US", {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2,
-                                        })}{" "}
-                                        TK
+                                        {total_bill}
+                                        {" TK"}
                                       </td>
                                     </tr>
                                     <tr>
                                       <th colSpan={6} className="text-end">
-                                        Tax (2)%
-                                      </th>
-                                      <td>1,171.68 Tk.</td>
-                                    </tr>
-                                    <tr>
-                                      <th colSpan={6} className="text-end">
-                                        Item Total
+                                        Advance Amount
                                       </th>
                                       <td>
                                         <input
                                           type="text"
                                           className="form-control"
                                           placeholder="0.00"
+                                          value={booking.advance_amount || 0}
+                                          onChange={(e) =>
+                                            setBooking({
+                                              ...booking,
+                                              advance_amount: e.target.value,
+                                            })
+                                          }
                                         />
                                       </td>
                                     </tr>
+                                    <tr>
+                                      <th colSpan={6} className="text-end">
+                                        Due Amount
+                                      </th>
+                                      <td>
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          placeholder="0.00"
+                                          value={due_amount}
+                                          disabled
+                                          readOnly
+                                        />
+                                      </td>
+                                    </tr>
+
                                     <tr>
                                       <th colSpan={6} className="text-end">
                                         Discount
@@ -442,19 +618,35 @@ const CheckOutInvoice = () => {
                                           type="text"
                                           className="form-control"
                                           placeholder="0.00"
+                                          value={discount_amt}
+                                          onChange={handleChangeDiscount}
                                         />
                                       </td>
                                     </tr>
+
                                     <tr>
                                       <th colSpan={6} className="text-end">
-                                        Advance Paid
+                                        Total Amount
                                       </th>
                                       <td>
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          placeholder="0.00"
-                                        />
+                                        {formatCurrency(finalDiscountAmt || 0)} {" TK"}
+                                      </td>
+                                    </tr>
+
+                                    <tr>
+                                      <th colSpan={6} className="text-end">
+                                        Tax ({booking.tax_percentage})%
+                                      </th>
+                                      <td>{formatCurrency(totalWithTax)}</td>
+                                    </tr>
+
+                                    
+                                    <tr>
+                                      <th colSpan={6} className="text-end">
+                                        Item Total (+)
+                                      </th>
+                                      <td>
+                                        {itemGrandTotal} {" TK"}
                                       </td>
                                     </tr>
                                     <tr>
@@ -462,14 +654,7 @@ const CheckOutInvoice = () => {
                                         <strong>Grand Total</strong>
                                       </th>
                                       <td>
-                                        {(
-                                          booking.perday_roomprice *
-                                          booking.total_booking_days
-                                        ).toLocaleString("en-US", {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2,
-                                        })}{" "}
-                                        TK
+                                        {convGrandTotal} {" TK"}
                                       </td>
                                     </tr>
                                   </tfoot>

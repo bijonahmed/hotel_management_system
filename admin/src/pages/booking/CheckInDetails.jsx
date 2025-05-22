@@ -698,7 +698,7 @@ const CheckInDetails = () => {
                                                 <input
                                                   type="text"
                                                   className="form-control"
-                                                  placeholder="Mr/Mrs."
+                                                  placeholder="0.00"
                                                   value={booking.customer_title}
                                                   onChange={(e) =>
                                                     setBooking({

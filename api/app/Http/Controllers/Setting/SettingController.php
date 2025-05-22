@@ -78,11 +78,14 @@ class SettingController extends Controller
     }
 
 
-
+    public function activeItemList()
+    {
+        $response = Items::where('status', 1)->orderBy('name', 'asc')->Get();
+        return response()->json($response);
+    }
 
     public function itemList(Request $request)
     {
-
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
         // Get search query from the request
