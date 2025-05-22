@@ -47,6 +47,8 @@ class Booking extends Authenticatable
         'update_by',
         'check_out_reason',
         'check_out_by',
+        'check_in_by',
+        'total_amount',
         'booking_status'
     ];
 }

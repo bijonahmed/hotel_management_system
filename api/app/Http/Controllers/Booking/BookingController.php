@@ -439,9 +439,10 @@ class BookingController extends Controller
                 DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
             )->first();
 
-        $data['booking_data'] = $booking_data;
-        $data['front'] = !empty($booking_data->front_side_document) ? url($booking_data->front_side_document) : "";
-        $data['back']  = !empty($booking_data->back_side_document) ? url($booking_data->back_side_document) : "";
+        $data['booking_data']   = $booking_data;
+        $data['front']          = !empty($booking_data->front_side_document) ? url($booking_data->front_side_document) : "";
+        $data['back']           = !empty($booking_data->back_side_document) ? url($booking_data->back_side_document) : "";
+        $data['total_amount']   = $booking_data->perday_roomprice * $booking_data->total_booking_days;
         return response()->json($data, 200);
     }
 
@@ -516,6 +517,9 @@ class BookingController extends Controller
                 'room_id'     => 'required',
                 'phone'       => 'required',
                 'id_no'       => 'required',
+                'total_amount' => 'required',
+                'advance_amount' => 'required',
+             
             ],
             [
                 'checkin.required'     => 'Check-in date is required.',
@@ -524,6 +528,8 @@ class BookingController extends Controller
                 'room_id.required'     => 'Room ID is required.',
                 'phone.required'       => 'Phone number is required.',
                 'id_no.required'       => 'ID number is required.',
+                'total_amount.required'=> 'Total amount is required.',
+                'advance_amount.required' => 'Advance amount is required.',
             ]
         );
 
@@ -586,7 +592,10 @@ class BookingController extends Controller
             "id_no",
             "room_price",
             "advance_amount",
+            "total_amount"
         ]);
+
+        $data['check_in_by'] = $this->userid;
 
         // Handle file uploads (optional)
         if (!empty($request->file('front_side_document'))) {

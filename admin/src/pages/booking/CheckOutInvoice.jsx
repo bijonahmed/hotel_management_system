@@ -10,6 +10,8 @@ import axios from "/config/axiosConfig";
 import Swal from "sweetalert2";
 import { useSearchParams } from "react-router-dom";
 import AuthUser from "../../components/AuthUser";
+import withReactContent from "sweetalert2-react-content";
+import ReactDOMServer from "react-dom/server";
 
 const CheckOutInvoice = () => {
   const [errors, setErrors] = useState({});
@@ -20,6 +22,7 @@ const CheckOutInvoice = () => {
   const booking_id = searchParams.get("booking_id");
   const [roomData, setRoomData] = useState([]);
   console.log("Received booking_id:", booking_id);
+  const MySwal = withReactContent(Swal);
 
   const [preview, setPreview] = useState({
     front: null,
@@ -82,6 +85,30 @@ const CheckOutInvoice = () => {
         back: response.data.back || null,
       });
       // const bookingBackImg  = response.data.booking_back;
+
+      if (!bookingData.id_no) {
+        const alertHtml = ReactDOMServer.renderToString(
+          <div>
+            <p>Please first fill up check-in NID and other information.</p>
+            <a
+              href={`/booking/checking-details?booking_id=${bookingData.booking_id}`}
+              className="text-primary"
+            >
+              👉 Go to Check-in List
+            </a>
+          </div>
+        );
+
+        MySwal.fire({
+          icon: "warning",
+          title: "Missing Information",
+          html: alertHtml,
+          showConfirmButton: false,
+          showCloseButton: false,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+      }
       setBooking({
         checkin: formatDate(bookingData.checkin),
         checkout: formatDate(bookingData.checkout),
@@ -157,7 +184,7 @@ const CheckOutInvoice = () => {
             <div className="page-content">
               <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
                 <div className="breadcrumb-title pe-3">
-                  Fill Out Booking Details
+                Invoice
                 </div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
@@ -358,9 +385,18 @@ const CheckOutInvoice = () => {
                                         {booking.total_booking_days}
                                       </td>
                                       <td>{booking.perday_roomprice}</td>
-                                    <td>
-  {booking.perday_roomprice} x {booking.total_booking_days} =  { (booking.perday_roomprice * booking.total_booking_days).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } TK
-</td>
+                                      <td>
+                                        {booking.perday_roomprice} x{" "}
+                                        {booking.total_booking_days} ={" "}
+                                        {(
+                                          booking.perday_roomprice *
+                                          booking.total_booking_days
+                                        ).toLocaleString("en-US", {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2,
+                                        })}{" "}
+                                        TK
+                                      </td>
                                     </tr>
                                   </tbody>
                                   <tfoot>
@@ -369,18 +405,23 @@ const CheckOutInvoice = () => {
                                         Subtotal
                                       </th>
                                       <td>
-                                       { (booking.perday_roomprice * booking.total_booking_days).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } TK
+                                        {(
+                                          booking.perday_roomprice *
+                                          booking.total_booking_days
+                                        ).toLocaleString("en-US", {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2,
+                                        })}{" "}
+                                        TK
                                       </td>
                                     </tr>
                                     <tr>
                                       <th colSpan={6} className="text-end">
                                         Tax (2)%
                                       </th>
-                                      <td>
-                                       1,171.68 Tk.
-                                      </td>
+                                      <td>1,171.68 Tk.</td>
                                     </tr>
-                                      <tr>
+                                    <tr>
                                       <th colSpan={6} className="text-end">
                                         Item Total
                                       </th>
@@ -421,7 +462,14 @@ const CheckOutInvoice = () => {
                                         <strong>Grand Total</strong>
                                       </th>
                                       <td>
-                                         { (booking.perday_roomprice * booking.total_booking_days).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } TK
+                                        {(
+                                          booking.perday_roomprice *
+                                          booking.total_booking_days
+                                        ).toLocaleString("en-US", {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2,
+                                        })}{" "}
+                                        TK
                                       </td>
                                     </tr>
                                   </tfoot>

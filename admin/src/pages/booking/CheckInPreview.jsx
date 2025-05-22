@@ -29,6 +29,7 @@ const CheckInPreview = () => {
     customer_dob: "",
     booking_type: "",
     booking_reference_no: "",
+    total_booking_days: "",
     pupose_of_visit: "",
     remarks: "",
     arival_from: "",
@@ -36,7 +37,7 @@ const CheckInPreview = () => {
     room_no: "",
     adult: "",
     booking_id: "",
-    room_name:"",
+    room_name: "",
     child: "",
     country_code: "88",
     phone: "",
@@ -51,6 +52,7 @@ const CheckInPreview = () => {
     customer_contact_email: "",
     customer_contact_address: "",
     room_price: "",
+    total_amount: "",
     advance_amount: "",
     id_no: "",
     front_side_document: null,
@@ -115,7 +117,9 @@ const CheckInPreview = () => {
         room_name: bookingData.room_name || "",
         id_no: bookingData.id_no || "",
         room_price: formatCurrency(bookingData.room_price) || "0.00",
+        total_amount: formatCurrency(response.data.total_amount) || "0.00",
         advance_amount: formatCurrency(bookingData.advance_amount) || "0.00",
+        total_booking_days: bookingData.total_booking_days || "",
         front_side_document: null,
         back_side_document: null,
       });
@@ -239,11 +243,11 @@ const CheckInPreview = () => {
               </div>
             )}
 
-
             {/* Booking Details Card */}
             <div className="container" id="printArea">
               <div className="card">
                 <div className="card-body">
+                  
                   <section className="mb-4">
                     <h5 className="border-bottom">Reservation Details</h5>
                     <table className="table table-bordered">
@@ -272,34 +276,60 @@ const CheckInPreview = () => {
                     <h5 className="border-bottom pb-2">Identity Details</h5>
                     <table className="table table-bordered">
                       <tbody>
-                        {renderRow("Title", booking.customer_title)}
-                        {renderRow("First Name", booking.customer_first_name)}
-                        {renderRow("Last Name", booking.customer_last_name)}
-                        {renderRow(
-                          "Father's Name",
-                          booking.customer_father_name
-                        )}
-                        {renderRow("Gender", booking.customer_gender)}
-                        {renderRow("Date of Birth", booking.customer_dob)}
-                        {renderRow("Occupation", booking.customer_occupation)}
-                        {renderRow("Nationality", booking.customer_nationality)}
-                        {renderRow(
-                          "Contact Type",
-                          booking.customer_contact_type
-                        )}
-                        {renderRow(
-                          "Contact Email",
-                          booking.customer_contact_email
-                        )}
-                        {renderRow(
-                          "Contact Address",
-                          booking.customer_contact_address
-                        )}
-                        {renderRow("Room Amount", booking.room_price)}
-                        {renderRow("Advance Amount", booking.advance_amount)}
-                        {renderRow("Country Code", booking.country_code)}
-                        {renderRow("Phone", booking.phone)}
-                        {renderRow("ID No", booking.id_no)}
+                        <tr>
+                          <th>Title</th>
+                          <td>{booking.customer_title}</td>
+                          <th>First Name</th>
+                          <td>{booking.customer_first_name}</td>
+                        </tr>
+                        <tr>
+                          <th>Last Name</th>
+                          <td>{booking.customer_last_name}</td>
+                          <th>Father's Name</th>
+                          <td>{booking.customer_father_name}</td>
+                        </tr>
+                        <tr>
+                          <th>Gender</th>
+                          <td>{booking.customer_gender}</td>
+                          <th>Date of Birth</th>
+                          <td>{booking.customer_dob}</td>
+                        </tr>
+                        <tr>
+                          <th>Occupation</th>
+                          <td>{booking.customer_occupation}</td>
+                          <th>Nationality</th>
+                          <td>{booking.customer_nationality}</td>
+                        </tr>
+                        <tr>
+                          <th>Contact Type</th>
+                          <td>{booking.customer_contact_type}</td>
+                          <th>Contact Email</th>
+                          <td>{booking.customer_contact_email}</td>
+                        </tr>
+                        <tr>
+                          <th>Contact Address</th>
+                          <td>{booking.customer_contact_address}</td>
+                          <th>Room Amount Per Day</th>
+                          <td>{booking.room_price}</td>
+                        </tr>
+                        <tr>
+                          <th>Number of Day</th>
+                          <td>{booking.total_booking_days}</td>
+                          <th>Total Amount</th>
+                          <td>{booking.total_amount}</td>
+                        </tr>
+                        <tr>
+                          <th>Advance Amount</th>
+                          <td>{booking.advance_amount}</td>
+                          <th>Country Code</th>
+                          <td>{booking.country_code}</td>
+                        </tr>
+                        <tr>
+                          <th>Phone</th>
+                          <td>{booking.phone}</td>
+                          <th>ID No</th>
+                          <td>{booking.id_no}</td>
+                        </tr>
                       </tbody>
                     </table>
                   </section>

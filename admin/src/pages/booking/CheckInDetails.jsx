@@ -67,8 +67,10 @@ const CheckInDetails = () => {
     customer_contact_type: "",
     customer_contact_email: "",
     customer_contact_address: "",
+    total_booking_days: "",
     room_price: "",
     advance_amount: "",
+    total_amount: "",
     id_no: "",
     front_side_document: null,
     back_side_document: null,
@@ -145,7 +147,7 @@ const CheckInDetails = () => {
           bookingId: booking_id, // replace this with your actual variable or value
         },
       });
-      console.log("API Response:", response.data.booking_front); // Log the response
+      console.log("API Response:", response.data.total_amount); // Log the response
 
       const bookingData = response.data.booking_data;
       setPreview({
@@ -178,17 +180,27 @@ const CheckInDetails = () => {
         customer_contact_type: bookingData.customer_contact_type || "",
         customer_contact_email: bookingData.customer_contact_email || "",
         customer_contact_address: bookingData.customer_contact_address || "",
+        total_booking_days: bookingData.total_booking_days || "",
         // front_side_document: bookingFrontImg || "",
         // back_side_document: bookingBackImg || "",
         id_no: bookingData.id_no || "",
         room_price: bookingData.room_price || "0.00",
-        advance_amount: bookingData.advance_amount || "0.00",
+        total_amount: response.data.total_amount || "0.00",
+        advance_amount: bookingData.advance_amount || "",
       });
     } catch (error) {
       console.error("Error fetching data", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const formatBookingTotal = (price, days) => {
+    const total = price * days;
+    return total.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   const fetechActiveRooms = async () => {
@@ -277,6 +289,10 @@ const CheckInDetails = () => {
                               </div>
                               <div className="card-body">
                                 <div className="row g-3">
+                                  <center>
+                                    <b></b>Total Number of day checkin:{" "}
+                                    <b>{booking.total_booking_days}</b>
+                                  </center>
                                   <div className="col-md-6 col-lg-4 col-xl-4">
                                     <div className="form-group">
                                       <label className="form-label text-muted">
@@ -1188,18 +1204,45 @@ const CheckInDetails = () => {
                                           type="text"
                                           className="form-control"
                                           placeholder="0.00"
-                                          value={booking.room_price}
+                                          value={booking.total_amount}
                                           onChange={(e) =>
                                             setBooking({
                                               ...booking,
-                                              room_price: e.target.value,
+                                              total_amount: e.target.value,
                                             })
                                           }
                                         />
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="col-md-6"></div>
+                                  <div className="col-md-6">
+                                    <div className="card bg-light border-primary p-3">
+                                      <div className="card-body">
+                                        <h5 className="card-title text-primary">
+                                          Check-in Summary
+                                        </h5>
+                                        <p className="mb-1">
+                                          <strong>
+                                            Total number of check-in days:
+                                          </strong>{" "}
+                                          {booking.total_booking_days}
+                                        </p>
+                                        <p className="mb-1">
+                                          <strong>Per day room price:</strong>{" "}
+                                          {booking.room_price} TK
+                                        </p>
+                                        <p className="mb-0">
+                                          <strong>Total Amount:</strong>{" "}
+                                          {formatBookingTotal(
+                                            booking.room_price,
+                                            booking.total_booking_days
+                                          )}{" "}
+                                          TK
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+
                                   <div className="col-md-6">
                                     <div className="form-group">
                                       <label className="form-label text-muted">

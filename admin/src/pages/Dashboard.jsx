@@ -172,7 +172,7 @@ const Index = () => {
                             <th>Booking ID</th>
                             <th>Booking By</th>
                             <th>Room Name</th>
-                            <th>Room Price</th>
+                            <th>Room Price / Day</th>
                             <th>Check In/Out</th>
                             <th>Days</th>
                             <th className="text-center">Payment Type</th>
