@@ -8,6 +8,7 @@ use App\Models\Attribute;
 use App\Models\AttributeValues;
 use App\Models\Booking;
 use App\Models\Categorys;
+use App\Models\InvoiceItem;
 use App\Models\MiningCategory;
 use App\Models\MiningHistory;
 use App\Models\Mystore;
@@ -28,6 +29,7 @@ use Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use PayPal\Api\Invoice;
 use Validator;
 
 class BookingController extends Controller
@@ -48,7 +50,6 @@ class BookingController extends Controller
 
     public function checkStatusUpdate(Request $request)
     {
-
         //dd($request->all());
         $validator = Validator::make(
             $request->all(),
@@ -81,6 +82,91 @@ class BookingController extends Controller
         ];
         Room::where('id', $request->room_id)->update($updateRoom);
 
+        return response()->json(['message' => 'Successfully booked.']);
+    }
+
+
+
+
+    public function bookingInvoiceInsert(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'booking_id'            => 'required',
+            'advance_amount'        => 'required',
+            'total_bill'            => 'required',
+            'due_amount'            => 'required',
+            'discount_amount'       => 'required',
+            'final_total_amount'    => 'required',
+            'tax_amount'            => 'required',
+            'item_total'            => 'required',
+            'grand_total'           => 'required',
+            'status'                => 'required',
+            'items' => 'required|array',
+            'items.*.id' => 'required|integer',
+            'items.*.name' => 'required|string',
+            'items.*.qty' => 'required|numeric',
+            'items.*.price' => 'required|numeric',
+            'items.*.total' => 'required|numeric',
+        ], [
+            'booking_id.required'           => 'The booking id is required.',
+            'advance_amount.required'       => 'The advance amount is required.',
+            'total_bill.required'           => 'The total bill is required.',
+            'due_amount.required'           => 'The due amount is required.',
+            'discount_amount.required'      => 'The discount amount is required.',
+            'final_total_amount.required'   => 'The final total amount is required.',
+            'tax_amount.required'           => 'The tax amount is required.',
+            'item_total.required'           => 'The item total is required.',
+            'grand_total.required'          => 'The grand total is required.',
+            'status.required'               => 'The status is required.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $updateBooking = [
+            'advance_amount'     => str_replace(',', '', $request->advance_amount),
+            'total_bill'         => str_replace(',', '', $request->total_bill),
+            'due_amount'         => str_replace(',', '', $request->due_amount),
+            'discount_amount'    => str_replace(',', '', $request->discount_amount),
+            'final_total_amount' => str_replace(',', '', $request->final_total_amount),
+            'tax_amount'         => str_replace(',', '', $request->tax_amount),
+            'item_total'         => str_replace(',', '', $request->item_total),
+            'grand_total'        => str_replace(',', '', $request->grand_total),
+            'booking_status'     => $request->status,
+            'invoice_create_by'  => $this->userid,
+        ];
+
+        //dd($updateBooking);
+        Booking::where('booking_id', $request->booking_id)->update($updateBooking);
+
+        if ($request->status == 2) {
+            $updateRoom = [
+                'booking_status' => 2, //Allow only release.
+            ];
+            Room::where('id', $request->room_id)->update($updateRoom);
+        }
+
+        // ✅ Use validated data
+        $data = $validator->validated();
+
+        foreach ($data['items'] as $item) {
+            $exists = InvoiceItem::where('booking_id', $data['booking_id'])
+                ->where('item_id', $item['id'])
+                ->exists();
+
+            if (!$exists) {
+                InvoiceItem::create([
+                    'booking_id'        => $data['booking_id'],
+                    'item_id'           => $item['id'],
+                    'name'              => $item['name'],
+                    'qty'               => $item['qty'],
+                    'price'             => $item['price'],
+                    'total'             => $item['total'],
+                    'invoice_create_by' => $this->userid,
+                ]);
+            }
+        }
         return response()->json(['message' => 'Successfully booked.']);
     }
 
@@ -240,7 +326,7 @@ class BookingController extends Controller
 
         try {
             $rowsData = Booking::where('booking.customer_id', $this->userid)
-                ->where('booking.booking_status', 1)
+                ->whereIn('booking.booking_status', [1,2])
                 ->leftJoin('room', 'room.id', '=', 'booking.room_id')
                 ->leftJoinSub(
                     RoomImages::select('room_id', DB::raw('MIN(id) as min_id'))
@@ -384,10 +470,34 @@ class BookingController extends Controller
         return response()->json($response, 200);
     }
 
+    public function deleteBookingInvItem(Request $request)
+    {
+        //dd($request->all());
+        $booking_id = $request->booking_id;
+        $item_id    = $request->id;
+        $item       = InvoiceItem::where('booking_id', $booking_id)
+            ->where('item_id', $item_id)
+            ->first();
+        if ($item) {
+            $item->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Item deleted successfully.',
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Item not found.',
+        ], 404);
+    }
+
+
+
     public function checkroomBookingStatus()
     {
 
-        $booking_rooms = Booking::where('booking.booking_status', 1)
+        $booking_rooms = Booking::whereIn('booking.booking_status', [1, 4])
             ->leftJoin('room', 'room.id', '=', 'booking.room_id')
             ->select(
                 'booking.*',
@@ -427,26 +537,42 @@ class BookingController extends Controller
     public function checkBookingRow(Request $request)
     {
         //dd($request->all());
+        //Booking::whereIn('booking.booking_status', [1, 4])
         $bookingId     = $request->bookingId;
-        $booking_data  = Booking::where('booking.booking_status', 1)
-        ->where('booking.booking_id', $bookingId)
-        ->leftJoin('users', 'users.id', '=', 'booking.customer_id')
-        ->leftJoin('room', 'room.id', '=', 'booking.room_id')
-        ->select(
-            'booking.*',
-            'users.phone',
-            'room.name as room_name','room.roomPrice as perday_roomprice',
-            DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
-        )->first();
-        
-        $setting       = Setting::where('id',1)->first();
-        $taxPercentage = !empty($setting->tax_percentag) ? $setting->tax_percentag: "0";
+        $booking_data  = Booking::where('booking.booking_id', $bookingId)
+            ->leftJoin('users', 'users.id', '=', 'booking.customer_id')
+            ->leftJoin('room', 'room.id', '=', 'booking.room_id')
+            ->select(
+                'booking.*',
+                'users.phone',
+                'room.name as room_name',
+                'room.roomPrice as perday_roomprice',
+                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+            )->first();
+
+        $invoiceItems = InvoiceItem::where('booking_id', $bookingId)->get();
+        $invArray = [];
+        foreach ($invoiceItems as $item) {
+            $invArray[] = [
+                'booking_id'        => $item->booking_id,
+                'id'                => $item->item_id,
+                'name'              => $item->name,
+                'qty'               => $item->qty,
+                'price'             => $item->price,
+                'total'             => $item->total,
+                'invoice_create_by' => $item->invoice_create_by,
+            ];
+        }
+
+        $setting       = Setting::where('id', 1)->first();
+        $taxPercentage = !empty($setting->tax_percentag) ? $setting->tax_percentag : "0";
 
         $data['booking_data']   = $booking_data;
         $data['front']          = !empty($booking_data->front_side_document) ? url($booking_data->front_side_document) : "";
         $data['back']           = !empty($booking_data->back_side_document) ? url($booking_data->back_side_document) : "";
         $data['total_amount']   = $booking_data->perday_roomprice * $booking_data->total_booking_days;
         $data['tax_percentage'] = $taxPercentage;
+        $data['itemlist']       = $invArray;
         return response()->json($data, 200);
     }
 
@@ -523,7 +649,7 @@ class BookingController extends Controller
                 'id_no'       => 'required',
                 'total_amount' => 'required',
                 'advance_amount' => 'required',
-             
+
             ],
             [
                 'checkin.required'     => 'Check-in date is required.',
@@ -532,7 +658,7 @@ class BookingController extends Controller
                 'room_id.required'     => 'Room ID is required.',
                 'phone.required'       => 'Phone number is required.',
                 'id_no.required'       => 'ID number is required.',
-                'total_amount.required'=> 'Total amount is required.',
+                'total_amount.required' => 'Total amount is required.',
                 'advance_amount.required' => 'Advance amount is required.',
             ]
         );
@@ -599,7 +725,8 @@ class BookingController extends Controller
             "total_amount"
         ]);
 
-        $data['check_in_by'] = $this->userid;
+        $data['check_in_by']    = $this->userid;
+        $data['invoice_create'] = 1;
 
         // Handle file uploads (optional)
         if (!empty($request->file('front_side_document'))) {

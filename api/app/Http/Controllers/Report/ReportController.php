@@ -91,22 +91,5 @@ class ReportController extends Controller
 
         return response()->json($bookingData, 200);
 
-        // $bookingData = Booking::where('booking.booking_status', 1)
-        //     ->select(
-        //         'booking.*',
-        //         'room.name as room_name',
-        //         'booking.checkin',
-        //         'booking.checkout',
-        //         'room.roomPrice',
-        //         'room.roomDescription',
-        //         'bed_type.name as bed_name',
-        //         \DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
-        //     )
-        //     ->whereDate('booking.created_at', $checkToday)
-        //     ->leftJoin('room', 'booking.room_id', '=', 'room.id') // Fixing bed_type join
-        //     ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
-        //     ->get();
-
-        // return response()->json($bookingData, 200);
     }
 }

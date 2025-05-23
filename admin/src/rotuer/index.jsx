@@ -45,6 +45,7 @@ import CheckOutList from "../pages/booking/CheckOutList.jsx";
 import CheckInList from "../pages/booking/CheckInList.jsx";
 import CheckInDetails from "../pages/booking/CheckInDetails.jsx";
 import CheckOutInvoice from "../pages/booking/CheckOutInvoice.jsx";
+import PrintCheckOutInvoice from "../pages/booking/PrintCheckOutInvoice.jsx";
 import CheckInPreview from "../pages/booking/CheckInPreview.jsx";
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
@@ -142,7 +143,8 @@ const AppRouter = () => {
       <Route path="/booking/checkout-list" element={<CheckOutList />} />
       <Route path="/booking/checkin-list" element={<CheckInList />} />
       <Route path="/booking/checking-details" element={<CheckInDetails />} />  
-      <Route path="//booking/checkout-invoice" element={<CheckOutInvoice />} />
+      <Route path="/booking/checkout-invoice" element={<CheckOutInvoice />} />
+     <Route path="/booking/print-checkout-invoice" element={<PrintCheckOutInvoice />} />
       <Route path="/booking/checking-preview" element={<CheckInPreview />} />  
       {/* //ROMM SETTING */}
       <Route path="/roomsetting/bed-type-list" element={<BedTypeList />} />

@@ -1,0 +1,80 @@
+/* General Styling */
+.printable-invoice {
+  font-family: Arial, sans-serif;
+  color: #000;
+  padding: 20px;
+  background: #fff;
+
+}
+
+/* Centered Header */
+.printable-invoice .header {
+  text-align: center;
+ 
+}
+
+.printable-invoice .header span {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+/* Table Styling */
+.printable-invoice table {
+  width: 100%;
+  border-collapse: collapse;
+ 
+}
+
+.printable-invoice table th,
+.printable-invoice table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.printable-invoice table thead {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+.printable-invoice table tfoot {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+/* Highlight Grand Total */
+.printable-invoice .table-success td {
+  background-color: #d4edda !important;
+  font-weight: bold;
+}
+.printable-invoice table tfoot td {
+  min-height: 20px;
+  padding: 8px;
+}
+/* Responsive text alignment */
+.text-end {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.txtowrd {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use AuthorizesRequests;
 use DB;
+
 class Booking extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -40,15 +42,27 @@ class Booking extends Authenticatable
         'id_no',
         'front_side_document',
         'back_side_document',
+        'booking_reference_no',
+        'pupose_of_visit',
+        // amt
         'advance_amount',
+        'total_bill',
+        'due_amount',
+        'discount_amount',
+        'final_total_amount',
+        'tax_amount',
+        'item_total',
+        'grand_total',
+        'total_amount',
+        // amt
         'message',
         'customer_id',
         'arival_from',
         'update_by',
         'check_out_reason',
-        'check_out_by',
+        'invoice_create_by',
+        'invoice_create',
         'check_in_by',
-        'total_amount',
         'booking_status'
     ];
 }

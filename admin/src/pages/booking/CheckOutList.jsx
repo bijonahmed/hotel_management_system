@@ -10,17 +10,10 @@ import axios from "/config/axiosConfig";
 import Swal from "sweetalert2";
 
 const CheckOutList = () => {
-  const [status, setStatus] = useState("");
-  const [note, setNote] = useState("");
-  const [errors, setErrors] = useState({});
   const [bookingrooms, setBookingRooms] = useState([]);
   const [availableRooms, setAvailableRooms] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [id, setId] = useState();
-  const [booking_id, setBookingId] = useState();
-  const [room_id, setRoomId] = useState();
-
   const bookingTabRef = useRef(null);
   useEffect(() => {
     // Optional: Set default active tab if needed
@@ -30,81 +23,14 @@ const CheckOutList = () => {
   }, []);
 
   const apiUrl = "/booking/checkroomBookingStatus";
-  const modalRef = useRef();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "status") setStatus(value);
-    if (name === "note") setNote(value);
-  };
-
-  const handleSubmitBooking = async (e) => {
-    e.preventDefault();
-    // Send status and note to your API or handle as needed
-    console.log("bookingID:", id);
-    console.log("Status:", status);
-    console.log("Note:", note);
-
-    try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
-      const formPayload = new FormData();
-      formPayload.append("id", "");
-      formPayload.append("id", id);
-      formPayload.append("status", status);
-      formPayload.append("note", note);
-      formPayload.append("room_id", room_id);
-      const response = await axios.post(
-        "/booking/checkStatusUpdate",
-        formPayload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      const modalInstance = window.bootstrap.Modal.getInstance(
-        modalRef.current
-      );
-      modalInstance?.hide();
-
-      setStatus("");
-      setNote("");
-
-      Swal.fire({
-        icon: "success",
-        title: "Your data has been successful update.",
-      });
-
-      fetchData();
-      navigate("/booking/room-status-list");
-    } catch (error) {
-      if (error.response && error.response.status === 422) {
-        Swal.fire({
-          icon: "error",
-          title: "Validation Errors",
-          html: Object.values(error.response.data.errors)
-            .map((err) => `<div>${err.join("<br>")}</div>`)
-            .join(""),
-        });
-        setErrors(error.response.data.errors);
-      } else {
-        console.error("Error updating user:", error);
-      }
-    }
-  };
-
   const handleClick = (item) => {
     console.log("booking_id...." + item.booking_id);
     navigate(`/booking/checkout-invoice?booking_id=${item.booking_id}`);
+  };
 
-    // setId(item.id);
-    // setBookingId(item.booking_id);
-    // setRoomId(item.room_id);
-    // const modal = new window.bootstrap.Modal(modalRef.current);
-    // modal.show();
+    const printInvoice = (item) => {
+    console.log("booking_id...." + item.booking_id);
+    navigate(`/booking/print-checkout-invoice?booking_id=${item.booking_id}`);
   };
 
   const fetchData = async () => {
@@ -147,7 +73,7 @@ const CheckOutList = () => {
   return (
     <>
       <Helmet>
-        <title>Room Status List</title>
+        <title>CheckOut List</title>
       </Helmet>
 
       <div>
@@ -160,7 +86,7 @@ const CheckOutList = () => {
           <div className="page-wrapper">
             <div className="page-content">
               <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div className="breadcrumb-title pe-3">Room Status List</div>
+                <div className="breadcrumb-title pe-3">CheckOut List</div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
@@ -296,17 +222,41 @@ const CheckOutList = () => {
                                             {item.total_booking_days}
                                           </td>
                                           <td className="text-center">
-                                            <span
-                                              style={{
-                                                color: "red",
-                                                fontWeight: "bold",
-                                                cursor: "pointer",
-                                              }}
-                                              onClick={() => handleClick(item)}
-                                            >
-                                              <i className="fas fa-receipt"></i>{" "}
-                                              Invoice
-                                            </span>
+                                            {item.invoice_create == 1 && (
+                                              <div className="d-grid gap-2">
+                                                <button
+                                                  type="button"
+                                                  className="btn btn-warning btn-sm"
+                                                  onClick={() =>
+                                                    handleClick(item)
+                                                  }
+                                                >
+                                                  Invoice Edit
+                                                </button>
+
+                                                <button
+                                                  type="button"
+                                                  className="btn btn-success btn-sm"
+                                                  onClick={() =>
+                                                    printInvoice(item)
+                                                  }
+                                                >
+                                                  Print Invoice
+                                                </button>
+                                              </div>
+                                            )}
+
+                                            {item.invoice_create == 2 && (
+                                              <button
+                                                type="button"
+                                                className="btn btn-warning btn-sm btn-block w-100"
+                                                onClick={() =>
+                                                  handleClick(item)
+                                                }
+                                              >
+                                                Invoice Create
+                                              </button>
+                                            )}
                                           </td>
                                         </tr>
                                       ))
@@ -401,61 +351,6 @@ const CheckOutList = () => {
               </div>
             </div>
           </div>
-
-          {/* Start Modal */}
-          <div
-            className="modal fade"
-            ref={modalRef}
-            tabIndex="-1"
-            aria-hidden="true"
-          >
-            <form onSubmit={handleSubmitBooking}>
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title">
-                      Checkout [BookingID:{booking_id}]
-                    </h5>
-                    <button
-                      type="button"
-                      className="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div className="modal-body">
-                    <select
-                      className="form-select w-100"
-                      value={status}
-                      onChange={handleChange}
-                      name="status"
-                      style={{ width: "200px", marginBottom: "10px" }}
-                    >
-                      <option value="">Select Status</option>
-                      <option value="2">Release</option>
-                      <option value="3">Cancel</option>
-                    </select>
-
-                    <textarea
-                      className="form-control w-100"
-                      name="note"
-                      value={note}
-                      onChange={handleChange}
-                      placeholder="Write your message here..."
-                      rows="4"
-                      style={{ width: "400px", marginTop: "10px" }}
-                    ></textarea>
-                  </div>
-                  <div className="modal-footer">
-                    <button type="submit" className="btn btn-primary">
-                      Proceed
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          {/* END Modal */}
 
           <div className="overlay toggle-icon" />
           <Link to="#" className="back-to-top">

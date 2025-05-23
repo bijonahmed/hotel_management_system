@@ -30,7 +30,11 @@ const CheckOutInvoice = () => {
   //console.log("Received booking_id:", booking_id);
   const MySwal = withReactContent(Swal);
   const [discount_amt, setdiscountAmt] = useState("");
+  const [status, setStatus] = useState("");
+  const [note, setNote] = useState("");
   const [finalDiscountAmt, setFinalDiscountAmt] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const handleClose = () => setShowModal(false);
 
   const handleChangeDiscount = (e) => {
     const discountValue = parseFloat(e.target.value) || 0;
@@ -93,9 +97,12 @@ const CheckOutInvoice = () => {
           bookingId: booking_id, // replace this with your actual variable or value
         },
       });
-      console.log("API Response:", response.data.tax_percentage); // Log the response
+      //console.log("API Response:", response.data.itemlist); // Log the response
 
       const bookingData = response.data.booking_data;
+      setAddedItems(response.data.itemlist);
+      setdiscountAmt(response.data.booking_data.discount_amount);
+
       setPreview({
         front: response.data.front || null,
         back: response.data.back || null,
@@ -114,7 +121,6 @@ const CheckOutInvoice = () => {
             </a>
           </div>
         );
-
         MySwal.fire({
           icon: "warning",
           title: "Missing Information",
@@ -125,6 +131,7 @@ const CheckOutInvoice = () => {
           allowEscapeKey: false,
         });
       }
+
       setBooking({
         checkin: formatDate(bookingData.checkin),
         checkout: formatDate(bookingData.checkout),
@@ -168,11 +175,93 @@ const CheckOutInvoice = () => {
     }
   };
 
+  const handleSubmitModal = () => {
+    setShowModal(true);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "status") setStatus(value);
+    if (name === "note") setNote(value);
+  };
+
+  const handleConfirm = async () => {
+    // console.log("All items:" + addedItems);
+    const data = {
+      room_id: booking.room_id,
+      booking_id: booking.booking_id,
+      advance_amount: booking.advance_amount,
+      total_bill: total_bill,
+      due_amount: due_amount,
+      discount_amount: discount_amt,
+      final_total_amount: finalDiscountAmt,
+      tax_amount: totalWithTax,
+      item_total: itemGrandTotal,
+      grand_total: convGrandTotal,
+      status: status,
+      note: note,
+      items: addedItems, // attaching mapped item list
+    };
+
+    try {
+      const response = await axios.post("/booking/bookingInvoiceInsert", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Success:", response.data);
+      //alert("Booking saved successfully!");
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "success",
+        title: "Successfully create invoice.",
+      });
+
+      navigate("/booking/checkout-list");
+    } catch (error) {
+      if (error.response?.status === 422) {
+        Swal.fire({
+          icon: "error",
+          title: "Validation Errors",
+          html: Object.values(error.response.data.errors)
+            .map((err) => `<div>${err.join("<br>")}</div>`)
+            .join(""),
+        });
+        setErrors(error.response.data.errors);
+      } else if (error.response?.status === 409) {
+        Swal.fire({
+          icon: "warning",
+          title: "Booking Conflict",
+          text: error.response.data.message,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Unexpected Error",
+          text: error.message,
+        });
+      }
+      //console.error("Error:", error);
+      //alert("Failed to save booking!");
+    }
+  };
   const taxAmount = (finalDiscountAmt * booking.tax_percentage) / 100;
   const totalWithTax = taxAmount;
 
-  const grandTotal = parseFloat(finalDiscountAmt) + parseFloat(taxAmount) + parseFloat(itemGrandTotal);
-    const convGrandTotal = grandTotal.toLocaleString("en-US", {
+  const grandTotal =
+    parseFloat(finalDiscountAmt) +
+    parseFloat(taxAmount) +
+    parseFloat(itemGrandTotal);
+  const convGrandTotal = grandTotal.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -181,7 +270,7 @@ const CheckOutInvoice = () => {
   const days = parseFloat(booking?.total_booking_days) || 0;
   const tbill = perDay * days;
 
-   useEffect(() => {
+  useEffect(() => {
     setFinalDiscountAmt(dueAmt - 0);
   }, [dueAmt]); // run whenever dueAmt changes
 
@@ -250,7 +339,10 @@ const CheckOutInvoice = () => {
   // Add item to list
   // Calculate grand total whenever addedItems changes
   useEffect(() => {
-    const sum = addedItems.reduce((acc, item) => acc + item.total, 0);
+    const sum = addedItems.reduce(
+      (acc, item) => acc + parseFloat(item.total) || 0,
+      0
+    );
     setGrandTotal(sum.toFixed(2));
   }, [addedItems]);
 
@@ -294,12 +386,46 @@ const CheckOutInvoice = () => {
     setSelectedItemId("");
     setQty("");
     setPrice("");
-    setTotal("");
+    // setTotal("");
   }
   // Remove item by index
-  function handleRemove(index) {
-    setAddedItems((prev) => prev.filter((_, i) => i !== index));
+  async function handleRemove(index, id) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete this item?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      // Remove item from UI
+      setAddedItems((prev) => prev.filter((_, i) => i !== index));
+
+      try {
+        const response = await axios.get("/booking/deleteBookingInvItem", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            booking_id: booking_id,
+            id: id,
+          },
+        });
+
+        Swal.fire("Deleted!", "The item has been deleted.", "success");
+        console.log("Check booking response:", response.data);
+      } catch (error) {
+        Swal.fire("Error", "There was a problem deleting the item.", "error");
+        console.error("Error checking booking row:", error);
+      }
+    } else {
+      Swal.fire("Cancelled", "Your item is safe.", "info");
+    }
   }
+
   useEffect(() => {
     fetechData();
     defaultFetchItems();
@@ -501,7 +627,9 @@ const CheckOutInvoice = () => {
                                           <th className="text-center">Qty</th>
                                           <th className="text-center">Price</th>
                                           <th className="text-center">Total</th>
-                                          <th className="text-center">Remove</th>
+                                          <th className="text-center">
+                                            Remove
+                                          </th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -509,14 +637,20 @@ const CheckOutInvoice = () => {
                                           <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{item.name}</td>
-                                            <td className="text-center">{item.qty}</td>
-                                            <td className="text-center">{item.price}</td>
-                                            <td className="text-center">{item.total}</td>
+                                            <td className="text-center">
+                                              {item.qty}
+                                            </td>
+                                            <td className="text-center">
+                                              {item.price}
+                                            </td>
+                                            <td className="text-center">
+                                              {item.total}
+                                            </td>
                                             <td className="text-center">
                                               <button
                                                 className="btn btn-sm btn-danger"
                                                 onClick={() =>
-                                                  handleRemove(index)
+                                                  handleRemove(index, item.id)
                                                 }
                                               >
                                                 Remove
@@ -567,7 +701,7 @@ const CheckOutInvoice = () => {
                                   <tfoot>
                                     <tr>
                                       <th colSpan={6} className="text-end">
-                                      Amount
+                                        Amount
                                       </th>
                                       <td>
                                         {total_bill}
@@ -629,7 +763,8 @@ const CheckOutInvoice = () => {
                                         Total Amount
                                       </th>
                                       <td>
-                                        {formatCurrency(finalDiscountAmt || 0)} {" TK"}
+                                        {formatCurrency(finalDiscountAmt || 0)}{" "}
+                                        {" TK"}
                                       </td>
                                     </tr>
 
@@ -640,7 +775,6 @@ const CheckOutInvoice = () => {
                                       <td>{formatCurrency(totalWithTax)}</td>
                                     </tr>
 
-                                    
                                     <tr>
                                       <th colSpan={6} className="text-end">
                                         Item Total (+)
@@ -659,6 +793,18 @@ const CheckOutInvoice = () => {
                                     </tr>
                                   </tfoot>
                                 </table>
+                                <div className="text-end mt-3">
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={handleSubmitModal}
+                                  >
+                                    Submit
+                                  </button>
+
+                                  {/* <button className="btn btn-primary" onClick={handleSubmit}>
+                                  Submit
+                                </button> */}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -895,6 +1041,64 @@ const CheckOutInvoice = () => {
               </div>
             </div>
           </div>
+
+          {/* Modal */}
+          {showModal && (
+            <div className="modal show d-block" tabIndex="-1" role="dialog">
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Confirm Submission</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={handleClose}
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <select
+                      className="form-select w-100"
+                      value={status}
+                      onChange={handleChange}
+                      name="status"
+                      style={{ width: "200px", marginBottom: "10px" }}
+                    >
+                      <option value="">Select Status</option>
+                      <option value="2">Release</option>
+                      <option value="3">Cancel</option>
+                      <option value="4">Others</option>
+                    </select>
+
+                    <textarea
+                      className="form-control w-100"
+                      name="note"
+                      value={note}
+                      onChange={handleChange}
+                      placeholder="IF need write your special message here..."
+                      rows="4"
+                      style={{ width: "400px", marginTop: "10px" }}
+                    ></textarea>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleClose}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleConfirm}
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="overlay toggle-icon" />
           <Link to="#" className="back-to-top">

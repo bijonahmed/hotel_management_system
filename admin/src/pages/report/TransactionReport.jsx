@@ -23,7 +23,7 @@ const TransactionReport = () => {
   const token = rawToken?.replace(/^"(.*)"$/, "$1");
   const apiUrl = "/report/filterBybookingReport";
 
-  const fetchMerchantData = async () => {
+  const fetchCustomerData = async () => {
     try {
       if (!token) {
         throw new Error("Token not found in sessionStorage");
@@ -63,7 +63,7 @@ const TransactionReport = () => {
 
       if (response.data) {
         setData(response.data);
-       // setTotalPages(response.data.total_pages);
+        // setTotalPages(response.data.total_pages);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -92,12 +92,11 @@ const TransactionReport = () => {
     setFromDate(formatDate(priorDate));
   }, []);
 
-
   // Correctly closed useEffect hook
   useEffect(() => {
     fetchData();
-    fetchMerchantData();
-  }, [selectedFilter, customer_id,fromDate,toDate,booking_id]);
+    fetchCustomerData();
+  }, [selectedFilter, customer_id, fromDate, toDate, booking_id]);
 
   return (
     <>
@@ -147,28 +146,26 @@ const TransactionReport = () => {
                               placeholder="Search Booking ID..."
                               className="form-control"
                               value={booking_id}
-                              onChange={(e) =>
-                                setBookingId(e.target.value)
-                              }
+                              onChange={(e) => setBookingId(e.target.value)}
                             />
                           </div>
                         </div>
 
                         <div className="col-12 col-md-4 mb-2 mb-md-0">
-                        <select
-                          style={{ height: "46px" }}
-                          className="form-select"
-                          value={customer_id}
-                          onChange={(e) => setCustomer(e.target.value)} // ✅ This line is important
-                          id="input46"
-                        >
-                  <option value="">All Customer</option>
-                  {merchantdata.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user.name} | {user.phone}
-                    </option>
-                  ))}
-                </select>
+                          <select
+                            style={{ height: "46px" }}
+                            className="form-select"
+                            value={customer_id}
+                            onChange={(e) => setCustomer(e.target.value)} // ✅ This line is important
+                            id="input46"
+                          >
+                            <option value="">All Customer</option>
+                            {merchantdata.map((user) => (
+                              <option key={user.id} value={user.id}>
+                                {user.name} | {user.phone}
+                              </option>
+                            ))}
+                          </select>
                         </div>
 
                         <div className="col-12 col-md-4 mb-2 mb-md-0">
@@ -216,7 +213,7 @@ const TransactionReport = () => {
                               className="btn btn-primary"
                               onClick={fetchData}
                             >
-                              Filter
+                              <i class="fa-solid fa-filter"></i> Filter
                             </button>
                           </div>
                         </div>
@@ -236,10 +233,11 @@ const TransactionReport = () => {
                                 <th className="text-left">BookingID</th>
                                 <th className="text-left">Booking By</th>
                                 <th className="text-left">Check In/Out</th>
-                                <th className="text-center">Room Price</th>
+                                <th className="text-center">Grand Total</th>
                                 <th className="text-center">Bed Info</th>
                                 <th className="text-center">Payment Type</th>
                                 <th className="text-center">Status</th>
+                                <th className="text-center">Action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -247,33 +245,69 @@ const TransactionReport = () => {
                                 data.map((item) => (
                                   <tr key={item.id}>
                                     <td>{item.booking_id}</td>
-                                    <td className="text-left">{item.name}-[{item.customer_id}]</td>
-                                    <td className="text-left">{item.checkin}---{item.checkout}</td>
-                                    <td className="text-center">{item.room_price} BDT</td>
-                                    <td className="text-center">{item.bed_name}</td>
-                                    <td className="text-center">{item.paymenttype == 1 ? 'Online' : item.paymenttype == 2 ? 'Offline' : ''}</td>
-                                    <td className="text-center">
-                                        <span
-                                          className={`badge ${
-                                            item.booking_status == 1
-                                              ? "bg-gradient-quepal"
-                                              : item.booking_status == 2
-                                              ? "bg-gradient-bloody"
-                                               : item.booking_status == 3
-                                              ? "bg-gradient-bloody"
-                                              : ""
-                                          } text-white shadow-sm w-100`}
-                                        >
-                                          {item.booking_status == 1
-                                            ? "Booking"
-                                            : item.booking_status == 2
-                                            ? "Release"
-                                            : item.booking_status == 3
-                                            ? "Cancel"
-                                            : ""}
-                                        </span>
+                                    <td className="text-left">
+                                      {item.name}
                                     </td>
-                                   
+                                    <td className="text-left">
+                                      {item.checkin}---{item.checkout}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.grand_total ? (
+                                        `${item.grand_total} TK`
+                                      ) : (
+                                        <span
+                                          style={{
+                                            color: "red",
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          Not complete bill
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.bed_name}
+                                    </td>
+                                    <td className="text-center">
+                                      {item.paymenttype == 1
+                                        ? "Online"
+                                        : item.paymenttype == 2
+                                        ? "Offline"
+                                        : ""}
+                                    </td>
+                                    <td className="text-center">
+                                      <span
+                                        className={`badge ${
+                                          item.booking_status == 1
+                                            ? "bg-gradient-quepal"
+                                            : item.booking_status == 2
+                                            ? "bg-gradient-bloody"
+                                            : item.booking_status == 3
+                                            ? "bg-gradient-bloody"
+                                            : item.booking_status == 4
+                                            ? "bg-gradient-quepal"
+                                            : ""
+                                        } text-white shadow-sm w-100`}
+                                      >
+                                        {item.booking_status == 1
+                                          ? "Booking"
+                                          : item.booking_status == 2
+                                          ? "Release"
+                                          : item.booking_status == 3
+                                          ? "Cancel"
+                                          : item.booking_status == 4
+                                          ? "Others"
+                                          : ""}
+                                      </span>
+                                    </td>
+
+                                    <td className="text-center">
+                                      <Link
+                                        to={`/booking/print-checkout-invoice?booking_id=${item.booking_id}`}
+                                      >
+                                        <i class="fa-solid fa-print"></i> Print
+                                      </Link>
+                                    </td>
                                   </tr>
                                 ))
                               ) : (
@@ -289,7 +323,17 @@ const TransactionReport = () => {
                       )}
 
                       <div className="text-end mt-3">
-                        <p className="fw-bold"> Total Amount: {data.reduce((sum, item) => sum + Number(item.room_price), 0).toLocaleString()} BDT</p>
+                        <p className="fw-bold">
+                          {" "}
+                          Total Amount:{" "}
+                          {data
+                            .reduce(
+                              (sum, item) => sum + Number(item.grand_total),
+                              0
+                            )
+                            .toLocaleString()}{" "}
+                          BDT
+                        </p>
                       </div>
                     </div>
                   </div>

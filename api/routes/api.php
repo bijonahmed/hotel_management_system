@@ -90,10 +90,12 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('/getBookingEditdata', [BookingController::class, 'getBookingEditdata']);
         Route::post('/updateCheckInDetails', [BookingController::class, 'updateCheckInDetails']);
         Route::get('/checkBookingRow', [BookingController::class, 'checkBookingRow']);
+        Route::get('/deleteBookingInvItem', [BookingController::class, 'deleteBookingInvItem']);
         Route::post('/bookingUpdate', [BookingController::class, 'bookingUpdate']);
         Route::post('/bookingUpdateInOut', [BookingController::class, 'bookingUpdateInOut']);
         Route::post('/adminBookingRequest', [BookingController::class, 'adminBookingRequest']);
         Route::post('/checkStatusUpdate', [BookingController::class, 'checkStatusUpdate']);
+        Route::post('/bookingInvoiceInsert', [BookingController::class, 'bookingInvoiceInsert']);
     });
 
     Route::group([
