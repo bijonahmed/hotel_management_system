@@ -24,7 +24,7 @@ class PublicController extends Controller
 
     public function filterBooking(Request $request)
     {
-        //dd($request->all());
+        //  dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
@@ -44,7 +44,7 @@ class PublicController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-
+        /*
         // Fetch available rooms (booking_status = 2 or NULL)
         $rooms = Room::where('booking_status', 2)
             ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
@@ -72,12 +72,146 @@ class PublicController extends Controller
                     'roomImage'       => !empty($room->roomImage) ? url($room->roomImage) : ""
                 ];
             });
+*/
+
+        /*
+        $rooms = Room::join('booking', function ($join) use ($today) {
+            $join->on('room.id', '=', 'booking.room_id')
+                ->where('booking.booking_status', '=', 1)
+                ->whereDate('booking.checkIn', '<=', $today);
+        })
+            ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id')
+            ->leftJoinSub(
+                \DB::table('room_images')
+                    ->select('room_id', \DB::raw('MIN(id) as min_id'))
+                    ->groupBy('room_id'),
+                'first_images',
+                'room.id',
+                '=',
+                'first_images.room_id'
+            )
+            ->leftJoin('room_images', 'room_images.id', '=', 'first_images.min_id')
+            ->select(
+                'room.slug',
+                'room.id',
+                'room.name',
+                'room.roomDescription',
+                'bed_type.name as bed_name',
+                'roomPrice',
+                'room_images.roomImage'
+            )
+            ->distinct()
+            ->get()
+            ->map(function ($room) {
+                return [
+                    'room_id'         => $room->id,
+                    'name'            => $room->name,
+                    'slug'            => $room->slug,
+                    'bed_name'        => $room->bed_name,
+                    'roomPrice'       => number_format($room->roomPrice, 2),
+                    'roomDescription' => Str::limit($room->roomDescription, 50),
+                    'roomImage'       => !empty($room->roomImage) ? url($room->roomImage) : ""
+                ];
+            });
+    */
+
+
+        //echo $today;exit; date('Y-m-d', strtotime('-1 day'));
+
+        // Get rooms with booking_status = 2 OR booking_status IS NULL
+        $roomsStatusTwo = Room::where(function ($query) {
+            $query->where('room.booking_status', 2)
+                ->orWhereNull('room.booking_status');
+        })
+            ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id')
+            ->leftJoinSub(
+                \DB::table('room_images')
+                    ->select('room_id', \DB::raw('MIN(id) as min_id'))
+                    ->groupBy('room_id'),
+                'first_images',
+                'room.id',
+                '=',
+                'first_images.room_id'
+            )
+            ->leftJoin('room_images', 'room_images.id', '=', 'first_images.min_id')
+            ->select('room.slug', 'room.id', 'room.name', 'room.roomDescription', 'bed_type.name as bed_name', 'roomPrice', 'room_images.roomImage')
+            ->get()
+            ->map(function ($room) {
+                return [
+                    'room_id'         => $room->id,
+                    'name'            => $room->name,
+                    'slug'            => $room->slug,
+                    'bed_name'        => $room->bed_name,
+                    'roomPrice'       => number_format($room->roomPrice, 2),
+                    'roomDescription' => Str::limit($room->roomDescription, 50),
+                    'roomImage'       => !empty($room->roomImage) ? url($room->roomImage) : ""
+                ];
+            })->toArray(); // convert to array for easier merging
+
+        // Get booked rooms where booking_status = 1 and checkIn <= today
+
+        $checkinRequest = $request->check_in; //date('Y-m-d');
+        // Step 1: Check if any record exists where checkin == request date
+        $hasMatchingCheckin = Booking::where('booking.booking_status', 1)
+            ->whereDate('checkin', $checkinRequest)
+            ->exists();
+
+        if ($hasMatchingCheckin) {
+            // If matching checkin date found, return empty array
+            $bookedRooms = [];
+        } else {
+            // Else, run the full query
+            $bookedRooms = Booking::where('booking.booking_status', 1)
+                ->where('checkin', '<=', $checkinRequest)
+                ->join('room', 'booking.room_id', '=', 'room.id')
+                ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id')
+                ->leftJoinSub(
+                    \DB::table('room_images')
+                        ->select('room_id', \DB::raw('MIN(id) as min_id'))
+                        ->groupBy('room_id'),
+                    'first_images',
+                    'room.id',
+                    '=',
+                    'first_images.room_id'
+                )
+                ->leftJoin('room_images', 'room_images.id', '=', 'first_images.min_id')
+                ->select(
+                    'room.slug',
+                    'room.id',
+                    'room.name',
+                    'room.roomDescription',
+                    'bed_type.name as bed_name',
+                    'roomPrice',
+                    'room_images.roomImage'
+                )
+                ->get()
+                ->map(function ($room) {
+                    return [
+                        'room_id'         => $room->id,
+                        'name'            => $room->name,
+                        'slug'            => $room->slug,
+                        'bed_name'        => $room->bed_name,
+                        'roomPrice'       => number_format($room->roomPrice, 2),
+                        'roomDescription' => Str::limit($room->roomDescription, 50),
+                        'roomImage'       => !empty($room->roomImage) ? url($room->roomImage) : ""
+                    ];
+                })->toArray();
+        }
+        // Merge both arrays and unique by 'room_id'
+        $mergedRooms = collect($roomsStatusTwo)
+            ->merge($bookedRooms)
+            ->unique(function ($item) {
+                return $item['room_id'];
+            })
+            ->values()
+            ->all();
+
 
 
 
         return response()->json([
-            'message' => 'Available rooms fetched successfully.',
-            'rooms' => $rooms
+            'message' => 'Available rooms fetched successfully',
+            'rooms' => $mergedRooms
         ], 200);
     }
 

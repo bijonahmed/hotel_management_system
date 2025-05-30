@@ -8,6 +8,7 @@ import Forgetpassword from "../pages/Forgetpassword.jsx";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import UserLogin from "../pages/UserLogin.jsx";
+import CheckAvailabilityResult from "../pages/CheckAvailabilityResult.jsx";
 import Booking from "../pages/booking/Booking.jsx";
 import BookingSuccess from "../pages/booking/BookingSuccess.jsx";
 import Contact from "../pages/Contact.jsx";
@@ -44,6 +45,7 @@ const AppRouter = () => {
       <Route path="/booking-history-details/:id" element={<BookingHistory />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/service" element={<Service />} />
+      <Route path="/check-availability-result" element={<CheckAvailabilityResult />} />
       <Route path="/room" element={<Room />} />
       <Route path="/user/change-password" element={<ChangePassword />} />
       <Route path="/user/profile" element={<MyProfile />} />

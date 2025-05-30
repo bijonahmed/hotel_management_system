@@ -85,7 +85,7 @@ const Index = () => {
                   className="mb-4 text-justify"
                   style={{ textAlign: "justify" }}
                 >
-                 {name.about_us}
+                  {name.about_us}
                 </p>
               </div>
               <div className="col-lg-6 d-none">
@@ -147,11 +147,15 @@ const Index = () => {
                   <div className="room-item shadow rounded overflow-hidden">
                     <div className="position-relative">
                       <img
-  className="img-responsive"
-  src={room.roomImage || "/img/room-3.jpg"}
-  alt="Room Image"
-  style={{ height: "250px", width: "100%", objectFit: "cover" }}
-/>
+                        className="img-responsive"
+                        src={room.roomImage || "/img/room-3.jpg"}
+                        alt="Room Image"
+                        style={{
+                          height: "250px",
+                          width: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
 
                       <small className="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">
                         BDT.&nbsp;{room.roomPrice}/Night
@@ -181,8 +185,16 @@ const Index = () => {
                         </small> */}
                       </div>
                       <p className="text-body mb-3">
-                       
-                        <div style={{ textAlign: "justify", marginTop: "8px", color: "#333" }} dangerouslySetInnerHTML={{ __html: room.roomDescription }} />
+                        <div
+                          style={{
+                            textAlign: "justify",
+                            marginTop: "8px",
+                            color: "#333",
+                          }}
+                          dangerouslySetInnerHTML={{
+                            __html: room.roomDescription,
+                          }}
+                        />
                       </p>
                       <div className="d-flex justify-content-between">
                         <Link
@@ -220,9 +232,7 @@ const Index = () => {
                   Luxury Living
                 </h6>
                 <h1 className="text-white mb-4">Moon Nest</h1>
-                <p className="text-white mb-4">
-                {name.about_us}
-                </p>
+                <p className="text-white mb-4">{name.about_us}</p>
                 {/* <a className="btn btn-primary py-md-3 px-md-5 me-3">
                   Our Rooms
                 </a>

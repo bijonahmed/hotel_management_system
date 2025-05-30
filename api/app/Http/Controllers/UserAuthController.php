@@ -99,7 +99,7 @@ class UserAuthController extends Controller
 
         $password = '#123456#';
         $username = $this->generateUniqueRandomNumber(); // you'll define this method
-        
+
         $user = User::create([
             'name'          => $request->name,
             'email'         => $request->email,
@@ -115,24 +115,24 @@ class UserAuthController extends Controller
 
 
         $domain   = $request->domain;
-        $loginUrl = "https://moon-nest.com/login";//$domain . '/login';
-       
+        $loginUrl = "https://moon-nest.com/login"; //$domain . '/login';
+
         $customData = [
             'username'   => $username,
             'login_url'  => $loginUrl,
             'password'   => $password
         ];
         // Send email
-        
-        
-        $to = $request->email;
-        $subject = 'Moon Nest Account';
-        
-        $headers  = "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8\r\n";
-        $headers .= "From: Moon Nest <info@moon-nest.com>\r\n";
-        
-        $message = "
+
+        if (env('APP_ENV') === 'production') {
+            $to = $request->email;
+            $subject = 'Moon Nest Account';
+
+            $headers  = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+            $headers .= "From: Moon Nest <info@moon-nest.com>\r\n";
+
+            $message = "
         <!DOCTYPE html>
         <html>
         <head>
@@ -167,11 +167,11 @@ class UserAuthController extends Controller
         </body>
         </html>
         ";
-        
-        mail($to, $subject, $message, $headers);
-                
-        
-       // Mail::to($request->email)->send(new Guestsendingmail($customData));
+
+            mail($to, $subject, $message, $headers);
+        }
+
+        // Mail::to($request->email)->send(new Guestsendingmail($customData));
         //end
 
         $inviteCode               = $this->generateUniqueRandomNumber();
@@ -185,7 +185,6 @@ class UserAuthController extends Controller
         // Get the token
         $token = auth('api')->login($user);
         return $this->respondWithToken($token);
-
     }
     public function userRegister(Request $request)
     {

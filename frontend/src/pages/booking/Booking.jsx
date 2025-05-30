@@ -508,7 +508,6 @@ const Booking = () => {
                   Room Booking
                 </h6>
                 <h1 className="mb-5">
-                  Book A{" "}
                   <span className="text-primary text-uppercase fw-bold">
                     {facilitiesData.name}
                   </span>
