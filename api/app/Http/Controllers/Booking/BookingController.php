@@ -86,6 +86,46 @@ class BookingController extends Controller
     }
 
 
+    public function insertItems(Request $request)
+    {
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'booking_id' => 'required',
+            'item_id'    => 'required',
+            'name'       => 'required',
+            'qty'        => 'required',
+            'price'      => 'required',
+            'total'      => 'required',
+        ], [
+            'booking_id.required' => 'The booking ID is required.',
+            'item_id.required'    => 'The item ID is required.',
+            'name.required'       => 'The item name is required.',
+            'qty.required'        => 'The quantity is required.',
+            'price.required'      => 'The price is required.',
+            'total.required'      => 'The total amount is required.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $exists = InvoiceItem::where('booking_id', $request->booking_id)
+            ->where('item_id', $request->item_id)
+            ->exists();
+
+        if (!$exists) {
+            InvoiceItem::create([
+                'booking_id'        => $request->booking_id,
+                'item_id'           => $request->item_id,
+                'name'              => $request->name,
+                'qty'               => $request->qty,
+                'price'             => $request->price,
+                'total'             => $request->total,
+                'invoice_create_by' => $this->userid,
+            ]);
+        }
+        return response()->json(['message' => 'Successfully insert items.']);
+    }
+
 
 
     public function bookingInvoiceInsert(Request $request)
@@ -326,7 +366,7 @@ class BookingController extends Controller
 
         try {
             $rowsData = Booking::where('booking.customer_id', $this->userid)
-                ->whereIn('booking.booking_status', [1,2])
+                ->whereIn('booking.booking_status', [1, 2])
                 ->leftJoin('room', 'room.id', '=', 'booking.room_id')
                 ->leftJoinSub(
                     RoomImages::select('room_id', DB::raw('MIN(id) as min_id'))
@@ -499,15 +539,21 @@ class BookingController extends Controller
 
         $booking_rooms = Booking::whereIn('booking.booking_status', [1, 4])
             ->leftJoin('room', 'room.id', '=', 'booking.room_id')
+
             ->select(
                 'booking.*',
                 'room.roomType',
                 'room.slug as roomslug',
-                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+                \DB::raw("
+        CASE
+            WHEN DATEDIFF(booking.checkout, booking.checkin) = 0 THEN 1
+            ELSE DATEDIFF(booking.checkout, booking.checkin)
+        END as total_booking_days
+    ")
             )->get();
 
         $roomIds         = $booking_rooms->pluck('room_id')->unique()->toArray(); // this is correct
-        $available_rooms = Room::whereNotIn('id', $roomIds)->select('id', 'roomType', 'roomPrice')->get();
+        $available_rooms = Room::whereNotIn('id', $roomIds)->where('room.status', 1)->select('id', 'roomType', 'roomPrice')->get();
 
         $data['booking_rooms'] = $booking_rooms;
         $data['available_rooms'] = $available_rooms;
@@ -525,7 +571,12 @@ class BookingController extends Controller
             ->select(
                 'booking.*',
                 'users.phone',
-                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+                \DB::raw("
+        CASE
+            WHEN DATEDIFF(booking.checkout, booking.checkin) = 0 THEN 1
+            ELSE DATEDIFF(booking.checkout, booking.checkin)
+        END as total_booking_days
+    ")
             )->first();
 
         $data['booking_data'] = $booking_data;
@@ -547,7 +598,12 @@ class BookingController extends Controller
                 'users.phone',
                 'room.name as room_name',
                 'room.roomPrice as perday_roomprice',
-                DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+                \DB::raw("
+        CASE
+            WHEN DATEDIFF(booking.checkout, booking.checkin) = 0 THEN 1
+            ELSE DATEDIFF(booking.checkout, booking.checkin)
+        END as total_booking_days
+    ")
             )->first();
 
         $invoiceItems = InvoiceItem::where('booking_id', $bookingId)->get();

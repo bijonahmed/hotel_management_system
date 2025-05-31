@@ -84,13 +84,18 @@ class DashboardController extends Controller
                 'room.roomPrice',
                 'room.roomDescription',
                 'bed_type.name as bed_name',
-                \DB::raw('DATEDIFF(booking.checkout, booking.checkin) as total_booking_days')
+                \DB::raw("
+        CASE
+            WHEN DATEDIFF(booking.checkout, booking.checkin) = 0 THEN 1
+            ELSE DATEDIFF(booking.checkout, booking.checkin)
+        END as total_booking_days
+    ")
             )
             ->whereDate('booking.created_at', $checkToday)
             ->leftJoin('room', 'booking.room_id', '=', 'room.id') // Fixing bed_type join
             ->leftJoin('bed_type', 'room.bed_type_id', '=', 'bed_type.id') // Fixing bed_type join
             ->get();
-       
+
         return response()->json($bookingData, 200);
     }
 }

@@ -6,6 +6,7 @@ import Header from "../../components/GuestNavbar";
 import AuthUser from "../../components/AuthUser";
 import BookingFilter from "../../components/BookingFilter";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 const Booking = () => {
   const baseURL = axios.defaults.baseURL;
@@ -98,10 +99,10 @@ const Booking = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone:"",
+    phone: "",
     checkin: "",
     checkout: "",
-    paymenttype:"",
+    paymenttype: "",
     adult: 0,
     child: 0,
     slug: slug,
@@ -109,7 +110,7 @@ const Booking = () => {
     account_type: "",
   });
   const imgStyle = {
-    width: "100%",  // Makes the image take up the full width of its container
+    width: "100%", // Makes the image take up the full width of its container
     height: "auto", // Maintains the aspect ratio
     display: "block", // Removes unwanted space below the image
   };
@@ -128,9 +129,9 @@ const Booking = () => {
     const savedCheckOut = localStorage.getItem("checkOut");
     const savedAdult = localStorage.getItem("adult");
     const savedChild = localStorage.getItem("child");
-  
+
     // Update formData state if values exist in localStorage
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       checkin: savedCheckIn || prevState.checkin,
       checkout: savedCheckOut || prevState.checkout,
@@ -138,7 +139,7 @@ const Booking = () => {
       child: savedChild ? parseInt(savedChild, 10) : prevState.child,
     }));
   }, []);
-  
+
   //Make Guest Account
   const guestAccount = async (e = null) => {
     if (e) e.preventDefault(); // prevent default only if event is passed
@@ -170,8 +171,6 @@ const Booking = () => {
       console.log("userData:" + response.data.user.id);
       await guestHandleSubmit(response.data.user.id);
       setGuestLoading(false);
-
-
     } catch (error) {
       if (error.response && error.response.status === 422) {
         // Handle validation errors
@@ -210,7 +209,10 @@ const Booking = () => {
 
     setErrors({}); // Clear previous errors
     try {
-      const response = await axios.post("/public/bookingRequest",updatedFormData);
+      const response = await axios.post(
+        "/public/bookingRequest",
+        updatedFormData
+      );
 
       const Toast = Swal.mixin({
         toast: true,
@@ -234,7 +236,7 @@ const Booking = () => {
         phone: "",
         checkin: "",
         checkout: "",
-        paymenttype:"",
+        paymenttype: "",
         adult: 0,
         child: 0,
         slug: "", // reset slug here if you want to clear it
@@ -377,6 +379,9 @@ const Booking = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Room Details</title>
+      </Helmet>
       <div
         className="modal fade"
         ref={modalRef}
@@ -504,6 +509,7 @@ const Booking = () => {
             <div className="container">
               {/* Section Heading */}
               <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <br />
                 <h6 className="section-title text-uppercase text-primary fw-bold">
                   Room Booking
                 </h6>
@@ -610,8 +616,11 @@ const Booking = () => {
                   <br />
                   <div style={{ textAlign: "justify" }}>
                     <strong>Room Description :</strong>{" "}
-                   
-                    <div dangerouslySetInnerHTML={{ __html: facilitiesData.roomDescription }} />
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: facilitiesData.roomDescription,
+                      }}
+                    />
                   </div>
                   <br />
                   <div className="table-responsive">
@@ -710,22 +719,20 @@ const Booking = () => {
                           Reguster Account
                         </button>
                       </li>
-                                        {!token && (
-                    <li className="nav-item" role="presentation">
-                      <button
-                        className="nav-link"
-                        id="guest-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#guest"
-                        type="button"
-                        role="tab"
-                      >
-                        Guest
-                      </button>
-                    </li>
-                  )}
-
-
+                      {!token && (
+                        <li className="nav-item" role="presentation">
+                          <button
+                            className="nav-link"
+                            id="guest-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#guest"
+                            type="button"
+                            role="tab"
+                          >
+                            Guest
+                          </button>
+                        </li>
+                      )}
                     </ul>
 
                     <div className="tab-content" id="accountTabContent">
@@ -869,7 +876,6 @@ const Booking = () => {
                                   <option value={16}>16 Adults</option>
                                   <option value={17}>17 Adults</option>
                                   <option value={18}>18 Adults</option>
-
                                 </select>
                                 <label htmlFor="adult">Adults</label>
                               </div>
@@ -901,7 +907,6 @@ const Booking = () => {
                                   <option value={16}>16 Children</option>
                                   <option value={17}>17 Children</option>
                                   <option value={18}>18 Children</option>
-
                                 </select>
                                 <label htmlFor="child">Children</label>
                               </div>
@@ -920,7 +925,9 @@ const Booking = () => {
                                   <option value={2}>Offline Payment</option>
                                 </select>
 
-                                <label htmlFor="paymenttype">Payment Type</label>
+                                <label htmlFor="paymenttype">
+                                  Payment Type
+                                </label>
                                 {errors.paymenttype && (
                                   <div style={{ color: "red" }}>
                                     {errors.paymenttype[0]}
@@ -1110,8 +1117,6 @@ const Booking = () => {
                               </div>
                             </div>
 
-
-
                             <div className="col-md-12">
                               <div className="form-floating">
                                 <select
@@ -1125,7 +1130,9 @@ const Booking = () => {
                                   <option value={2}>Offline Payment</option>
                                 </select>
 
-                                <label htmlFor="paymenttype">Payment Type</label>
+                                <label htmlFor="paymenttype">
+                                  Payment Type
+                                </label>
                                 {errors.paymenttype && (
                                   <div style={{ color: "red" }}>
                                     {errors.paymenttype[0]}
@@ -1133,9 +1140,6 @@ const Booking = () => {
                                 )}
                               </div>
                             </div>
-
-
-
 
                             <div className="col-12">
                               <div className="form-floating">
@@ -1153,36 +1157,33 @@ const Booking = () => {
 
                             <div className="col-12">
                               <button
-                          className="btn btn-primary w-100 py-3 shadow"
-                          type="submit"
-                          disabled={guestloading}
-                        >
-                          {guestloading ? (
-                            <span>Loading... {countdown > 0 && `${countdown}`}</span>
-                          ) : (
-                            "Book Now"
-                          )}
-                        </button>
+                                className="btn btn-primary w-100 py-3 shadow"
+                                type="submit"
+                                disabled={guestloading}
+                              >
+                                {guestloading ? (
+                                  <span>
+                                    Loading... {countdown > 0 && `${countdown}`}
+                                  </span>
+                                ) : (
+                                  "Book Now"
+                                )}
+                              </button>
                             </div>
                           </div>
                         </form>
-                       
                       </div>
                     </div>
 
-                   
-
                     {/* END */}
                   </div>
-                                
                 </div>
               </div>
             </div>
 
-           
             <div className="container">
-            <img src="/img/pay.png" style={imgStyle} alt="Payment Image" />
-              </div>
+              <img src="/img/pay.png" style={imgStyle} alt="Payment Image" />
+            </div>
 
             <br />
             <div className="container">
@@ -1205,15 +1206,15 @@ const Booking = () => {
                     <div className="room-item shadow rounded overflow-hidden">
                       <div className="position-relative">
                         <img
-                        className="img-responsive"
-                        src={room.roomImage || "/img/room-3.jpg"}
-                        alt="Room Image"
-                        style={{
-                          height: "250px",
-                          width: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
+                          className="img-responsive"
+                          src={room.roomImage || "/img/room-3.jpg"}
+                          alt="Room Image"
+                          style={{
+                            height: "250px",
+                            width: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
                         <small className="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">
                           BDT.&nbsp;{room.roomPrice}/Night
                         </small>
@@ -1244,7 +1245,11 @@ const Booking = () => {
                                  </small> */}
                         </div>
                         <p className="text-body mb-3">
-                         <div dangerouslySetInnerHTML={{ __html: room.roomDescription }} />
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: room.roomDescription,
+                            }}
+                          />
                         </p>
                         <div className="d-flex justify-content-between">
                           <Link

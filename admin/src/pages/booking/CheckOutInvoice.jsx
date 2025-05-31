@@ -22,7 +22,7 @@ const CheckOutInvoice = () => {
   const [itemData, setItemData] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState("");
   const [qty, setQty] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [itemGrandTotal, setGrandTotal] = useState(0);
   const [dueAmt, setDueAmount] = useState(0);
   const [addedItems, setAddedItems] = useState([]);
@@ -359,28 +359,45 @@ const CheckOutInvoice = () => {
         (item) => item.id === Number(selectedItemId)
       );
 
+      let updatedItems;
+      const itemPayload = {
+        booking_id: booking.booking_id,
+        item_id: selectedItem.id,
+        name: selectedItem.name,
+        qty: Number(qty),
+        price: Number(price),
+        total: Number((qty * price).toFixed(2)),
+      };
+
       if (existingIndex !== -1) {
-        const updatedItems = [...prev];
-        const existingItem = updatedItems[existingIndex];
+        const updatedList = [...prev];
+        const existingItem = updatedList[existingIndex];
         const newQty = existingItem.qty + Number(qty);
-        updatedItems[existingIndex] = {
+
+        updatedList[existingIndex] = {
           ...existingItem,
           qty: newQty,
           total: Number((newQty * existingItem.price).toFixed(2)),
         };
-        return updatedItems;
+        updatedItems = updatedList;
       } else {
-        return [
-          ...prev,
-          {
-            id: selectedItem.id,
-            name: selectedItem.name,
-            qty: Number(qty),
-            price: Number(price),
-            total: Number((qty * price).toFixed(2)),
-          },
-        ];
+        updatedItems = [...prev, itemPayload];
       }
+
+      // ✅ Correct Axios request
+      axios.post("/booking/insertItems", itemPayload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log("Item inserted:", response.data);
+        })
+        .catch((error) => {
+          console.error("Insert failed:", error);
+        });
+
+      return updatedItems;
     });
 
     setSelectedItemId("");
@@ -576,7 +593,7 @@ const CheckOutInvoice = () => {
                                           className="form-control"
                                           placeholder="Qty"
                                           min="1"
-                                          value={qty}
+                                          value={qty ?? ''}
                                           onChange={(e) =>
                                             setQty(e.target.value)
                                           }
@@ -587,7 +604,7 @@ const CheckOutInvoice = () => {
                                           type="number"
                                           className="form-control"
                                           placeholder="Price"
-                                          value={price}
+                                          value={price ?? ''}
                                           disabled
                                           readOnly
                                         />
@@ -597,7 +614,7 @@ const CheckOutInvoice = () => {
                                           type="text"
                                           className="form-control"
                                           placeholder="Total"
-                                          value={total}
+                                          value={total ?? ''}
                                           disabled
                                           readOnly
                                         />

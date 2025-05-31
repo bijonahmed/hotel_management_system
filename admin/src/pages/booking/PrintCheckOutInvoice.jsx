@@ -31,6 +31,7 @@ const PrintCheckOutInvoice = () => {
   //console.log("Received booking_id:", booking_id);
   const MySwal = withReactContent(Swal);
   const [discount_amt, setdiscountAmt] = useState("");
+  const [bookingstatus, setBookingStatus] = useState("");
   const [finalDiscountAmt, setFinalDiscountAmt] = useState(0);
   const [settingData, setName] = useState({});
   const invoiceRef = useRef();
@@ -87,6 +88,8 @@ const PrintCheckOutInvoice = () => {
       const bookingData = response.data.booking_data;
       setAddedItems(response.data.itemlist);
       setdiscountAmt(response.data.booking_data.discount_amount);
+      setBookingStatus(bookingData.booking_status);
+
       if (!bookingData.id_no) {
         const alertHtml = ReactDOMServer.renderToString(
           <div>
@@ -277,7 +280,6 @@ const PrintCheckOutInvoice = () => {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
-
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -482,7 +484,9 @@ const PrintCheckOutInvoice = () => {
                                 <td colSpan="6" className="text-end">
                                   Advance Amount
                                 </td>
-                                <td className="text-end">{booking.advance_amount || 0}</td>
+                                <td className="text-end">
+                                  {booking.advance_amount || 0}
+                                </td>
                               </tr>
                               <tr>
                                 <td colSpan="6" className="text-end">
@@ -494,7 +498,9 @@ const PrintCheckOutInvoice = () => {
                                 <td colSpan="6" className="text-end">
                                   Discount
                                 </td>
-                                <td className="text-end">{discount_amt || 0}</td>
+                                <td className="text-end">
+                                  {discount_amt || 0}
+                                </td>
                               </tr>
                               <tr>
                                 <td colSpan="6" className="text-end">
@@ -508,7 +514,9 @@ const PrintCheckOutInvoice = () => {
                                 <td colSpan="6" className="text-end">
                                   Tax ({booking.tax_percentage}%)
                                 </td>
-                                <td className="text-end">{formatCurrency(totalWithTax)}</td>
+                                <td className="text-end">
+                                  {formatCurrency(totalWithTax)}
+                                </td>
                               </tr>
                               <tr>
                                 <td colSpan="6" className="text-end">
@@ -524,8 +532,16 @@ const PrintCheckOutInvoice = () => {
                               </tr>
                             </tfoot>
                           </table>
-                         <h3 className="txtowrd">{numberInWords}</h3>
-
+                          <h3 className="txtowrd">{numberInWords}</h3>
+                          <center>
+                            {(bookingstatus === 1 ||
+                              bookingstatus === 4) && (
+                              <h2 style={{ color: "red" }}>
+                                This invoice is not final. Please update the
+                                status to complete it.
+                              </h2>
+                            )}
+                          </center>
                         </div>
 
                         {/* Action Buttons */}

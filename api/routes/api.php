@@ -96,6 +96,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::post('/adminBookingRequest', [BookingController::class, 'adminBookingRequest']);
         Route::post('/checkStatusUpdate', [BookingController::class, 'checkStatusUpdate']);
         Route::post('/bookingInvoiceInsert', [BookingController::class, 'bookingInvoiceInsert']);
+        Route::post('/insertItems', [BookingController::class, 'insertItems']);
     });
 
     Route::group([
