@@ -38,7 +38,8 @@ const RoomEdit = () => {
   });
 
   // Handle input change
-  const handleFormSubmitRoomImage = async () => {
+  const handleFormSubmitRoomImage = async (e) => {
+      e.preventDefault();
     try {
       const token = JSON.parse(sessionStorage.getItem("token"));
       const formPayload = new FormData();

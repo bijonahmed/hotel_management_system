@@ -45,7 +45,7 @@ class LeftSideMenuController extends Controller
                     ['label' => 'Booking List', 'path' => '/booking/booking-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'CheckIn', 'path' => '/booking/checkin-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Checkout', 'path' => '/booking/checkout-list', 'icon' => 'bx bx-radio-circle'],
-                    ['label' => 'Room Status', 'path' => '/booking/room-status-list', 'icon' => 'bx bx-radio-circle'],
+                  //  ['label' => 'Room Status', 'path' => '/booking/room-status-list', 'icon' => 'bx bx-radio-circle'],
                 ]
             ],
             [
@@ -79,7 +79,7 @@ class LeftSideMenuController extends Controller
                 'submenu' => [
                     //['label' => 'Role List', 'path' => '/user/role-list', 'icon' => 'bx bx-radio-circle'],
                     //['label' => 'Admin List', 'path' => '/user/admin-list', 'icon' => 'bx bx-radio-circle'],
-                    //['label' => 'Customer List', 'path' => '/user/customer-list', 'icon' => 'bx bx-radio-circle']
+                    ['label' => 'Customer List', 'path' => '/user/customer-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Super Admin List', 'path' => '/user/superadmin-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Users List', 'path' => '/user/users-list', 'icon' => 'bx bx-radio-circle'],
 

@@ -63,6 +63,7 @@ Route::group([
 ], function () {
     Route::post('bookingRequest', [GuestBookingController::class, 'bookingRequest']);
     Route::get('/activeRooms', [PublicController::class, 'activeRooms']);
+    Route::get('/allActiveRooms', [PublicController::class, 'allActiveRooms']);
     Route::get('/getServiceList', [PublicController::class, 'getServiceList']);
     Route::get('/getRoomDetails', [PublicController::class, 'getRoomDetails']);
     Route::get('/getSliders', [PublicController::class, 'getSliders']);

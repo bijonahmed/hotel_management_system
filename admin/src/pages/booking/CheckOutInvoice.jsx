@@ -225,8 +225,9 @@ const CheckOutInvoice = () => {
         icon: "success",
         title: "Successfully create invoice.",
       });
-
-      navigate("/booking/checkout-list");
+      navigate(`/booking/print-checkout-invoice?booking_id=${booking_id}`);
+      //navigate("/booking/checkout-list");
+      
     } catch (error) {
       if (error.response?.status === 422) {
         Swal.fire({

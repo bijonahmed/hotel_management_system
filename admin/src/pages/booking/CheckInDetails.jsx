@@ -19,7 +19,7 @@ const CheckInDetails = () => {
   const [searchParams] = useSearchParams();
   const booking_id = searchParams.get("booking_id");
   const [roomData, setRoomData] = useState([]);
-  console.log("Received booking_id:", booking_id);
+  //console.log("Received booking_id:", booking_id);
 
   const [preview, setPreview] = useState({
     front: null,
@@ -147,7 +147,7 @@ const CheckInDetails = () => {
           bookingId: booking_id, // replace this with your actual variable or value
         },
       });
-      console.log("API Response:", response.data.total_amount); // Log the response
+      console.log("API Response room_id:", response.data.booking_data.room_id); // Log the response
 
       const bookingData = response.data.booking_data;
       setPreview({
@@ -205,8 +205,8 @@ const CheckInDetails = () => {
 
   const fetechActiveRooms = async () => {
     try {
-      const response = await axios.get(`/public/activeRooms`);
-      //console.log("API Response:", response.data); // Log the response
+      const response = await axios.get(`/public/allActiveRooms`);
+      console.log("API Room Response:", response.data); // Log the response
       setRoomData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -307,11 +307,6 @@ const CheckInDetails = () => {
                                           type="date"
                                           className="form-control"
                                           value={booking.checkin || ""}
-                                          min={
-                                            new Date()
-                                              .toISOString()
-                                              .split("T")[0]
-                                          } // optional
                                           onChange={(e) =>
                                             setBooking({
                                               ...booking,
@@ -336,11 +331,7 @@ const CheckInDetails = () => {
                                           type="date"
                                           className="form-control"
                                           value={booking.checkout}
-                                          min={
-                                            new Date()
-                                              .toISOString()
-                                              .split("T")[0]
-                                          } // sets today as the minimum date
+                                         
                                           onChange={(e) =>
                                             setBooking({
                                               ...booking,
@@ -506,7 +497,7 @@ const CheckInDetails = () => {
                                   <div className="col-md-6">
                                     <div className="form-group">
                                       <label className="form-label text-muted">
-                                        Room Type{" "}
+                                        Room Name{" "}
                                         <span className="text-danger">*</span>
                                       </label>
                                       <div className="input-group">
@@ -516,25 +507,26 @@ const CheckInDetails = () => {
                                         <select
                                           className="form-select"
                                           id="room_id"
-                                          value={booking.room_id}
+                                          value={booking.room_id || ""} // Fallback to empty string
                                           onChange={(e) =>
                                             setBooking({
-                                              ...room_id,
-                                              remarks: e.target.value,
+                                              ...booking,
+                                              room_id: e.target.value, // Make sure to set as string or convert to number as needed
                                             })
                                           }
                                         >
-                                          <option value={0}>
-                                            Please select
+                                          <option value="">
+                                            Please select  
                                           </option>
-                                          {roomData.map((item, index) => (
-                                            <option
-                                              key={index}
-                                              value={item.room_id}
-                                            >
-                                              {item.name}
-                                            </option>
-                                          ))}
+                                          {roomData.length > 0 &&
+                                            roomData.map((item, index) => (
+                                              <option
+                                                key={index}
+                                                value={item.id}
+                                              >
+                                                {item.name} 
+                                              </option>
+                                            ))}
                                         </select>
 
                                         {errors.room_id && (

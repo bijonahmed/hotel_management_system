@@ -20,7 +20,7 @@ const CustomerList = () => {
 
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -144,7 +144,7 @@ const CustomerList = () => {
                   </nav>
                 </div>
 
-                <div className="ms-auto">
+                <div className="ms-auto d-none">
                   <button
                     type="button"
                     className="btn btn-primary"
@@ -270,7 +270,7 @@ const CustomerList = () => {
                                 <th className="text-center">Username</th>
                                 <th className="text-center">Status</th>
                                 <th className="text-center">Created Time</th>
-                                <th className="text-center">Action</th>
+                                <th className="text-center d-none">Action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -283,7 +283,7 @@ const CustomerList = () => {
                                     <td className="text-left">{item.username}</td>
                                     <td className="text-center">{item.status}</td>
                                     <td className="text-center">{item.created_at}</td>
-                                    <td className="text-center"><a href="#" onClick={() => handleEdit(item.id)}><i className="lni lni-pencil-alt"></i></a></td>
+                                    <td className="text-center d-none"><a href="#" onClick={() => handleEdit(item.id)}><i className="lni lni-pencil-alt"></i></a></td>
 
                                   </tr>
                                 ))

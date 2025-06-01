@@ -142,12 +142,12 @@ class BookingController extends Controller
             'item_total'            => 'required',
             'grand_total'           => 'required',
             'status'                => 'required',
-            'items' => 'required|array',
-            'items.*.id' => 'required|integer',
-            'items.*.name' => 'required|string',
-            'items.*.qty' => 'required|numeric',
-            'items.*.price' => 'required|numeric',
-            'items.*.total' => 'required|numeric',
+            'items'                 => 'required|array',
+            // 'items.*.id'            => 'required|integer',
+            // 'items.*.name'          => 'required|string',
+            // 'items.*.qty'           => 'required|numeric',
+            // 'items.*.price'         => 'required|numeric',
+            // 'items.*.total'         => 'required|numeric',
         ], [
             'booking_id.required'           => 'The booking id is required.',
             'advance_amount.required'       => 'The advance amount is required.',
@@ -187,6 +187,7 @@ class BookingController extends Controller
             Room::where('id', $request->room_id)->update($updateRoom);
         }
 
+        /*
         // ✅ Use validated data
         $data = $validator->validated();
 
@@ -207,12 +208,13 @@ class BookingController extends Controller
                 ]);
             }
         }
+        */
         return response()->json(['message' => 'Successfully booked.']);
     }
 
     public function adminBookingRequest(Request $request)
     {
-        // dd($request->all());
+        //dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
@@ -242,7 +244,7 @@ class BookingController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+        /*
         $password = '#123456#';
         $username = $this->generateUniqueRandomNumber(); // you'll define this method
 
@@ -254,7 +256,6 @@ class BookingController extends Controller
             // If user exists, do nothing and return
             return;
         }
-
         $user = User::create([
             'name'          => $request->name,
             'email'         => $request->email,
@@ -268,8 +269,7 @@ class BookingController extends Controller
             'password'      => bcrypt($password), // secure hash
         ]);
         $lastInsertedId = $user->id;
-
-
+        */
 
 
         $existingBooking = Booking::where('room_id', $request->room_id)
@@ -303,16 +303,16 @@ class BookingController extends Controller
             'adult'       => $request->adult,
             'child'       => $request->child,
             'message'     => $request->message,
-            'customer_id' => $lastInsertedId,
+            //'customer_id' => $lastInsertedId,
             'booking_status' => 1,
         ];
 
         Booking::create($data);
 
-        $updateRoom = [
-            'booking_status' => 1,
-        ];
-        Room::where('id', $request->room_id)->update($updateRoom);
+        // $updateRoom = [
+        //     'booking_status' => 1,
+        // ];
+        // Room::where('id', $request->room_id)->update($updateRoom);
         return response()->json(['message' => 'Successfully booked.']);
     }
 

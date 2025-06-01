@@ -479,6 +479,16 @@ class PublicController extends Controller
         }
     }
 
+    public function allActiveRooms()
+    {
+
+        try {
+            $data = Room::where('status', 1)->get();
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
 
     public function getServiceList()

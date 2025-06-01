@@ -4,6 +4,7 @@ namespace App\Http\Controllers\RoomSetting;
 
 use App\Http\Controllers\Controller;
 use App\Models\BedType;
+use App\Models\Booking;
 use App\Models\BookingType;
 use App\Models\Categorys;
 use App\Models\PromoCode;
@@ -599,9 +600,24 @@ class RoomSettingController extends Controller
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
 
         $modifiedCollection = $paginator->getCollection()->map(function ($item) {
+
+            // Get a single booking record, e.g., the latest one
+            $chkBookDate = Booking::where('booking.booking_status', 1)
+                ->where('booking.room_id', $item->id)
+                ->orderby('id','asc') // optional: get latest by created_at or ID
+                ->get();
+
+            $arryData = [];
+            foreach ($chkBookDate as $v) {
+                $arryData[] = 'Checkin: ' . $v->checkin . ', Checkout: ' . $v->checkout;
+            }
+
+
+
             return [
                 'id'            => $item->id,
                 'name'          => $item->name,
+                'booking_dates' => implode(" | ", $arryData), // 👈 joined checkin/checkout strings
                 'roomType'      => $item->roomType,
                 'roomPrice'     => $item->roomPrice,
                 'bedCharge'     => $item->bedCharge,

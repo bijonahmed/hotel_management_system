@@ -28,7 +28,7 @@ const CheckOutList = () => {
     navigate(`/booking/checkout-invoice?booking_id=${item.booking_id}`);
   };
 
-    const printInvoice = (item) => {
+  const printInvoice = (item) => {
     console.log("booking_id...." + item.booking_id);
     navigate(`/booking/print-checkout-invoice?booking_id=${item.booking_id}`);
   };
@@ -47,9 +47,8 @@ const CheckOutList = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       setBookingRooms(response.data.booking_rooms);
-      setAvailableRooms(response.data.available_rooms);
+     // setAvailableRooms(response.data.available_rooms);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -140,24 +139,7 @@ const CheckOutList = () => {
                           Booking Rooms
                         </button>
                       </li>
-                      <li
-                        className="nav-item"
-                        role="presentation"
-                        onClick={fetchData}
-                      >
-                        <button
-                          className="nav-link"
-                          id="available-tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#available"
-                          type="button"
-                          role="tab"
-                          aria-controls="available"
-                          aria-selected="false"
-                        >
-                          Available Rooms
-                        </button>
-                      </li>
+                      
                     </ul>
 
                     {/* Tab Content */}
@@ -279,72 +261,7 @@ const CheckOutList = () => {
                       </div>
 
                       {/* Available Rooms Tab */}
-                      <div
-                        className="tab-pane fade"
-                        id="available"
-                        role="tabpanel"
-                        aria-labelledby="available-tab"
-                      >
-                        {loading ? (
-                          <div className="d-flex justify-content-center mt-3">
-                            <div className="spinner-border" role="status">
-                              <span className="visually-hidden">
-                                Loading...
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="table-responsive">
-                            <div className="card mt-4">
-                              <div className="card-header text-center">
-                                <h4>Available Rooms List</h4>
-                              </div>
-                              <div className="card-body p-0">
-                                <table className="table table-striped table-bordered mb-0">
-                                  <thead className="thead-dark">
-                                    <tr>
-                                      <th className="text-left">Room Name</th>
-
-                                      <th className="text-center">Status</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {availableRooms.length > 0 ? (
-                                      availableRooms.map((item) => (
-                                        <tr key={item.id}>
-                                          <td className="text-left">
-                                            {item.roomType}
-                                          </td>
-
-                                          <td className="text-center">
-                                            <span
-                                              style={{
-                                                color: "green",
-                                                fontWeight: "bold",
-                                              }}
-                                            >
-                                              Available
-                                            </span>
-                                          </td>
-                                        </tr>
-                                      ))
-                                    ) : (
-                                      <tr>
-                                        <td
-                                          colSpan="5"
-                                          className="text-center text-muted"
-                                        >
-                                          No data found
-                                        </td>
-                                      </tr>
-                                    )}
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                   
                     </div>
                   </div>
                 </div>

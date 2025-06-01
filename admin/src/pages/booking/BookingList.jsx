@@ -423,7 +423,7 @@ const BookingList = () => {
                   </nav>
                 </div>
 
-                <div className="ms-auto">
+                <div className="ms-auto d-none">
                   <button
                     type="button"
                     className="btn btn-primary"

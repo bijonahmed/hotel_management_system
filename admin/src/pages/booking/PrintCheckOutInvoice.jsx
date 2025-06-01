@@ -32,6 +32,11 @@ const PrintCheckOutInvoice = () => {
   const MySwal = withReactContent(Swal);
   const [discount_amt, setdiscountAmt] = useState("");
   const [bookingstatus, setBookingStatus] = useState("");
+
+  const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+
   const [finalDiscountAmt, setFinalDiscountAmt] = useState(0);
   const [settingData, setName] = useState({});
   const invoiceRef = useRef();
@@ -89,6 +94,10 @@ const PrintCheckOutInvoice = () => {
       setAddedItems(response.data.itemlist);
       setdiscountAmt(response.data.booking_data.discount_amount);
       setBookingStatus(bookingData.booking_status);
+
+      setCustomerName(bookingData.name);
+      setCustomerEmail(bookingData.email);
+      setCustomerPhone(bookingData.phone);
 
       if (!bookingData.id_no) {
         const alertHtml = ReactDOMServer.renderToString(
@@ -414,6 +423,38 @@ const PrintCheckOutInvoice = () => {
                             <span>Facebook: {settingData.fblink}</span>
                             <span>Pechardwip, Cox's Bazar, Bangladesh</span>
                           </div>
+                          <hr />
+
+                          <div
+                            style={{
+                              padding: "1rem",
+                              border: "1px solid #ccc",
+                              borderRadius: "8px",
+                              maxWidth: "500px",
+                            }}
+                          >
+                            {customerName && (
+                              <div style={{ marginBottom: "0.5rem" }}>
+                                <strong>Customer Name:</strong>{" "}
+                                {customerName || "N/A"}
+                              </div>
+                            )}
+
+                            {customerPhone && (
+                              <div style={{ marginBottom: "0.5rem" }}>
+                                <strong>Customer Phone:</strong>{" "}
+                                {customerPhone || "N/A"}
+                              </div>
+                            )}
+
+                            {customerEmail && (
+                              <div style={{ marginBottom: "0.5rem" }}>
+                                <strong>Customer Email:</strong>{" "}
+                                {customerEmail || "N/A"}
+                              </div>
+                            )}
+                          </div>
+                          <br />
 
                           {/* Items Table */}
                           {addedItems.length > 0 && (
@@ -431,7 +472,7 @@ const PrintCheckOutInvoice = () => {
                                 {addedItems.map((item, index) => (
                                   <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{item.name}</td>
+                                    <td className="text-start">{item.name}</td>
                                     <td>{item.qty}</td>
                                     <td>{item.price}</td>
                                     <td>{item.total}</td>
@@ -534,8 +575,7 @@ const PrintCheckOutInvoice = () => {
                           </table>
                           <h3 className="txtowrd">{numberInWords}</h3>
                           <center>
-                            {(bookingstatus === 1 ||
-                              bookingstatus === 4) && (
+                            {(bookingstatus === 1 || bookingstatus === 4) && (
                               <h2 style={{ color: "red" }}>
                                 This invoice is not final. Please update the
                                 status to complete it.
