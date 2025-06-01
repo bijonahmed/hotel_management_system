@@ -65,6 +65,7 @@ class SettingController extends Controller
         $response = [
             'data'         => $data,
             'banner_image' => !empty($data->banner_image) ? url($data->banner_image) : "",
+            'logo'         => !empty($data->logo) ? url($data->logo) : "",
             'message' => 'success'
         ];
         return response()->json($response, 200);
@@ -294,6 +295,7 @@ class SettingController extends Controller
             'tax_percentag' => 'required',
             'whatsApp'      => 'required',
             'about_us'      => 'required',
+            'currency_symbol' => 'required',
         ]);
 
 
@@ -312,6 +314,7 @@ class SettingController extends Controller
             'fblink'              => $request->fblink,
             'youtubelink'         => $request->youtubelink,
             'tax_percentag'       => $request->tax_percentag,
+            'currency_symbol'     => $request->currency_symbol,
         );
 
         if (!empty($request->file('banner_image'))) {
@@ -324,6 +327,19 @@ class SettingController extends Controller
             $files->move(public_path('/backend/files/'), $upload_url);
             $file_url = $uploadPath . $path;
             $data['banner_image'] = $file_url;
+        }
+
+
+        if (!empty($request->file('logo'))) {
+            $files = $request->file('logo');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['logo'] = $file_url;
         }
 
         Setting::where('id', 1)->update($data);

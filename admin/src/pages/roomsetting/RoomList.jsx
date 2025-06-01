@@ -808,6 +808,7 @@ const RoomList = () => {
                               <select
                                 className="form-select"
                                 id="room_id"
+                                  disabled // 🔒 makes it read-only
                                 value={String(formData.room_id)} // Ensure it's a string
                                 onChange={handleChange}
                               >

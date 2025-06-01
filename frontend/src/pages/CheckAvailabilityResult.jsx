@@ -109,7 +109,7 @@ const CheckAvailabilityResult = () => {
                           </small>
                         </div>
 
-                        <div className="p-4 mt-2">
+                        <div className="p-4 mt-2" style={{ height: '232px'}}>
                           <div className="d-flex justify-content-between mb-3">
                             <h5 className="mb-0">
                               {room.name || "Super Deluxe"}

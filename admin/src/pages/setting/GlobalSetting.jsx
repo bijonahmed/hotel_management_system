@@ -17,9 +17,12 @@ const GlobalSetting = () => {
   const [fblink, setFacebookPagesLink] = useState("");
   const [tax_percentag, setTax_percentag] = useState("");
   const [youtubelink, setYoutubeChaneelLink] = useState("");
+  const [currency_symbol, set_currency_symbol] = useState("");
   const [about_us, setAboutus] = useState("");
   const [bannerImage, setBannerImage] = useState(null);
+  const [logo, setLogo] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [logoPreview, setCompanyLogoPreview] = useState(null);
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token")?.replace(/^"(.*)"$/, "$1");
 
@@ -41,6 +44,24 @@ const GlobalSetting = () => {
     }
   };
 
+  const handleImageChangeCLogo = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Please upload a valid image file.");
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Image size must be less than 2MB.");
+        return;
+      }
+      setLogo(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setCompanyLogoPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
   const defaultFetch = async () => {
     try {
       const response = await axios.get(`/setting/settingrowSystem`, {
@@ -48,6 +69,7 @@ const GlobalSetting = () => {
       });
       const userData = response.data.data;
       const bannerimage = response.data.banner_image;
+      const logoImage = response.data.logo;
       setName(userData.name || "");
       setSugan(userData.slugan || "");
       setEmail(userData.email || "");
@@ -57,8 +79,10 @@ const GlobalSetting = () => {
       setYoutubeChaneelLink(userData.youtubelink || "");
       setTax_percentag(userData.tax_percentag || "");
       setAboutus(userData.about_us || "");
+      set_currency_symbol(userData.currency_symbol || "");
 
       setPreview(bannerimage || "");
+      setCompanyLogoPreview(logoImage || "");
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -77,8 +101,14 @@ const GlobalSetting = () => {
       formData.append("fblink", fblink);
       formData.append("youtubelink", youtubelink);
       formData.append("tax_percentag", tax_percentag);
+      formData.append("currency_symbol", currency_symbol);
+
       if (bannerImage) {
         formData.append("banner_image", bannerImage);
+      }
+
+      if (logo) {
+        formData.append("logo", logo);
       }
 
       await axios.post("/setting/saveSetting", formData, {
@@ -91,10 +121,10 @@ const GlobalSetting = () => {
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Your data has been successfully saved.",
+        text: "Your data has been successfully updated.",
       });
 
-      navigate("/setting/global-setting");
+      navigate("/dashboard");
     } catch (error) {
       if (error.response && error.response.status === 422) {
         Swal.fire({
@@ -198,6 +228,14 @@ const GlobalSetting = () => {
                       setter: setTax_percentag,
                       key: "fblink",
                     },
+
+                    {
+                      label: "Currency Symbol",
+                      value: currency_symbol,
+                      setter: set_currency_symbol,
+                      key: "currency_symbol",
+                    },
+
                     {
                       label: "Youtube Channel Link",
                       value: youtubelink,
@@ -238,6 +276,27 @@ const GlobalSetting = () => {
                       ></textarea>
                       {errors.about_us && (
                         <div style={{ color: "red" }}>{errors.about_us[0]}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="row mb-3 d-none">
+                    <label className="col-sm-3 col-form-label">
+                      Website Logo
+                    </label>
+                    <div className="col-sm-9">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="form-control"
+                        onChange={handleImageChangeCLogo}
+                      />
+                      {logoPreview && (
+                        <img
+                          src={logoPreview}
+                          alt="Preview"
+                          style={{ marginTop: "10px", maxWidth: "200px" }}
+                        />
                       )}
                     </div>
                   </div>

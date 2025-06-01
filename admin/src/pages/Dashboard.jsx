@@ -23,6 +23,18 @@ const Index = () => {
 
   const rawToken = sessionStorage.getItem("token");
   const token = rawToken?.replace(/^"(.*)"$/, "$1");
+  const [currency_symbol, set_currency_symbol] = useState("");
+  const globalSetting = async () => {
+    try {
+      const response = await axios.get(`/setting/settingrowSystem`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const userData = response.data.data;
+      set_currency_symbol(userData.currency_symbol || "");
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const getBookingList = async () => {
     try {
@@ -65,6 +77,7 @@ const Index = () => {
   useEffect(() => {
     countData();
     getBookingList();
+    globalSetting();
   }, []);
 
   return (
@@ -94,7 +107,9 @@ const Index = () => {
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
                           <p className="mb-0 text-white">Today Booking</p>
-                          <h4 className="my-1 text-white">{todaybookingCount}</h4>
+                          <h4 className="my-1 text-white">
+                            {todaybookingCount}
+                          </h4>
                         </div>
                         <div id="chart1" />
                       </div>
@@ -108,9 +123,11 @@ const Index = () => {
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
                           <p className="mb-0 text-dark">Today Booking Amount</p>
-                          <h4 className="my-1 text-dark">Tk.{todaybookingAmt}</h4>
+                          <h4 className="my-1 text-dark">
+                            {currency_symbol}&nbsp;{todaybookingAmt}
+                          </h4>
                         </div>
-                        <div id="chart4" />
+                         
                       </div>
                     </div>
                   </div>
@@ -124,7 +141,7 @@ const Index = () => {
                           <p className="mb-0 text-white">Total Customer</p>
                           <h4 className="my-1 text-white">{coustomerCount}</h4>
                         </div>
-                        <div id="chart2" />
+                       
                       </div>
                     </div>
                   </div>
@@ -134,14 +151,10 @@ const Index = () => {
                     <div className="card-body">
                       <div className="d-flex align-items-center">
                         <div className="me-auto">
-                          <p className="mb-0 text-white">
-                            Total Rooms
-                          </p>
-                          <h4 className="my-1 text-white">
-                            {roomCount}
-                          </h4>
+                          <p className="mb-0 text-white">Total Rooms</p>
+                          <h4 className="my-1 text-white">{roomCount}</h4>
                         </div>
-                        <div id="chart3" />
+                        
                       </div>
                     </div>
                   </div>
@@ -158,12 +171,13 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="card-body">
-               
                   {loading ? (
                     <center>
-                     <div className="spinner-border" role="status"> <span className="visually-hidden">Loading...</span>
-                     </div>
-                      </center>
+                      <div className="spinner-border" role="status">
+                        {" "}
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </center>
                   ) : (
                     <div className="table-responsive">
                       <table className="table align-middle mb-0 table-hover">
@@ -182,15 +196,23 @@ const Index = () => {
                           {bookingData.map((data, index) => (
                             <tr key={index}>
                               <td>{data.booking_id}</td>
-                              <td>{data.name	}</td>
-                              <td>{data.room_name	}</td>
-                              <td>{data.roomPrice}</td>
+                              <td>{data.name}</td>
+                              <td>{data.room_name}&nbsp;{currency_symbol}</td>
+                              <td>{data.roomPrice}&nbsp;{currency_symbol}</td>
                               <td>
-                                {data.checkin}<br/>
-                                {data.checkout	}
+                                {data.checkin}
+                                <br />
+                                {data.checkout}
                               </td>
-                               <td>{data.total_booking_days}</td>
-                               <td className="text-center">    {data.paymenttype === 1 ? 'Online' : data.paymenttype === 2 ? 'Offline' : 'N/A'}</td>
+                              <td>{data.total_booking_days}</td>
+                              <td className="text-center">
+                                {" "}
+                                {data.paymenttype === 1
+                                  ? "Online"
+                                  : data.paymenttype === 2
+                                  ? "Offline"
+                                  : "N/A"}
+                              </td>
                             </tr>
                           ))}
                         </tbody>

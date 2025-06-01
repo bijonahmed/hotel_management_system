@@ -38,7 +38,7 @@ class LeftSideMenuController extends Controller
                 'submenu' => []
             ],
             [
-                'label' => 'Room Booking',
+                'label' => 'Booking',
                 'path' => '#',
                 'icon' => 'bx bx-category',
                 'submenu' => [
@@ -83,6 +83,15 @@ class LeftSideMenuController extends Controller
                     ['label' => 'Super Admin List', 'path' => '/user/superadmin-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Users List', 'path' => '/user/users-list', 'icon' => 'bx bx-radio-circle'],
 
+                ]
+            ],
+            [
+                'label' => 'Mail/SMS',
+                'path' => '#',
+                'icon' => 'bx bx-category',
+                'submenu' => [
+                    ['label' => 'Send Mail', 'path' => '/getway/send-mail', 'icon' => 'bx bx-radio-circle'],
+                    ['label' => 'Send SMS', 'path' => '/getway/send-sms', 'icon' => 'bx bx-radio-circle'],
                 ]
             ],
             /*

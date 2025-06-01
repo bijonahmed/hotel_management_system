@@ -59,6 +59,8 @@ const CheckInDetails = () => {
     phone: "",
     customer_title: "",
     customer_first_name: "",
+    name: "",
+    email:"",
     customer_last_name: "",
     customer_father_name: "",
     customer_gender: "",
@@ -171,7 +173,9 @@ const CheckInDetails = () => {
         country_code: bookingData.country_code || "",
         phone: bookingData.phone || "",
         customer_title: bookingData.customer_title || "",
-        customer_first_name: bookingData.customer_first_name || "",
+        name : bookingData.name || "",
+        email : bookingData.email || "",
+        customer_first_name: bookingData.name,//bookingData.customer_first_name || "",
         customer_last_name: bookingData.customer_last_name || "",
         customer_father_name: bookingData.customer_father_name || "",
         customer_gender: bookingData.customer_gender || "",
@@ -690,7 +694,7 @@ const CheckInDetails = () => {
                                                 <input
                                                   type="text"
                                                   className="form-control"
-                                                  placeholder="Title"
+                                                  placeholder="Mr. / Mrs. etc."
                                                   value={booking.customer_title}
                                                   onChange={(e) =>
                                                     setBooking({
@@ -788,6 +792,35 @@ const CheckInDetails = () => {
                                               </div>
                                             </div>
                                           </div>
+
+                                           <div className="col-md-6">
+                                            <div className="form-group">
+                                              <label className="form-label text-muted">
+                                                Email
+                                              </label>
+                                              <div className="input-group">
+                                                <span className="input-group-text">
+                                                  <i className="bi bi-person-circle" />
+                                                </span>
+                                                <input
+                                                  type="text"
+                                                  className="form-control"
+                                                  placeholder="Father Name"
+                                                  value={
+                                                    booking.email
+                                                  }
+                                                  onChange={(e) =>
+                                                    setBooking({
+                                                      ...booking,
+                                                      email:
+                                                        e.target.value,
+                                                    })
+                                                  }
+                                                />
+                                              </div>
+                                            </div>
+                                          </div>
+
                                           <div className="col-md-6 align-self-center">
                                             <label className="form-label text-muted w-100">
                                               Gender

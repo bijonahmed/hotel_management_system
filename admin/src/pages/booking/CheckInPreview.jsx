@@ -18,6 +18,19 @@ const CheckInPreview = () => {
   const booking_id = searchParams.get("booking_id");
   const [roomData, setRoomData] = useState([]);
 
+  const [currency_symbol, set_currency_symbol] = useState("");
+  const globalSetting = async () => {
+    try {
+      const response = await axios.get(`/setting/settingrowSystem`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const userData = response.data.data;
+      set_currency_symbol(userData.currency_symbol || "");
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   const [preview, setPreview] = useState({
     front: null,
     back: null,
@@ -186,6 +199,7 @@ const CheckInPreview = () => {
   useEffect(() => {
     fetchData();
     fetchActiveRooms();
+    globalSetting();
   }, []);
 
   return (
@@ -247,7 +261,6 @@ const CheckInPreview = () => {
             <div className="container" id="printArea">
               <div className="card">
                 <div className="card-body">
-                  
                   <section className="mb-4">
                     <h5 className="border-bottom">Reservation Details</h5>
                     <table className="table table-bordered">
@@ -310,17 +323,17 @@ const CheckInPreview = () => {
                           <th>Contact Address</th>
                           <td>{booking.customer_contact_address}</td>
                           <th>Room Amount Per Day</th>
-                          <td>{booking.room_price}</td>
+                          <td>{booking.room_price} {currency_symbol}</td>
                         </tr>
                         <tr>
                           <th>Number of Day</th>
                           <td>{booking.total_booking_days}</td>
                           <th>Total Amount</th>
-                          <td>{booking.total_amount}</td>
+                          <td>{booking.total_amount} {currency_symbol}</td>
                         </tr>
                         <tr>
                           <th>Advance Amount</th>
-                          <td>{booking.advance_amount}</td>
+                          <td>{booking.advance_amount} {currency_symbol}</td>
                           <th>Country Code</th>
                           <td>{booking.country_code}</td>
                         </tr>

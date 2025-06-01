@@ -40,6 +40,19 @@ const PrintCheckOutInvoice = () => {
   const [finalDiscountAmt, setFinalDiscountAmt] = useState(0);
   const [settingData, setName] = useState({});
   const invoiceRef = useRef();
+  const [currency_symbol, set_currency_symbol] = useState("");
+
+  const globalSetting = async () => {
+    try {
+      const response = await axios.get(`/setting/settingrowSystem`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const userData = response.data.data;
+      set_currency_symbol(userData.currency_symbol || "");
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const [booking, setBooking] = useState({
     booking_id: "",
@@ -349,6 +362,7 @@ const PrintCheckOutInvoice = () => {
   };
 
   useEffect(() => {
+    globalSetting();
     fetchGlobalData();
     fetechData();
     defaultFetchItems();
@@ -510,7 +524,7 @@ const PrintCheckOutInvoice = () => {
                                     booking.perday_roomprice *
                                       booking.total_booking_days
                                   )}{" "}
-                                  TK
+                                {currency_symbol}
                                 </td>
                               </tr>
                             </tbody>
@@ -519,28 +533,28 @@ const PrintCheckOutInvoice = () => {
                                 <td colSpan="6" className="text-end">
                                   Amount
                                 </td>
-                                <td className="text-end">{total_bill}</td>
+                                <td className="text-end">{total_bill}  {currency_symbol}</td>
                               </tr>
                               <tr>
                                 <td colSpan="6" className="text-end">
                                   Advance Amount
                                 </td>
                                 <td className="text-end">
-                                  {booking.advance_amount || 0}
+                                  {booking.advance_amount || 0}  {currency_symbol}
                                 </td>
                               </tr>
                               <tr>
                                 <td colSpan="6" className="text-end">
                                   Due Amount
                                 </td>
-                                <td className="text-end">{due_amount || 0}</td>
+                                <td className="text-end">{due_amount || 0}  {currency_symbol}</td>
                               </tr>
                               <tr>
                                 <td colSpan="6" className="text-end">
                                   Discount
                                 </td>
                                 <td className="text-end">
-                                  {discount_amt || 0}
+                                  {discount_amt || 0}  {currency_symbol}
                                 </td>
                               </tr>
                               <tr>
@@ -548,7 +562,7 @@ const PrintCheckOutInvoice = () => {
                                   Total Amount
                                 </td>
                                 <td className="text-end">
-                                  {formatCurrency(finalDiscountAmt || 0)}
+                                  {formatCurrency(finalDiscountAmt || 0)}  {currency_symbol}
                                 </td>
                               </tr>
                               <tr>
@@ -556,20 +570,20 @@ const PrintCheckOutInvoice = () => {
                                   Tax ({booking.tax_percentage}%)
                                 </td>
                                 <td className="text-end">
-                                  {formatCurrency(totalWithTax)}
+                                  {formatCurrency(totalWithTax)}  {currency_symbol}
                                 </td>
                               </tr>
                               <tr>
                                 <td colSpan="6" className="text-end">
                                   Item Total (+)
                                 </td>
-                                <td className="text-end">{itemGrandTotal}</td>
+                                <td className="text-end">{itemGrandTotal}  {currency_symbol}</td>
                               </tr>
                               <tr className="table-success">
                                 <td colSpan="6" className="text-end">
                                   Grand Total
                                 </td>
-                                <td className="text-end">{convGrandTotal}</td>
+                                <td className="text-end">{convGrandTotal}  {currency_symbol}</td>
                               </tr>
                             </tfoot>
                           </table>

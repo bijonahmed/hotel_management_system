@@ -19,6 +19,8 @@ use App\Http\Controllers\Facility\FacilityController;
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\Booking\GuestBookingController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Getway\SenMailController;
+use App\Http\Controllers\Getway\SenSMSController;
 use App\Http\Controllers\Report\ReportController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -74,7 +76,6 @@ Route::group([
     Route::get('getGlobalSettingdata', [PublicController::class, 'getGlobalSettingdata']);
     Route::post('/sendContact', [PublicController::class, 'sendContact']);
     Route::post('/filterBooking', [PublicController::class, 'filterBooking']);
-
 });
 
 Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
@@ -213,6 +214,16 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('getTodayBookingList', [DashboardController::class, 'getTodayBookingList']);
     });
 
+    Route::group([
+        //'middleware' => 'api',
+        'prefix' => 'getway'
+    ], function () {
+        Route::post('send-bulk-email', [SenMailController::class, 'sendBulkEmail']);
+        Route::post('send-bulk-sms', [SenSMSController::class, 'sendbulksms']);
+    });
+
+
+
 
     Route::group([
         'prefix' => 'report'
@@ -244,6 +255,5 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('itemList', [SettingController::class, 'itemList']);
         Route::get('activeItemList', [SettingController::class, 'activeItemList']);
         Route::post('itemSave', [SettingController::class, 'itemSave']);
-
     });
 });

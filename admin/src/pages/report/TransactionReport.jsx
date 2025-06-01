@@ -18,10 +18,22 @@ const TransactionReport = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(false);
-
   const rawToken = sessionStorage.getItem("token");
   const token = rawToken?.replace(/^"(.*)"$/, "$1");
   const apiUrl = "/report/filterBybookingReport";
+
+  const [currency_symbol, set_currency_symbol] = useState("");
+  const globalSetting = async () => {
+    try {
+      const response = await axios.get(`/setting/settingrowSystem`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const userData = response.data.data;
+      set_currency_symbol(userData.currency_symbol || "");
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const fetchCustomerData = async () => {
     try {
@@ -96,6 +108,7 @@ const TransactionReport = () => {
   useEffect(() => {
     fetchData();
     fetchCustomerData();
+    globalSetting();
   }, [selectedFilter, customer_id, fromDate, toDate, booking_id]);
 
   return (
@@ -245,15 +258,13 @@ const TransactionReport = () => {
                                 data.map((item) => (
                                   <tr key={item.id}>
                                     <td>{item.booking_id}</td>
-                                    <td className="text-left">
-                                      {item.name}
-                                    </td>
+                                    <td className="text-left">{item.name}</td>
                                     <td className="text-left">
                                       {item.checkin}---{item.checkout}
                                     </td>
                                     <td className="text-center">
                                       {item.grand_total ? (
-                                        `${item.grand_total} TK`
+                                        `${item.grand_total} ${currency_symbol}`
                                       ) : (
                                         <span
                                           style={{
@@ -261,7 +272,7 @@ const TransactionReport = () => {
                                             fontWeight: "bold",
                                           }}
                                         >
-                                          Not complete bill
+                                          Bill is not complete
                                         </span>
                                       )}
                                     </td>

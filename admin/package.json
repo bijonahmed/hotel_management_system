@@ -41,6 +41,7 @@
     "react-frame-component": "^5.2.7",
     "react-helmet": "^6.1.0",
     "react-pdf": "^9.1.0",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.20.1",
     "slate": "^0.110.2",
     "slate-history": "^0.110.3",

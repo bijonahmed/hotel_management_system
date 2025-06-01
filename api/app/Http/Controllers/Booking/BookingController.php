@@ -595,7 +595,7 @@ class BookingController extends Controller
             ->leftJoin('room', 'room.id', '=', 'booking.room_id')
             ->select(
                 'booking.*',
-                'users.phone',
+               // 'users.phone',
                 'room.name as room_name',
                 'room.roomPrice as perday_roomprice',
                 \DB::raw("

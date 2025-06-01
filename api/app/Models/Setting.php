@@ -18,6 +18,8 @@ class Setting extends Authenticatable
       'id',
       'slugan',
       'tax_percentag',
+      'currency_symbol',
+      'logo',
       'name',
     ];
 

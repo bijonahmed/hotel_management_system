@@ -20,7 +20,6 @@ import BulkAddress from "../pages/configration/address/BulkAddress.jsx";
 import TransactionReport from "../pages/report/TransactionReport.jsx";
 import CheckLogAPI from "../pages/report/CheckLogAPI.jsx";
 
-
 import RoleEdit from "../pages/users/EditRole.jsx";
 import UserEdit from "../pages/users/EditUser.jsx";
 import SuperAdminList from "../pages/users/SuperAdminList.jsx";
@@ -37,6 +36,10 @@ import PostCategoryEdit from "../pages/category/PostCategoryEdit.jsx";
 import PostList from "../pages/post/PostList.jsx";
 import PostAdd from "../pages/post/PostAdd.jsx";
 import PostEdit from "../pages/post/PostEdit.jsx";
+
+import Sendmail from "../pages/getway/Sendmail.jsx";
+import SendSms from "../pages/getway/SendSms.jsx";
+
 //Booking
 import RoomStatusList from "../pages/booking/RoomStatusList.jsx";
 import BookingList from "../pages/booking/BookingList.jsx";
@@ -177,7 +180,10 @@ const AppRouter = () => {
       <Route path="/setting/service-list" element={<Service />} />
       <Route path="/setting/item-list" element={<ItemList />} />
       <Route path="/setting/add-item" element={<ItemAdd />} />
-            <Route path="/setting/item-edit/:id" element={<ItemEdit />} />
+       <Route path="/setting/item-edit/:id" element={<ItemEdit />} />
+        {/* Getway */}
+      <Route path="/getway/send-mail" element={<Sendmail />} />
+      <Route path="/getway/send-sms" element={<SendSms />} />
 
 
       <Route path="/dashboard" element={<Dashboard />} />
