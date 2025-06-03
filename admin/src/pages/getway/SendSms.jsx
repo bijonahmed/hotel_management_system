@@ -160,13 +160,26 @@ const SendSms = () => {
                     ></textarea>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={loader}
-                  >
-                    {loader ? "Sending..." : "Send Bulk Email"}
-                  </button>
+                  <div className="row">
+                    <div className="text-end">
+                      <button
+                        type="submit"
+                        className="btn btn-primary text-end"
+                        disabled={loader}
+                      >
+                        {loader ? (
+                          <>
+                            <i className="fas fa-spinner fa-spin me-2"></i>{" "}
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-paper-plane me-2"></i> Send
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </form>
               </div>
             </div>

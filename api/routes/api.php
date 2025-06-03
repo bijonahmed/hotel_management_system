@@ -18,6 +18,7 @@ use App\Http\Controllers\RoomSetting\RoomSettingController;
 use App\Http\Controllers\Facility\FacilityController;
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\Booking\GuestBookingController;
+use App\Http\Controllers\Restaurant\RestaurantController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Getway\SenMailController;
 use App\Http\Controllers\Getway\SenSMSController;
@@ -230,6 +231,16 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
     ], function () {
         Route::get('filterBybookingReport', [ReportController::class, 'filterBybookingReport']);
     });
+
+
+    Route::group([
+        'prefix' => 'restaurant'
+    ], function () {
+        Route::post('insertItems', [RestaurantController::class, 'insertItems']);
+        Route::get('getInvoiceList', [RestaurantController::class, 'getInvoiceList']);
+        Route::get('checkRestInvoiceRow', [RestaurantController::class, 'checkRestInvoiceRow']);
+    });
+
 
 
     Route::group([

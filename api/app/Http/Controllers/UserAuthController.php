@@ -56,14 +56,15 @@ class UserAuthController extends Controller
             [
                 'name'  => 'required',
                 'email' => 'required|email|unique:users,email',
-                'phone' => 'required',
+                'phone' => 'required|digits:11|numeric',
                 'paymenttype' => 'required',
                 'checkin'   => 'required|date',
                 'checkout'  => 'required|date|after_or_equal:checkin',
             ],
             [
                 'name.required'     => 'Please enter your name.',
-                'phone.required'    => 'Please enter your phone.',
+                'phone.required'    => 'Phone number is required. Do not include country code. Example: 019xxxxxxxx',
+                'phone.digits'      => 'Phone number must be exactly 11 digits. Example: 019xxxxxxxx',
                 'paymenttype.required' => 'Payment type required.',
                 'email.required'    => 'Email address is required.',
                 'email.email'       => 'Please provide a valid email address.',

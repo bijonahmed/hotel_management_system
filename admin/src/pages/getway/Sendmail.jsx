@@ -11,6 +11,7 @@ import EditorComponent from "../../components/EditorComponent";
 
 const Sendmail = () => {
   const [errors, setErrors] = useState({});
+  const [customerEmail, setCustomerData] = useState([]);
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const token = sessionStorage.getItem("token")?.replace(/^"(.*)"$/, "$1");
@@ -91,7 +92,46 @@ const Sendmail = () => {
     }));
   };
 
-  useEffect(() => {}, []);
+  const fetchCustomerData = async () => {
+    try {
+      if (!token) {
+        throw new Error("Token not found in sessionStorage");
+      }
+      const response = await axios.get(`/user/getOnlyMerchantList`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.data) {
+        const customerList = response.data.data;
+
+        // ✅ Extract unique emails
+        const uniqueEmails = [
+          ...new Set(
+            customerList.map((customer) => customer.email).filter(Boolean)
+          ),
+        ];
+
+        // ✅ Comma-separated string of emails
+        const emailList = uniqueEmails.join(",");
+
+        // ✅ Set emails into formData
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          emails: emailList,
+        }));
+
+        // Optional: store emailList in state if needed
+        setCustomerData(emailList); // only emails, not full objects
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomerData();
+  }, []);
 
   return (
     <>
@@ -135,7 +175,6 @@ const Sendmail = () => {
                       onChange={handleChange}
                     />
                   </div>
-
                   <div className="mb-3">
                     <label>Recipient Emails (comma-separated)</label>
                     <textarea
@@ -147,7 +186,6 @@ const Sendmail = () => {
                       placeholder="e.g. abcd@gmail.com, xyz@gmail.com, hello@example.com"
                     />
                   </div>
-
                   <div className="mb-3">
                     <label>Message</label>
                     <EditorComponent
@@ -164,14 +202,26 @@ const Sendmail = () => {
                       onChange={handleChange}
                     ></textarea> */}
                   </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={loader}
-                  >
-                    {loader ? "Sending..." : "Send Bulk SMS"}
-                  </button>
+                  <div className="row">
+                    <div className="text-end">
+                      <button
+                        type="submit"
+                        className="btn btn-primary text-end"
+                        disabled={loader}
+                      >
+                        {loader ? (
+                          <>
+                            <i className="fas fa-spinner fa-spin me-2"></i>{" "}
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-paper-plane me-2"></i> Send
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </form>
               </div>
             </div>

@@ -37,6 +37,12 @@ class LeftSideMenuController extends Controller
                 'icon' => 'bx bx-repeat',
                 'submenu' => []
             ],
+             [
+                'label' => 'Restaurants Report',
+                'path' => '/report/transaction-report',
+                'icon' => 'bx bx-repeat',
+                'submenu' => []
+            ],
             [
                 'label' => 'Booking',
                 'path' => '#',
@@ -92,6 +98,16 @@ class LeftSideMenuController extends Controller
                 'submenu' => [
                     ['label' => 'Send Mail', 'path' => '/getway/send-mail', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Send SMS', 'path' => '/getway/send-sms', 'icon' => 'bx bx-radio-circle'],
+                ]
+            ],
+
+            [
+                'label' => 'Restaurant',
+                'path' => '#',
+                'icon' => 'bx bx-category',
+                'submenu' => [
+                    ['label' => 'Invoice List', 'path' => '/restaurant/restaurant-invoice', 'icon' => 'bx bx-radio-circle'],
+                    //['label' => 'Send SMS', 'path' => '/getway/send-sms', 'icon' => 'bx bx-radio-circle'],
                 ]
             ],
             /*

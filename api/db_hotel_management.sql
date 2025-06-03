@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: May 24, 2025 at 03:40 AM
--- Server version: 10.3.39-MariaDB
--- PHP Version: 8.1.16
+-- Host: 127.0.0.1
+-- Generation Time: Jun 03, 2025 at 11:50 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `moonnest_db_moonnest`
+-- Database: `db_hotel_management`
 --
 
 -- --------------------------------------------------------
@@ -115,7 +115,7 @@ CREATE TABLE `booking` (
   `adult` int(11) DEFAULT 0,
   `child` int(11) DEFAULT 0,
   `booking_type` varchar(255) DEFAULT NULL,
-  `room_price` double(10,2) DEFAULT NULL,
+  `room_price` double(10,2) DEFAULT NULL COMMENT 'Per day room price',
   `total_amount` decimal(10,2) DEFAULT NULL,
   `advance_amount` decimal(10,2) DEFAULT NULL,
   `total_bill` decimal(10,2) DEFAULT NULL,
@@ -152,10 +152,23 @@ CREATE TABLE `booking` (
   `check_in_by` int(11) DEFAULT NULL,
   `check_out_reason` text DEFAULT NULL,
   `invoice_create_by` int(11) DEFAULT NULL,
-  `invoice_create` int(11) NOT NULL DEFAULT 1 COMMENT '1=Yes,2=NO',
+  `invoice_create` int(11) NOT NULL DEFAULT 2 COMMENT '1=Yes,2=NO',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`id`, `booking_id`, `name`, `email`, `country_code`, `phone`, `checkin`, `checkout`, `room_id`, `room_no`, `adult`, `child`, `booking_type`, `room_price`, `total_amount`, `advance_amount`, `total_bill`, `due_amount`, `discount_amount`, `final_total_amount`, `tax_amount`, `item_total`, `grand_total`, `message`, `customer_title`, `customer_first_name`, `customer_last_name`, `customer_father_name`, `customer_gender`, `customer_occupation`, `customer_dob`, `customer_nationality`, `customer_contact_type`, `customer_contact_address`, `customer_contact_email`, `id_no`, `front_side_document`, `back_side_document`, `arival_from`, `customer_id`, `paymenttype`, `booking_status`, `update_by`, `booking_by`, `booking_reference_no`, `pupose_of_visit`, `remarks`, `check_in_by`, `check_out_reason`, `invoice_create_by`, `invoice_create`, `created_at`, `updated_at`) VALUES
+(1, '82179', 'jons', '11jons@gmail.com', NULL, '01915728982', '2025-05-31', '2025-05-31', 7, '102', NULL, NULL, NULL, 9720.00, 9720.00, 720.00, 9720.00, 9000.00, 0.00, 9000.00, 180.00, 1388.92, 10568.92, NULL, NULL, 'Bijons', NULL, NULL, 'Male', 'Programmer', NULL, NULL, NULL, NULL, NULL, '654998999', '/backend/files/XNLffmKNpg6VbZApnuDv.png', '/backend/files/1cxC66IPaTkNRIxZ0sNT.png', 'Dhaka', 29, 2, 2, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, '2025-05-31 14:02:08', '2025-06-01 04:45:18'),
+(2, '12505', 'Gazi', 'mdbijon@gmail.com', NULL, '01915728982', '2025-06-01', '2025-06-03', 7, NULL, 4, 6, NULL, 9720.00, 19440.00, 440.00, 19440.00, 19000.00, 0.00, 19000.00, 380.00, 915.00, 20295.00, 'This second booking request.', NULL, 'Gazi', 'Ahmed', 'Mr. Harunur Rashid', 'Male', 'Programmer', NULL, NULL, NULL, NULL, NULL, '56898879999', '/backend/files/AdUtRe8damCiS8ZxuihZ.png', '/backend/files/5kPSXX8dan3cNVdx0N6f.png', 'Dhaka', 29, 2, 2, NULL, NULL, '54545', 'For visit', NULL, 1, NULL, 1, 1, '2025-05-31 14:03:16', '2025-06-01 18:34:57'),
+(5, '29741', 'Bijon', 'sajibahmed@gmail.com', NULL, '01915728982', '2025-06-03', '2025-06-03', 7, NULL, 3, 5, NULL, 9720.00, 9720.00, 720.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ccc', 'Mr.', 'Bijon', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '548578855555', '/backend/files/R1S6JO33JDazHgdVqa3l.png', '/backend/files/seRIH6y3qPOdRGzKPo8V.png', 'Dhaka', 0, 2, 1, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, 1, '2025-06-01 13:35:01', '2025-06-03 02:00:22'),
+(6, '61949', 'kahem ali', 'kashem@gmail.com', NULL, '0187878888', '2025-06-05', '2025-06-06', 7, NULL, 0, 0, NULL, 9720.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'xssss', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2025-06-01 13:37:28', '2025-06-01 13:37:28'),
+(7, '15769', 'kawsar', 'kawsar@gmail.com', NULL, NULL, '2025-06-01', '2025-06-04', 1, NULL, 1, 3, NULL, 7290.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ddd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2025-06-01 14:08:18', '2025-06-01 14:08:18'),
+(8, '75498', 'dsf', 'sdf@gmail.com', NULL, NULL, '2025-06-15', '2025-06-18', 3, NULL, 0, 0, NULL, 12190.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2025-06-03 02:17:35', '2025-06-03 02:17:35'),
+(9, '34306', 'Mouthwatering Caprese Skewers', 'ran1223ay123@gmail.com', NULL, NULL, '2025-06-21', '2025-06-23', 3, NULL, 0, 0, NULL, 12190.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2025-06-03 02:21:05', '2025-06-03 02:21:05');
 
 -- --------------------------------------------------------
 
@@ -589,6 +602,292 @@ INSERT INTO `country` (`id`, `shortname`, `name`, `phonecode`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `currencies`
+--
+
+CREATE TABLE `currencies` (
+  `country` varchar(100) DEFAULT NULL,
+  `currency` varchar(100) DEFAULT NULL,
+  `code` varchar(4) DEFAULT NULL,
+  `minor_unit` smallint(6) DEFAULT NULL,
+  `symbol` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `currencies`
+--
+
+INSERT INTO `currencies` (`country`, `currency`, `code`, `minor_unit`, `symbol`) VALUES
+('Afghanistan', 'Afghani', 'AFN', 2, '؋'),
+('Åland Islands', 'Euro', 'EUR', 2, '€'),
+('Albania', 'Lek', 'ALL', 2, 'Lek'),
+('Algeria', 'Algerian Dinar', 'DZD', 2, NULL),
+('American Samoa', 'US Dollar', 'USD', 2, '$'),
+('Andorra', 'Euro', 'EUR', 2, '€'),
+('Angola', 'Kwanza', 'AOA', 2, NULL),
+('Anguilla', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Antigua And Barbuda', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Argentina', 'Argentine Peso', 'ARS', 2, '$'),
+('Armenia', 'Armenian Dram', 'AMD', 2, NULL),
+('Aruba', 'Aruban Florin', 'AWG', 2, NULL),
+('Australia', 'Australian Dollar', 'AUD', 2, '$'),
+('Austria', 'Euro', 'EUR', 2, '€'),
+('Azerbaijan', 'Azerbaijan Manat', 'AZN', 2, NULL),
+('Bahamas', 'Bahamian Dollar', 'BSD', 2, '$'),
+('Bahrain', 'Bahraini Dinar', 'BHD', 3, NULL),
+('Bangladesh', 'Taka', 'BDT', 2, '৳'),
+('Barbados', 'Barbados Dollar', 'BBD', 2, '$'),
+('Belarus', 'Belarusian Ruble', 'BYN', 2, NULL),
+('Belgium', 'Euro', 'EUR', 2, '€'),
+('Belize', 'Belize Dollar', 'BZD', 2, 'BZ$'),
+('Benin', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Bermuda', 'Bermudian Dollar', 'BMD', 2, NULL),
+('Bhutan', 'Indian Rupee', 'INR', 2, '₹'),
+('Bhutan', 'Ngultrum', 'BTN', 2, NULL),
+('Bolivia', 'Boliviano', 'BOB', 2, NULL),
+('Bolivia', 'Mvdol', 'BOV', 2, NULL),
+('Bonaire, Sint Eustatius And Saba', 'US Dollar', 'USD', 2, '$'),
+('Bosnia And Herzegovina', 'Convertible Mark', 'BAM', 2, NULL),
+('Botswana', 'Pula', 'BWP', 2, NULL),
+('Bouvet Island', 'Norwegian Krone', 'NOK', 2, NULL),
+('Brazil', 'Brazilian Real', 'BRL', 2, 'R$'),
+('British Indian Ocean Territory', 'US Dollar', 'USD', 2, '$'),
+('Brunei Darussalam', 'Brunei Dollar', 'BND', 2, NULL),
+('Bulgaria', 'Bulgarian Lev', 'BGN', 2, 'лв'),
+('Burkina Faso', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Burundi', 'Burundi Franc', 'BIF', 0, NULL),
+('Cabo Verde', 'Cabo Verde Escudo', 'CVE', 2, NULL),
+('Cambodia', 'Riel', 'KHR', 2, '៛'),
+('Cameroon', 'CFA Franc BEAC', 'XAF', 0, NULL),
+('Canada', 'Canadian Dollar', 'CAD', 2, '$'),
+('Cayman Islands', 'Cayman Islands Dollar', 'KYD', 2, NULL),
+('Central African Republic', 'CFA Franc BEAC', 'XAF', 0, NULL),
+('Chad', 'CFA Franc BEAC', 'XAF', 0, NULL),
+('Chile', 'Chilean Peso', 'CLP', 0, '$'),
+('Chile', 'Unidad de Fomento', 'CLF', 4, NULL),
+('China', 'Yuan Renminbi', 'CNY', 2, '¥'),
+('Christmas Island', 'Australian Dollar', 'AUD', 2, NULL),
+('Cocos (keeling) Islands', 'Australian Dollar', 'AUD', 2, NULL),
+('Colombia', 'Colombian Peso', 'COP', 2, '$'),
+('Colombia', 'Unidad de Valor Real', 'COU', 2, NULL),
+('Comoros', 'Comorian Franc ', 'KMF', 0, NULL),
+('Congo (the Democratic Republic Of The)', 'Congolese Franc', 'CDF', 2, NULL),
+('Congo', 'CFA Franc BEAC', 'XAF', 0, NULL),
+('Cook Islands', 'New Zealand Dollar', 'NZD', 2, '$'),
+('Costa Rica', 'Costa Rican Colon', 'CRC', 2, NULL),
+('Côte D\'ivoire', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Croatia', 'Kuna', 'HRK', 2, 'kn'),
+('Cuba', 'Cuban Peso', 'CUP', 2, NULL),
+('Cuba', 'Peso Convertible', 'CUC', 2, NULL),
+('Curaçao', 'Netherlands Antillean Guilder', 'ANG', 2, NULL),
+('Cyprus', 'Euro', 'EUR', 2, '€'),
+('Czechia', 'Czech Koruna', 'CZK', 2, 'Kč'),
+('Denmark', 'Danish Krone', 'DKK', 2, 'kr'),
+('Djibouti', 'Djibouti Franc', 'DJF', 0, NULL),
+('Dominica', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Dominican Republic', 'Dominican Peso', 'DOP', 2, NULL),
+('Ecuador', 'US Dollar', 'USD', 2, '$'),
+('Egypt', 'Egyptian Pound', 'EGP', 2, NULL),
+('El Salvador', 'El Salvador Colon', 'SVC', 2, NULL),
+('El Salvador', 'US Dollar', 'USD', 2, '$'),
+('Equatorial Guinea', 'CFA Franc BEAC', 'XAF', 0, NULL),
+('Eritrea', 'Nakfa', 'ERN', 2, NULL),
+('Estonia', 'Euro', 'EUR', 2, '€'),
+('Eswatini', 'Lilangeni', 'SZL', 2, NULL),
+('Ethiopia', 'Ethiopian Birr', 'ETB', 2, NULL),
+('European Union', 'Euro', 'EUR', 2, '€'),
+('Falkland Islands [Malvinas]', 'Falkland Islands Pound', 'FKP', 2, NULL),
+('Faroe Islands', 'Danish Krone', 'DKK', 2, NULL),
+('Fiji', 'Fiji Dollar', 'FJD', 2, NULL),
+('Finland', 'Euro', 'EUR', 2, '€'),
+('France', 'Euro', 'EUR', 2, '€'),
+('French Guiana', 'Euro', 'EUR', 2, '€'),
+('French Polynesia', 'CFP Franc', 'XPF', 0, NULL),
+('French Southern Territories', 'Euro', 'EUR', 2, '€'),
+('Gabon', 'CFA Franc BEAC', 'XAF', 0, NULL),
+('Gambia', 'Dalasi', 'GMD', 2, NULL),
+('Georgia', 'Lari', 'GEL', 2, '₾'),
+('Germany', 'Euro', 'EUR', 2, '€'),
+('Ghana', 'Ghana Cedi', 'GHS', 2, NULL),
+('Gibraltar', 'Gibraltar Pound', 'GIP', 2, NULL),
+('Greece', 'Euro', 'EUR', 2, '€'),
+('Greenland', 'Danish Krone', 'DKK', 2, NULL),
+('Grenada', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Guadeloupe', 'Euro', 'EUR', 2, '€'),
+('Guam', 'US Dollar', 'USD', 2, '$'),
+('Guatemala', 'Quetzal', 'GTQ', 2, NULL),
+('Guernsey', 'Pound Sterling', 'GBP', 2, '£'),
+('Guinea', 'Guinean Franc', 'GNF', 0, NULL),
+('Guinea-bissau', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Guyana', 'Guyana Dollar', 'GYD', 2, NULL),
+('Haiti', 'Gourde', 'HTG', 2, NULL),
+('Haiti', 'US Dollar', 'USD', 2, '$'),
+('Heard Island And Mcdonald Islands', 'Australian Dollar', 'AUD', 2, NULL),
+('Holy See (Vatican)', 'Euro', 'EUR', 2, '€'),
+('Honduras', 'Lempira', 'HNL', 2, NULL),
+('Hong Kong', 'Hong Kong Dollar', 'HKD', 2, '$'),
+('Hungary', 'Forint', 'HUF', 2, 'ft'),
+('Iceland', 'Iceland Krona', 'ISK', 0, NULL),
+('India', 'Indian Rupee', 'INR', 2, '₹'),
+('Indonesia', 'Rupiah', 'IDR', 2, 'Rp'),
+('International Monetary Fund (IMF)', 'SDR (Special Drawing Right)', 'XDR', 0, NULL),
+('Iran', 'Iranian Rial', 'IRR', 2, NULL),
+('Iraq', 'Iraqi Dinar', 'IQD', 3, NULL),
+('Ireland', 'Euro', 'EUR', 2, '€'),
+('Isle Of Man', 'Pound Sterling', 'GBP', 2, '£'),
+('Israel', 'New Israeli Sheqel', 'ILS', 2, '₪'),
+('Italy', 'Euro', 'EUR', 2, '€'),
+('Jamaica', 'Jamaican Dollar', 'JMD', 2, NULL),
+('Japan', 'Yen', 'JPY', 0, '¥'),
+('Jersey', 'Pound Sterling', 'GBP', 2, '£'),
+('Jordan', 'Jordanian Dinar', 'JOD', 3, NULL),
+('Kazakhstan', 'Tenge', 'KZT', 2, NULL),
+('Kenya', 'Kenyan Shilling', 'KES', 2, 'Ksh'),
+('Kiribati', 'Australian Dollar', 'AUD', 2, NULL),
+('Korea (the Democratic People’s Republic Of)', 'North Korean Won', 'KPW', 2, NULL),
+('Korea (the Republic Of)', 'Won', 'KRW', 0, '₩'),
+('Kuwait', 'Kuwaiti Dinar', 'KWD', 3, NULL),
+('Kyrgyzstan', 'Som', 'KGS', 2, NULL),
+('Lao People’s Democratic Republic', 'Lao Kip', 'LAK', 2, NULL),
+('Latvia', 'Euro', 'EUR', 2, '€'),
+('Lebanon', 'Lebanese Pound', 'LBP', 2, NULL),
+('Lesotho', 'Loti', 'LSL', 2, NULL),
+('Lesotho', 'Rand', 'ZAR', 2, NULL),
+('Liberia', 'Liberian Dollar', 'LRD', 2, NULL),
+('Libya', 'Libyan Dinar', 'LYD', 3, NULL),
+('Liechtenstein', 'Swiss Franc', 'CHF', 2, NULL),
+('Lithuania', 'Euro', 'EUR', 2, '€'),
+('Luxembourg', 'Euro', 'EUR', 2, '€'),
+('Macao', 'Pataca', 'MOP', 2, NULL),
+('North Macedonia', 'Denar', 'MKD', 2, NULL),
+('Madagascar', 'Malagasy Ariary', 'MGA', 2, NULL),
+('Malawi', 'Malawi Kwacha', 'MWK', 2, NULL),
+('Malaysia', 'Malaysian Ringgit', 'MYR', 2, 'RM'),
+('Maldives', 'Rufiyaa', 'MVR', 2, NULL),
+('Mali', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Malta', 'Euro', 'EUR', 2, '€'),
+('Marshall Islands', 'US Dollar', 'USD', 2, '$'),
+('Martinique', 'Euro', 'EUR', 2, '€'),
+('Mauritania', 'Ouguiya', 'MRU', 2, NULL),
+('Mauritius', 'Mauritius Rupee', 'MUR', 2, NULL),
+('Mayotte', 'Euro', 'EUR', 2, '€'),
+('Member Countries Of The African Development Bank Group', 'ADB Unit of Account', 'XUA', 0, NULL),
+('Mexico', 'Mexican Peso', 'MXN', 2, '$'),
+('Mexico', 'Mexican Unidad de Inversion (UDI)', 'MXV', 2, NULL),
+('Micronesia', 'US Dollar', 'USD', 2, '$'),
+('Moldova', 'Moldovan Leu', 'MDL', 2, NULL),
+('Monaco', 'Euro', 'EUR', 2, '€'),
+('Mongolia', 'Tugrik', 'MNT', 2, NULL),
+('Montenegro', 'Euro', 'EUR', 2, '€'),
+('Montserrat', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Morocco', 'Moroccan Dirham', 'MAD', 2, ' .د.م '),
+('Mozambique', 'Mozambique Metical', 'MZN', 2, NULL),
+('Myanmar', 'Kyat', 'MMK', 2, NULL),
+('Namibia', 'Namibia Dollar', 'NAD', 2, NULL),
+('Namibia', 'Rand', 'ZAR', 2, NULL),
+('Nauru', 'Australian Dollar', 'AUD', 2, NULL),
+('Nepal', 'Nepalese Rupee', 'NPR', 2, NULL),
+('Netherlands', 'Euro', 'EUR', 2, '€'),
+('New Caledonia', 'CFP Franc', 'XPF', 0, NULL),
+('New Zealand', 'New Zealand Dollar', 'NZD', 2, '$'),
+('Nicaragua', 'Cordoba Oro', 'NIO', 2, NULL),
+('Niger', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Nigeria', 'Naira', 'NGN', 2, '₦'),
+('Niue', 'New Zealand Dollar', 'NZD', 2, '$'),
+('Norfolk Island', 'Australian Dollar', 'AUD', 2, NULL),
+('Northern Mariana Islands', 'US Dollar', 'USD', 2, '$'),
+('Norway', 'Norwegian Krone', 'NOK', 2, 'kr'),
+('Oman', 'Rial Omani', 'OMR', 3, NULL),
+('Pakistan', 'Pakistan Rupee', 'PKR', 2, 'Rs'),
+('Palau', 'US Dollar', 'USD', 2, '$'),
+('Panama', 'Balboa', 'PAB', 2, NULL),
+('Panama', 'US Dollar', 'USD', 2, '$'),
+('Papua New Guinea', 'Kina', 'PGK', 2, NULL),
+('Paraguay', 'Guarani', 'PYG', 0, NULL),
+('Peru', 'Sol', 'PEN', 2, 'S'),
+('Philippines', 'Philippine Peso', 'PHP', 2, '₱'),
+('Pitcairn', 'New Zealand Dollar', 'NZD', 2, '$'),
+('Poland', 'Zloty', 'PLN', 2, 'zł'),
+('Portugal', 'Euro', 'EUR', 2, '€'),
+('Puerto Rico', 'US Dollar', 'USD', 2, '$'),
+('Qatar', 'Qatari Rial', 'QAR', 2, NULL),
+('Réunion', 'Euro', 'EUR', 2, '€'),
+('Romania', 'Romanian Leu', 'RON', 2, 'lei'),
+('Russian Federation', 'Russian Ruble', 'RUB', 2, '₽'),
+('Rwanda', 'Rwanda Franc', 'RWF', 0, NULL),
+('Saint Barthélemy', 'Euro', 'EUR', 2, '€'),
+('Saint Helena, Ascension And Tristan Da Cunha', 'Saint Helena Pound', 'SHP', 2, NULL),
+('Saint Kitts And Nevis', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Saint Lucia', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Saint Martin (French Part)', 'Euro', 'EUR', 2, '€'),
+('Saint Pierre And Miquelon', 'Euro', 'EUR', 2, '€'),
+('Saint Vincent And The Grenadines', 'East Caribbean Dollar', 'XCD', 2, NULL),
+('Samoa', 'Tala', 'WST', 2, NULL),
+('San Marino', 'Euro', 'EUR', 2, '€'),
+('Sao Tome And Principe', 'Dobra', 'STN', 2, NULL),
+('Saudi Arabia', 'Saudi Riyal', 'SAR', 2, NULL),
+('Senegal', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Serbia', 'Serbian Dinar', 'RSD', 2, NULL),
+('Seychelles', 'Seychelles Rupee', 'SCR', 2, NULL),
+('Sierra Leone', 'Leone', 'SLL', 2, NULL),
+('Singapore', 'Singapore Dollar', 'SGD', 2, '$'),
+('Sint Maarten (Dutch Part)', 'Netherlands Antillean Guilder', 'ANG', 2, NULL),
+('Sistema Unitario De Compensacion Regional De Pagos \"sucre\"\"\"', 'Sucre', 'XSU', 0, NULL),
+('Slovakia', 'Euro', 'EUR', 2, '€'),
+('Slovenia', 'Euro', 'EUR', 2, '€'),
+('Solomon Islands', 'Solomon Islands Dollar', 'SBD', 2, NULL),
+('Somalia', 'Somali Shilling', 'SOS', 2, NULL),
+('South Africa', 'Rand', 'ZAR', 2, 'R'),
+('South Sudan', 'South Sudanese Pound', 'SSP', 2, NULL),
+('Spain', 'Euro', 'EUR', 2, '€'),
+('Sri Lanka', 'Sri Lanka Rupee', 'LKR', 2, 'Rs'),
+('Sudan (the)', 'Sudanese Pound', 'SDG', 2, NULL),
+('Suriname', 'Surinam Dollar', 'SRD', 2, NULL),
+('Svalbard And Jan Mayen', 'Norwegian Krone', 'NOK', 2, NULL),
+('Sweden', 'Swedish Krona', 'SEK', 2, 'kr'),
+('Switzerland', 'Swiss Franc', 'CHF', 2, NULL),
+('Switzerland', 'WIR Euro', 'CHE', 2, NULL),
+('Switzerland', 'WIR Franc', 'CHW', 2, NULL),
+('Syrian Arab Republic', 'Syrian Pound', 'SYP', 2, NULL),
+('Taiwan', 'New Taiwan Dollar', 'TWD', 2, NULL),
+('Tajikistan', 'Somoni', 'TJS', 2, NULL),
+('Tanzania, United Republic Of', 'Tanzanian Shilling', 'TZS', 2, NULL),
+('Thailand', 'Baht', 'THB', 2, '฿'),
+('Timor-leste', 'US Dollar', 'USD', 2, '$'),
+('Togo', 'CFA Franc BCEAO', 'XOF', 0, NULL),
+('Tokelau', 'New Zealand Dollar', 'NZD', 2, '$'),
+('Tonga', 'Pa’anga', 'TOP', 2, NULL),
+('Trinidad And Tobago', 'Trinidad and Tobago Dollar', 'TTD', 2, NULL),
+('Tunisia', 'Tunisian Dinar', 'TND', 3, NULL),
+('Turkey', 'Turkish Lira', 'TRY', 2, '₺'),
+('Turkmenistan', 'Turkmenistan New Manat', 'TMT', 2, NULL),
+('Turks And Caicos Islands', 'US Dollar', 'USD', 2, '$'),
+('Tuvalu', 'Australian Dollar', 'AUD', 2, NULL),
+('Uganda', 'Uganda Shilling', 'UGX', 0, NULL),
+('Ukraine', 'Hryvnia', 'UAH', 2, '₴'),
+('United Arab Emirates', 'UAE Dirham', 'AED', 2, 'د.إ'),
+('United Kingdom Of Great Britain And Northern Ireland', 'Pound Sterling', 'GBP', 2, '£'),
+('United States Minor Outlying Islands', 'US Dollar', 'USD', 2, '$'),
+('United States Of America', 'US Dollar', 'USD', 2, '$'),
+('United States Of America', 'US Dollar (Next day)', 'USN', 2, NULL),
+('Uruguay', 'Peso Uruguayo', 'UYU', 2, NULL),
+('Uruguay', 'Uruguay Peso en Unidades Indexadas (UI)', 'UYI', 0, NULL),
+('Uruguay', 'Unidad Previsional', 'UYW', 4, NULL),
+('Uzbekistan', 'Uzbekistan Sum', 'UZS', 2, NULL),
+('Vanuatu', 'Vatu', 'VUV', 0, NULL),
+('Venezuela', 'Bolívar Soberano', 'VES', 2, NULL),
+('Vietnam', 'Dong', 'VND', 0, '₫'),
+('Virgin Islands (British)', 'US Dollar', 'USD', 2, '$'),
+('Virgin Islands (U.S.)', 'US Dollar', 'USD', 2, '$'),
+('Wallis And Futuna', 'CFP Franc', 'XPF', 0, NULL),
+('Western Sahara', 'Moroccan Dirham', 'MAD', 2, NULL),
+('Yemen', 'Yemeni Rial', 'YER', 2, NULL),
+('Zambia', 'Zambian Kwacha', 'ZMW', 2, NULL),
+('Zimbabwe', 'Zimbabwe Dollar', 'ZWL', 2, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `currency_type`
 --
 
@@ -737,23 +1036,21 @@ CREATE TABLE `invoice_items` (
 --
 
 INSERT INTO `invoice_items` (`id`, `booking_id`, `item_id`, `name`, `qty`, `price`, `total`, `invoice_create_by`, `created_at`, `updated_at`) VALUES
-(22, 34261, 83, 'Cheese Omelette', 18, 10.75, 193.50, 1, '2025-05-23 17:28:38', '2025-05-23 17:28:38'),
-(23, 34261, 15, 'AC Remote 215', 30, 30.39, 911.70, 1, '2025-05-23 17:32:12', '2025-05-23 17:32:12'),
-(24, 69917, 15, 'AC Remote 215', 30, 30.39, 911.70, 1, '2025-05-23 20:22:52', '2025-05-23 20:22:52'),
-(25, 69917, 65, 'Almond Pack', 25, 17.00, 425.00, 1, '2025-05-23 20:22:52', '2025-05-23 20:22:52'),
-(26, 69917, 108, 'Apple Pie', 15, 20.00, 300.00, 1, '2025-05-23 20:22:52', '2025-05-23 20:22:52'),
-(27, 69917, 118, 'Banana', 50, 6.00, 300.00, 1, '2025-05-23 20:22:52', '2025-05-23 20:22:52'),
-(28, 69917, 30, 'Blanket 230', 5, 14.94, 74.70, 1, '2025-05-23 20:22:52', '2025-05-23 20:22:52'),
-(29, 47068, 15, 'AC Remote 215', 30, 30.39, 911.70, 1, '2025-05-23 20:30:43', '2025-05-23 20:30:43'),
-(30, 47068, 119, 'Apple', 45, 7.00, 315.00, 1, '2025-05-23 20:30:43', '2025-05-23 20:30:43'),
-(31, 47068, 442, 'Apple Pie Slice', 15, 16.00, 240.00, 1, '2025-05-23 20:30:43', '2025-05-23 20:30:43'),
-(32, 56040, 15, 'AC Remote 215', 30, 30.39, 911.70, 1, '2025-05-23 21:11:46', '2025-05-23 21:11:46'),
-(33, 56040, 119, 'Apple', 50, 7.00, 350.00, 1, '2025-05-23 21:11:46', '2025-05-23 21:11:46'),
-(34, 56040, 108, 'Apple Pie', 15, 20.00, 300.00, 1, '2025-05-23 21:11:46', '2025-05-23 21:11:46'),
-(35, 56040, 29, 'Bedsheet 229', 43, 33.25, 1429.75, 1, '2025-05-23 21:11:46', '2025-05-23 21:11:46'),
-(36, 56040, 103, 'Cheese Burger', 10, 24.00, 240.00, 1, '2025-05-23 21:11:46', '2025-05-23 21:11:46'),
-(37, 31087, 65, 'Almond Pack', 25, 17.00, 425.00, 1, '2025-05-23 21:26:13', '2025-05-23 21:26:13'),
-(38, 31087, 108, 'Apple Pie', 15, 20.00, 300.00, 1, '2025-05-23 21:26:13', '2025-05-23 21:26:13');
+(1, 82179, 65, 'Almond Pack', 25, 17.00, 425.00, 1, '2025-05-31 15:35:49', '2025-05-31 15:35:49'),
+(2, 82179, 422, 'Apple Juice Bottle', 40, 18.00, 720.00, 1, '2025-05-31 15:36:11', '2025-05-31 15:36:11'),
+(3, 82179, 81, 'Boiled Egg', 30, 6.00, 180.00, 1, '2025-05-31 15:36:15', '2025-05-31 15:36:15'),
+(4, 82179, 5, 'Body Lotion 205', 34, 1.88, 63.92, 1, '2025-05-31 15:40:09', '2025-05-31 15:40:09'),
+(6, 12505, 119, 'Apple', 45, 7.00, 315.00, 1, '2025-06-01 08:39:18', '2025-06-01 08:39:18'),
+(7, 12505, 118, 'Banana', 50, 6.00, 300.00, 1, '2025-06-01 08:39:20', '2025-06-01 08:39:20'),
+(8, 12505, 108, 'Apple Pie', 15, 20.00, 300.00, 1, '2025-06-01 08:50:56', '2025-06-01 08:50:56'),
+(9, 29741, 425, 'Vegetable Soup', 25, 15.75, 393.75, 1, '2025-06-02 06:13:32', '2025-06-02 06:13:32'),
+(10, 29741, 119, 'Apple', 45, 7.00, 315.00, 1, '2025-06-02 06:13:36', '2025-06-02 06:13:36'),
+(11, 29741, 32, 'Biscuits 232', 72, 20.59, 1482.48, 1, '2025-06-02 06:13:43', '2025-06-02 06:13:43'),
+(12, 29741, 31, 'Mineral Water 231', 9, 45.48, 409.32, 1, '2025-06-02 06:14:14', '2025-06-02 06:14:14'),
+(13, 29741, 442, 'Apple Pie Slice', 15, 16.00, 240.00, 1, '2025-06-02 06:14:30', '2025-06-02 06:14:30'),
+(14, 0, 117, 'Apple Juice', 35, 12.50, 437.50, 1, '2025-06-03 20:20:47', '2025-06-03 20:20:47'),
+(15, 0, 108, 'Apple Pie', 15, 20.00, 300.00, 1, '2025-06-03 20:20:47', '2025-06-03 20:20:47'),
+(16, 0, 75, 'Beef Sandwich', 15, 22.00, 330.00, 1, '2025-06-03 20:20:47', '2025-06-03 20:20:47');
 
 -- --------------------------------------------------------
 
@@ -1255,6 +1552,84 @@ INSERT INTO `promocode` (`id`, `room_id`, `form_date`, `to_date`, `discount`, `p
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `restaruent_invoice`
+--
+
+CREATE TABLE `restaruent_invoice` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `invoice_no` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(50) NOT NULL,
+  `address` text NOT NULL,
+  `item_total` decimal(12,2) DEFAULT 0.00,
+  `advance_amount` decimal(12,2) DEFAULT 0.00,
+  `due_amount` decimal(12,2) DEFAULT 0.00,
+  `discount_amount` decimal(12,2) DEFAULT 0.00,
+  `after_discount` decimal(12,2) DEFAULT 0.00,
+  `tax_percentage` decimal(5,2) DEFAULT 0.00,
+  `tax_amount` decimal(12,2) DEFAULT 0.00,
+  `grand_total` decimal(12,2) DEFAULT 0.00,
+  `invoice_create_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `restaruent_invoice`
+--
+
+INSERT INTO `restaruent_invoice` (`id`, `invoice_no`, `name`, `email`, `phone`, `address`, `item_total`, `advance_amount`, `due_amount`, `discount_amount`, `after_discount`, `tax_percentage`, `tax_amount`, `grand_total`, `invoice_create_by`, `created_at`, `updated_at`) VALUES
+(1, '0000001', 'Jons', 'mdbijon@gmail.com', '01567897888', 'dhakak', 1067.50, 0.00, 1067.50, 0.00, 1067.50, 2.00, 21.35, 1088.85, 1, '2025-06-03 20:42:10', '2025-06-03 20:52:23'),
+(2, '0000002', 'Mrs. Ayesha', 'ayesha@gmail.com', '01988846927', 'Dhaka', 7966.40, 0.00, 7966.40, 0.00, 7966.40, 2.00, 159.33, 8125.73, 1, '2025-06-03 20:43:30', '2025-06-03 20:52:19'),
+(3, '0000003', 'Gazi', 'gazi@gmail.com', '01915728982', 'Dhaka', 645.00, 0.00, 645.00, 0.00, 645.00, 2.00, 12.90, 657.90, 1, '2025-06-03 20:48:44', '2025-06-03 20:52:48'),
+(4, '0000004', 'Gazi', 'gazi@gmail.com', '01915728982', 'Dhaka', 645.00, 0.00, 645.00, 0.00, 645.00, 2.00, 12.90, 657.90, 1, '2025-06-03 20:51:20', '2025-06-03 20:52:52'),
+(5, '0000005', 'Robi', 'robi@gmail.com', '01915728982', 'Dhaka', 645.00, 0.00, 645.00, 0.00, 645.00, 2.00, 12.90, 657.90, 1, '2025-06-03 20:52:02', '2025-06-03 20:52:43');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `restaruent_invoice_history`
+--
+
+CREATE TABLE `restaruent_invoice_history` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `rest_invoice_id` bigint(20) UNSIGNED NOT NULL,
+  `item_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `qty` int(10) UNSIGNED DEFAULT 1,
+  `price` decimal(12,2) DEFAULT 0.00,
+  `total` decimal(12,2) DEFAULT 0.00,
+  `invoice_create_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `restaruent_invoice_history`
+--
+
+INSERT INTO `restaruent_invoice_history` (`id`, `rest_invoice_id`, `item_id`, `name`, `qty`, `price`, `total`, `invoice_create_by`, `created_at`, `updated_at`) VALUES
+(1, 1, 117, 'Apple Juice', 35, 12.50, 437.50, 1, '2025-06-03 20:42:10', '2025-06-03 20:42:10'),
+(2, 1, 108, 'Apple Pie', 15, 20.00, 300.00, 1, '2025-06-03 20:42:10', '2025-06-03 20:42:10'),
+(3, 1, 75, 'Beef Sandwich', 15, 22.00, 330.00, 1, '2025-06-03 20:42:10', '2025-06-03 20:42:10'),
+(4, 2, 119, 'Apple', 45, 7.00, 315.00, 1, '2025-06-03 20:43:30', '2025-06-03 20:43:30'),
+(5, 2, 37, 'Bath Towel 237', 93, 38.64, 3593.52, 1, '2025-06-03 20:43:30', '2025-06-03 20:43:30'),
+(6, 2, 32, 'Biscuits 232', 144, 20.59, 2964.96, 1, '2025-06-03 20:43:30', '2025-06-03 20:43:30'),
+(7, 2, 142, 'Black Pepper Pack', 40, 7.00, 280.00, 1, '2025-06-03 20:43:30', '2025-06-03 20:43:30'),
+(8, 2, 5, 'Body Lotion 205', 34, 1.88, 63.92, 1, '2025-06-03 20:43:30', '2025-06-03 20:43:30'),
+(9, 2, 461, 'Canned Corn', 30, 10.50, 315.00, 1, '2025-06-03 20:43:30', '2025-06-03 20:43:30'),
+(10, 2, 59, 'Cream Biscuits', 70, 6.20, 434.00, 1, '2025-06-03 20:43:30', '2025-06-03 20:43:30'),
+(11, 3, 119, 'Apple', 45, 7.00, 315.00, 1, '2025-06-03 20:48:44', '2025-06-03 20:48:44'),
+(12, 3, 75, 'Beef Sandwich', 15, 22.00, 330.00, 1, '2025-06-03 20:48:44', '2025-06-03 20:48:44'),
+(13, 4, 119, 'Apple', 45, 7.00, 315.00, 1, '2025-06-03 20:51:20', '2025-06-03 20:51:20'),
+(14, 4, 75, 'Beef Sandwich', 15, 22.00, 330.00, 1, '2025-06-03 20:51:20', '2025-06-03 20:51:20'),
+(15, 5, 119, 'Apple', 45, 7.00, 315.00, 1, '2025-06-03 20:52:02', '2025-06-03 20:52:02'),
+(16, 5, 75, 'Beef Sandwich', 15, 22.00, 330.00, 1, '2025-06-03 20:52:02', '2025-06-03 20:52:02');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `room`
 --
 
@@ -1283,10 +1658,11 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`id`, `name`, `slug`, `roomType`, `capacity`, `extraCapacity`, `roomPrice`, `bedCharge`, `room_size_id`, `bedNumber`, `bed_type_id`, `roomDescription`, `reserveCondition`, `status`, `booking_status`, `created_at`, `updated_at`) VALUES
-(1, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 2, '', 7290.00, 0, 0, '', 1, 'Comfy beds, 10 – Based on 1 review\r\nThis bungalow includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and free toiletries. The unit has \r\nair conditioning, \r\nsea views, \r\na balcony and fruit is offered for guests. The unit has 1 bed. Bungalow size: 29 m²', '', 1, 2, '2025-04-03 14:43:03', '2025-05-24 03:11:46'),
-(3, 'Superior Bungalow', 'superior-bungalow', 'Superior Bungalow', 1, '', 12190.00, 0, 0, '', 3, '1 extra-large double bed \r\nComfy beds, 10 – Based on 1 review\r\nFeaturing a private entrance, this air-conditioned bungalow consists of 1 bedroom and 1 bathroom with a bath and a shower. This bungalow features a seating area, flat-screen TV, mountain views, as well as fruit for guests. The unit offers 1 bed.\r\n\r\nIn your private bathroom:\r\nBath\r\nFree toiletries\r\nShower\r\nBidet\r\nToilet\r\nToilet paper\r\nView:\r\nBalcony\r\nMountain view\r\nBungalow facilities:\r\nFlat-screen TV\r\nPrivate entrance\r\nFan\r\nTowels\r\nSeating Area\r\nMosquito net\r\nAir conditioning', '', 1, NULL, '2025-04-03 14:56:26', '2025-05-24 02:31:09'),
-(6, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 2, '', 7000.00, 0, 0, '', 1, '1 large double bed \r\nEntire bungalow29 m²BalconySea viewMountain viewEnsuite bathroom\r\nFree toiletries  Shower  Bidet Toilet  Sofa  Towels  Desk Seating Area  Mosquito net Fan  Toilet paper', '', 1, NULL, '2025-05-15 22:48:50', '2025-05-15 22:50:45'),
-(7, 'Bungalow', 'bungalow', 'Bungalow', 1, '', 9720.00, 0, 0, '', 1, '<p><strong>Bedroom 1: </strong>1 large double bed Living room: 1 sofa bed Comfy beds, 10 &ndash; Based on 1 review The unit has 2 beds. Smoking: ​ No smoking</p>', '', 1, 2, '2025-05-15 22:52:10', '2025-05-24 03:26:13');
+(1, 'Bungalow with Sea View', 'bungalow-with-sea-view', 'Bungalow with Sea View', 2, '', 7290.00, 0, 0, '', 1, 'Comfy beds, 10 – Based on 1 review\r\nThis bungalow includes 1 living room, 1 separate bedroom and 1 bathroom with a shower and free toiletries. The unit has \r\nair conditioning, \r\nsea views, \r\na balcony and fruit is offered for guests. The unit has 1 bed. Bungalow size: 29 m²', '', 1, 1, '2025-04-03 14:43:03', '2025-06-01 18:39:37'),
+(2, 'Executive Suite', 'executive-suite', 'Executive Suite', 1, '', 19528.00, 0, 0, '', 3, 'Living room: 1 sofa bed\r\nPrivate suite\r\n\r\nComfy beds, 10 – Based on 1 review\r\nThe unit has 2 beds.\r\n\r\nSmoking: ​ No smoking', '', 0, NULL, '2025-04-03 14:56:26', '2025-05-15 23:10:28'),
+(3, 'Superior Bungalow', 'superior-bungalow', 'Superior Bungalow', 1, '', 12190.00, 0, 0, '', 3, '1 extra-large double bed \r\nComfy beds, 10 – Based on 1 review\r\nFeaturing a private entrance, this air-conditioned bungalow consists of 1 bedroom and 1 bathroom with a bath and a shower. This bungalow features a seating area, flat-screen TV, mountain views, as well as fruit for guests. The unit offers 1 bed.\r\n\r\nIn your private bathroom:\r\nBath\r\nFree toiletries\r\nShower\r\nBidet\r\nToilet\r\nToilet paper\r\nView:\r\nBalcony\r\nMountain view\r\nBungalow facilities:\r\nFlat-screen TV\r\nPrivate entrance\r\nFan\r\nTowels\r\nSeating Area\r\nMosquito net\r\nAir conditioning', '', 1, 1, '2025-04-03 14:56:26', '2025-06-03 08:21:05'),
+(6, 'Bungalow with Sea View', 'bungalow-with-sea-view-', 'Bungalow with Sea View', 2, '', 7000.00, 0, 0, '', 1, '1 large double bed \r\nEntire bungalow29 m²BalconySea viewMountain viewEnsuite bathroom\r\nFree toiletries  Shower  Bidet Toilet  Sofa  Towels  Desk Seating Area  Mosquito net Fan  Toilet paper', '', 1, NULL, '2025-05-15 22:48:50', '2025-05-15 22:50:45'),
+(7, 'Bungalow', 'bungalow', 'Bungalow', 1, '', 9720.00, 0, 0, '', 1, '<p><strong>Bedroom 1: </strong>1 large double bed Living room: 1 sofa bed Comfy beds, 10 &ndash; Based on 1 review The unit has 2 beds. Smoking: ​ No smoking</p>', '', 1, 2, '2025-05-15 22:52:10', '2025-06-02 00:34:57');
 
 -- --------------------------------------------------------
 
@@ -1419,12 +1795,20 @@ INSERT INTO `room_images` (`id`, `room_id`, `roomImage`, `roomImgDescription`, `
 (2, 1, '/backend/files/Ba0w970urOW4I2T6Mvms.jpg', '', 1, '2025-04-03 14:48:19', '2025-04-03 14:48:19'),
 (3, 1, '/backend/files/cwUw8bJYAmoLODFqn88a.jpg', '', 1, '2025-04-03 14:48:27', '2025-04-03 14:48:27'),
 (4, 1, '/backend/files/Dubpa6yUt4rm913yYmGk.jpg', '', 1, '2025-04-03 14:48:35', '2025-04-03 14:48:35'),
+(5, 2, '/backend/files/mx7KULphkqXmCQNgdSGh.jpg', '', 1, '2025-04-03 14:59:21', '2025-04-03 14:59:21'),
 (6, 2, '/backend/files/OQLjTlhmOZU98U93CeMP.jpg', '', 1, '2025-04-03 14:59:30', '2025-04-03 14:59:30'),
 (7, 2, '/backend/files/XeEbspMBRrItpIratdBH.jpg', '', 1, '2025-04-03 14:59:36', '2025-04-03 14:59:36'),
 (8, 2, '/backend/files/uQqq6pQo4KonWwCjs2a9.jpg', '', 1, '2025-04-03 14:59:44', '2025-04-03 14:59:44'),
 (9, 2, '/backend/files/TMC44McTxlWjLA95VPP5.jpg', '', 1, '2025-04-03 14:59:53', '2025-04-03 14:59:53'),
+(10, 2, '/backend/files/LRsLChikzBJ1PHQ3h7Uw.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
+(18, 4, '/backend/files/LRsLChikzBJ1PHQ3h7Uw.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
 (19, 4, '/backend/files/Dubpa6yUt4rm913yYmGk.jpg', '', 1, '2025-04-03 15:00:01', '2025-04-03 15:00:01'),
-(20, 3, '/backend/files/fuEd8DSMvMW3hNl5Om2r.jpg', '', 1, '2025-05-08 23:25:12', '2025-05-08 23:25:12');
+(20, 3, '/backend/files/fuEd8DSMvMW3hNl5Om2r.jpg', '', 1, '2025-05-08 23:25:12', '2025-05-08 23:25:12'),
+(25, 7, '/backend/files/VTCgz0nj3TUqqJFQzAQu.jpg', NULL, 1, '2025-05-31 22:04:54', '2025-05-31 22:04:54'),
+(26, 7, '/backend/files/ppVzn7GURyxntV8ushBr.jpg', NULL, 1, '2025-05-31 22:04:54', '2025-05-31 22:04:54'),
+(27, 7, '/backend/files/7wDutafG2Quknaa7xbeI.jpg', NULL, 1, '2025-06-01 10:50:51', '2025-06-01 10:50:51'),
+(28, 7, '/backend/files/29XwOmoBrOac3FUGXbI7.jpeg', NULL, 1, '2025-06-01 10:51:01', '2025-06-01 10:51:01'),
+(29, 7, '/backend/files/kTUR8sryGzpm40y6J6CV.jpg', NULL, 1, '2025-06-01 10:51:23', '2025-06-01 10:51:23');
 
 -- --------------------------------------------------------
 
@@ -1530,7 +1914,44 @@ INSERT INTO `select_room_facilities` (`id`, `room_id`, `room_facility_group_id`,
 (19, 5, 2, 19, 1, 1, '2025-05-05 03:03:05', '2025-05-05 03:03:05'),
 (20, 5, 2, 20, 1, 1, '2025-05-05 03:03:05', '2025-05-05 03:03:05'),
 (21, 5, 2, 21, 1, 1, '2025-05-05 03:03:05', '2025-05-05 03:03:05'),
-(24, 5, 2, 25, 1, 1, '2025-05-05 03:03:05', '2025-05-05 03:03:05');
+(24, 5, 2, 25, 1, 1, '2025-05-05 03:03:05', '2025-05-05 03:03:05'),
+(25, 7, 1, 1, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(26, 7, 1, 2, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(27, 7, 1, 3, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(28, 7, 1, 4, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(29, 7, 1, 5, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(30, 7, 1, 6, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(31, 7, 1, 7, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(32, 7, 1, 8, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(33, 7, 1, 9, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(34, 7, 1, 10, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(35, 7, 1, 11, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(36, 7, 1, 12, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(37, 7, 1, 13, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(38, 7, 1, 14, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(39, 7, 1, 15, 1, 1, '2025-06-01 04:52:07', '2025-06-01 04:52:07'),
+(40, 7, 4, 37, 1, 1, '2025-06-01 04:54:35', '2025-06-01 04:54:35'),
+(41, 7, 4, 38, 1, 1, '2025-06-01 04:54:35', '2025-06-01 04:54:35'),
+(42, 7, 4, 39, 1, 1, '2025-06-01 04:54:35', '2025-06-01 04:54:35'),
+(43, 7, 4, 40, 1, 1, '2025-06-01 04:54:35', '2025-06-01 04:54:35'),
+(44, 7, 4, 41, 1, 1, '2025-06-01 04:54:35', '2025-06-01 04:54:35'),
+(45, 7, 4, 42, 1, 1, '2025-06-01 04:54:35', '2025-06-01 04:54:35'),
+(46, 7, 4, 43, 1, 1, '2025-06-01 04:54:35', '2025-06-01 04:54:35'),
+(47, 3, 1, 1, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(48, 3, 1, 2, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(49, 3, 1, 3, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(50, 3, 1, 4, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(51, 3, 1, 5, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(52, 3, 1, 6, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(53, 3, 1, 7, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(54, 3, 1, 8, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(55, 3, 1, 9, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(56, 3, 1, 10, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(57, 3, 1, 11, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(58, 3, 1, 12, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(59, 3, 1, 13, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(60, 3, 1, 14, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50'),
+(61, 3, 1, 15, 1, 1, '2025-06-01 04:55:50', '2025-06-01 04:55:50');
 
 -- --------------------------------------------------------
 
@@ -1579,6 +2000,8 @@ CREATE TABLE `setting` (
   `instragramlink` varchar(255) DEFAULT NULL,
   `slugan` varchar(255) DEFAULT NULL,
   `tax_percentag` int(11) DEFAULT NULL,
+  `currency_symbol` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `logo` varchar(255) DEFAULT NULL,
   `banner_image` varchar(255) DEFAULT NULL,
   `youtubelink` varchar(255) DEFAULT NULL,
   `update_by` int(11) DEFAULT NULL,
@@ -1590,8 +2013,8 @@ CREATE TABLE `setting` (
 -- Dumping data for table `setting`
 --
 
-INSERT INTO `setting` (`id`, `name`, `email`, `address`, `whatsApp`, `about_us`, `copyright`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `slugan`, `tax_percentag`, `banner_image`, `youtubelink`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 'Moon Nest', 'shahin@moon-nest.com', 'Pechardwip, Cox\'s Bazar, Bangladesh', '+8801830330055', 'Moon Nest is a very soothing resort. All are wooden bungalow with both sea and hill view sides. There is a bathroom, a couple bed room & a veranda in one bungalow. You will get complementary breakfast for 2 person with one bungalow. Also we have a open restaurant, where you can order fresh drinks, food, sea food and so on. The beautiful beach is 6 to 7 mins walking away from our resort.', 'All Right Reserved.Designed By Moon Nest', 'https://www.facebook.com/moon.nest.coxsbazar', NULL, NULL, '#', 'Moon Nest is a very soothing resort', 15, '/backend/files/3ETgRBbgeceBCnwXRein.jpg', 'https://www.youtube.com/embed/aoJEbllaj2c?si=kIVLuI-hWyoV19NH', NULL, '2024-05-12 05:32:50', '2025-05-23 20:22:10');
+INSERT INTO `setting` (`id`, `name`, `email`, `address`, `whatsApp`, `about_us`, `copyright`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `slugan`, `tax_percentag`, `currency_symbol`, `logo`, `banner_image`, `youtubelink`, `update_by`, `created_at`, `updated_at`) VALUES
+(1, 'Moon Nest', 'shahin@moon-nest.com', 'Pechardwip, Cox\'s Bazar, Bangladesh', '+8801830330055', 'Moon Nest is a very soothing resort. All are wooden bungalow with both sea and hill view sides. There is a bathroom, a couple bed room & a veranda in one bungalow. You will get complementary breakfast for 2 person with one bungalow. Also we have a open restaurant, where you can order fresh drinks, food, sea food and so on. The beautiful beach is 6 to 7 mins walking away from our resort.', 'All Right Reserved.Designed By Moon Nest', 'https://www.facebook.com/moon.nest.coxsbazar', NULL, NULL, '#', 'Moon Nest is a very soothing resort', 2, 'TK', '/backend/files/AukuMMjw6OAo2RZr5XX8.jpg', '/backend/files/3ETgRBbgeceBCnwXRein.jpg', 'https://www.youtube.com/embed/aoJEbllaj2c?si=kIVLuI-hWyoV19NH', NULL, '2024-05-12 05:32:50', '2025-06-01 16:27:53');
 
 -- --------------------------------------------------------
 
@@ -1689,12 +2112,24 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `fg_id`, `fg_wallet_address`, `inviteCode`, `ref_id`, `employee_id`, `company_name`, `role_id`, `name`, `email`, `username`, `phone`, `available_balance`, `show_password`, `password`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `email_verified_at`, `telegram`, `whtsapp`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
 (1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 'FG IT', 1, 'Black jons', 'dev1@mail.com', 'dev', '019155555', NULL, 'dev', '$2y$10$egNt4iHOZ4sWab8IcaHE9..QCyQc3z4oFRYUwesyeTH52KDFzM5.y', NULL, '01915728982', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, NULL, NULL, NULL, NULL, 1, NULL, '127.0.0.1', NULL, '2024-11-22 09:50:10', '2023-06-22 03:20:43', '2025-04-15 02:56:37', 1, NULL),
-(2, NULL, NULL, '5267056', NULL, NULL, NULL, 2, 'Jh', 'coxspegasus@gmail.com', '5267051', '01830330055', NULL, '#123456#', '$2y$10$8bd0N8/r35CybiJ9fPzzY.cZHirJbVWSObtX754W/1SKf7fbczu0W', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '37.111.200.10', NULL, NULL, NULL, '2025-05-06 10:32:06', '2025-05-06 10:32:06', 1, NULL),
-(3, 'FG000000024', '6bef7562c1493b48753b47113ea97cd9', '2536442', NULL, NULL, NULL, 2, 'Bijon', 'mdbijon@yahoo.com', '2530289', '00114568982', NULL, '#123456#', '$2y$10$0Bou/SBDtjDMRdGRPc/jlO2UDSVhHihkExPZigVrHv5Uhp7NPD0YW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '45.250.22.140', NULL, NULL, NULL, '2025-05-07 04:30:53', '2025-05-07 04:30:53', 1, NULL),
-(4, 'FG000000025', '7f284e9d9213df577c302320575f3ebc', '1203881', NULL, NULL, NULL, 2, 'mohammad yousuf', 'yousufharrier@gmail.com', '1198372', '01711936050', NULL, '#123456#', '$2y$10$wKWp7DYN35B/r8JEl74kdO6Z4QbgepL5Etu13RXAyGmYeJflM22re', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '103.150.27.238', NULL, NULL, NULL, '2025-05-08 17:58:39', '2025-05-08 18:01:19', 1, NULL),
-(5, 'FG000000026', 'eedc68afba0a1a3183e2c631e1cea6b9', '7622966', NULL, NULL, NULL, 2, 'Mridul', 'mujib1k@yahoo.com', '7617374', '01911367912', NULL, '#123456#', '$2y$10$YmlCm.7oTeNb4KaIHZHaAON.YuDUfJ6KvKQHjgKg8b9tlybIRS5jm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '43.255.21.233', NULL, NULL, NULL, '2025-05-10 11:32:41', '2025-05-10 11:32:42', 1, NULL),
-(6, 'FG000000027', '4d72b53ed1ca22f2ea59523681cd993c', '7364654', NULL, NULL, NULL, 2, 'Test', 'aljawadurrahman1234@gmail.com', '1735861', '01684253300', NULL, '#123456#', '$2y$10$uWUW8qHR2VnpF8qjIYFP2OVYjzQD7fMJlVGrU4g1fnf9KmVIQTvDW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '119.148.32.98', NULL, NULL, NULL, '2025-05-13 07:35:35', '2025-05-13 07:35:36', 1, NULL),
-(7, 'FG000000028', '81d3f6e24daca2a87d8f1fbc5bb48f1d', '8608109', NULL, NULL, NULL, 2, 'test', 'test@gmail.com', '8598088', '0000000887', NULL, '#123456#', '$2y$10$XzL.U3zfBIPegM1k9fDJj.qNUkelDfpvNlzGbrzMHUbnU/AgWgHKa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '103.150.26.149', NULL, NULL, NULL, '2025-05-15 17:07:39', '2025-05-15 17:07:40', 1, NULL);
+(2, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'Ibraheem', '12ibraheem@gmail.com', '4888', '045878787888', NULL, 'Ibraheem', '$2y$10$xD8SNrVUclcpYXMtzfx9OeMz98V4bTDYQG/0OwYS.xFv1rwMnufWC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:01:49', '2025-04-12 04:01:56', 1, NULL),
+(3, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'jannat', 'jannat4874878@gmail.com', 'jannat', '458787888', NULL, 'jannat', '$2y$10$bfBvKWL5zKjjpz0IZIdSPeIPRt148zd6FVVDAL.2xRNzgUgiJ5qEK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:01:53', '2025-04-12 04:01:59', 1, NULL),
+(4, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'Rana', 'rana@gmail.com', 'rana', '59898989898', NULL, '124156', '$2y$10$PG63dsfnzkqO4t3OK/mTW.RvcnrD0i8bSeiGvkIgGi7F9bVJ2k1rG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:02:35', '2025-04-12 04:02:35', 1, NULL),
+(5, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'Rabeya', 'rabeya@gmail.com', 'rabeya', '01989898999', NULL, 'rabeya', '$2y$10$O0VXjUpE0VYsFME.BP.R5ehmXaKPGE9gu.gXlsLHjqXdDKAs3BiZC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:12:44', '2025-04-12 04:12:44', 1, NULL),
+(6, NULL, NULL, NULL, NULL, NULL, NULL, 3, 'Ayesha', 'ayesha@gmail.com', 'ayesha123', '00157878788', NULL, 'ayesha123', '$2y$10$4FbfI7bUybzfYjzzRRwddeoUlucC4DgRG3JTMOFO8ED8lPHpmxtGG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2025-04-12 04:41:06', '2025-04-12 04:41:06', 1, NULL),
+(7, NULL, '6f21357fs863ce4424ce21c1a82f49a7d5d13', '0000123', 0, 4, 'FG IT', 1, 'Admin ', 'admin@mail.com', 'admin112233', '019155555', NULL, 'dev', '$2a$12$udapmAoPpAi2i6OCFQoVb.akdQkNF45V4OgKwWZO1WYPuE1Bp6F.C', NULL, '019157289845', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, NULL, NULL, NULL, NULL, 1, NULL, '127.0.0.1', NULL, '2024-11-22 09:50:10', '2023-06-22 03:20:43', '2025-04-15 02:56:37', 1, NULL),
+(8, NULL, NULL, '5267056', NULL, NULL, NULL, 2, 'Jh', 'coxspegasus@gmail.com', '5267051', '01830330055', NULL, '#123456#', '$2y$10$8bd0N8/r35CybiJ9fPzzY.cZHirJbVWSObtX754W/1SKf7fbczu0W', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '37.111.200.10', NULL, NULL, NULL, '2025-05-06 10:32:06', '2025-05-06 10:32:06', 1, NULL),
+(9, 'FG000000024', '6bef7562c1493b48753b47113ea97cd9', '2536442', NULL, NULL, NULL, 2, 'Bijon', 'mdbijon@yahoo.com', '2530289', '00114568982', NULL, '#123456#', '$2y$10$0Bou/SBDtjDMRdGRPc/jlO2UDSVhHihkExPZigVrHv5Uhp7NPD0YW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '45.250.22.140', NULL, NULL, NULL, '2025-05-07 04:30:53', '2025-05-07 04:30:53', 1, NULL),
+(25, 'FG000000025', '7f284e9d9213df577c302320575f3ebc', '1203881', NULL, NULL, NULL, 2, 'mohammad yousuf', 'yousufharrier@gmail.com', '1198372', '01711936050', NULL, '#123456#', '$2y$10$wKWp7DYN35B/r8JEl74kdO6Z4QbgepL5Etu13RXAyGmYeJflM22re', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '103.150.27.238', NULL, NULL, NULL, '2025-05-08 17:58:39', '2025-05-08 18:01:19', 1, NULL),
+(26, 'FG000000026', 'eedc68afba0a1a3183e2c631e1cea6b9', '7622966', NULL, NULL, NULL, 2, 'Mridul', 'mujib1k@yahoo.com', '7617374', '01911367912', NULL, '#123456#', '$2y$10$YmlCm.7oTeNb4KaIHZHaAON.YuDUfJ6KvKQHjgKg8b9tlybIRS5jm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '43.255.21.233', NULL, NULL, NULL, '2025-05-10 11:32:41', '2025-05-10 11:32:42', 1, NULL),
+(27, 'FG000000027', '4d72b53ed1ca22f2ea59523681cd993c', '7364654', NULL, NULL, NULL, 2, 'Test', 'aljawadurrahman1234@gmail.com', '1735861', '01684253300', NULL, '#123456#', '$2y$10$uWUW8qHR2VnpF8qjIYFP2OVYjzQD7fMJlVGrU4g1fnf9KmVIQTvDW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '119.148.32.98', NULL, NULL, NULL, '2025-05-13 07:35:35', '2025-05-13 07:35:36', 1, NULL),
+(28, 'FG000000028', '81d3f6e24daca2a87d8f1fbc5bb48f1d', '8608109', NULL, NULL, NULL, 2, 'test', 'test@gmail.com', '8598088', '0000000887', NULL, '#123456#', '$2y$10$XzL.U3zfBIPegM1k9fDJj.qNUkelDfpvNlzGbrzMHUbnU/AgWgHKa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '103.150.26.149', NULL, NULL, NULL, '2025-05-15 17:07:39', '2025-05-15 17:07:40', 1, NULL),
+(29, NULL, NULL, '6388409', NULL, NULL, NULL, 2, 'Bijon', 'mdbijon@yahoo123.com', '6388398', '01915728982', NULL, '#123456#', '$2y$10$VLFOg9qCGiEOPLOAdmseMehcHqI70HHRfar0KhnHqTNe.4nbldAm2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-05-30 20:07:19', '2025-05-30 20:07:19', 1, NULL),
+(30, NULL, NULL, '7670022', NULL, NULL, NULL, 2, 'Bijon', 'gazijons@gmail.com', '7670019', '655987888', NULL, '#123456#', '$2y$10$88CKnMNqmMnIL3rGJLqnDehfgBV4GAjnx5.bnczyTjRHzB3XvlRzm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-05-30 20:09:27', '2025-05-30 20:09:27', 1, NULL),
+(31, NULL, NULL, '8081975', NULL, NULL, NULL, 2, 'Bijon', '1234gazijons@gmail.com', '5808197', '655987888', NULL, '#123456#', '$2y$10$HuZFwLjco6c2YhNNW2H16Od98Jj0R6vMVEd9mUqzCqeGzu5Dc7pGa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-05-30 20:10:08', '2025-05-30 20:10:08', 1, NULL),
+(32, 'FG000000032', '729a84d0116f5e62632633990c9b1dad', '0774124', NULL, NULL, NULL, 2, 'Bijon', '4447ons@gmail.com', '0773488', '655987888', NULL, '#123456#', '$2y$10$Mzx8troDefyZGwefBxF3wefOmnQLm883OVZKhdtPhOMSUMkm7.dSO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-05-30 20:14:37', '2025-05-30 20:14:37', 1, NULL),
+(33, NULL, NULL, '5772638', NULL, NULL, NULL, 2, 'Ibraheem ahmed', 'ibrhmahmed@gmail.com', '5772632', '58978788888', NULL, '#123456#', '$2y$10$JGOLRhlVs487hAG61L.v6eJZQFUMZjZT4dCV3Gx3s4lz9AERoo7jG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-06-01 12:39:37', '2025-06-01 12:39:37', 1, NULL),
+(34, NULL, NULL, '7888672', NULL, NULL, NULL, 2, 'ff', 'sdfsf@gmail.com', '7888666', '00589789788', NULL, '#123456#', '$2y$10$PhZxQHU89/EQ7bQAqLaX/uzZPutklUj5WlKjyu8rf5hSpY3SyCWnC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-06-01 12:43:08', '2025-06-01 12:43:08', 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1862,10 +2297,24 @@ ALTER TABLE `promocode`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `restaruent_invoice`
+--
+ALTER TABLE `restaruent_invoice`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `invoice_no` (`invoice_no`);
+
+--
+-- Indexes for table `restaruent_invoice_history`
+--
+ALTER TABLE `restaruent_invoice_history`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `room`
 --
 ALTER TABLE `room`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`);
 
 --
 -- Indexes for table `room_facility`
@@ -1957,7 +2406,7 @@ ALTER TABLE `bed_type`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `booking_type`
@@ -2017,7 +2466,7 @@ ALTER TABLE `global_wallet_address`
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `items`
@@ -2080,6 +2529,18 @@ ALTER TABLE `promocode`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `restaruent_invoice`
+--
+ALTER TABLE `restaruent_invoice`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `restaruent_invoice_history`
+--
+ALTER TABLE `restaruent_invoice_history`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
@@ -2095,7 +2556,7 @@ ALTER TABLE `room_facility`
 -- AUTO_INCREMENT for table `room_images`
 --
 ALTER TABLE `room_images`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `room_size`
@@ -2113,7 +2574,7 @@ ALTER TABLE `rule`
 -- AUTO_INCREMENT for table `select_room_facilities`
 --
 ALTER TABLE `select_room_facilities`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `service`
@@ -2143,7 +2604,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

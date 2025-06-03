@@ -57,6 +57,15 @@ Benefits:
 Ideal For:
 
 Hotels, resorts, guest houses, and property managers looking to digitize and streamline their operations with a scalable and maintainable solution.
+ 
 
-Let me know if you'd like to add deployment options, a user guide, or a login system description.
+Mail Configration 
 
+MAIL_MAILER=smtp
+MAIL_HOST=mail.yourdomain.com
+MAIL_PORT=465
+MAIL_USERNAME=mail@yourdomain.com
+MAIL_PASSWORD=password
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=no-reply@moon-nest.com
+MAIL_FROM_NAME="moon-nest.com"

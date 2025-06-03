@@ -418,15 +418,18 @@ class BookingController extends Controller
                 'name'          => 'required',
                 'slug'          => 'required',
                 'paymenttype'   => 'required',
-                'email'     => 'required|email',
-                'checkin'   => 'required|date',
-                'checkout'  => 'required|date|after_or_equal:checkin',
+                'email'         => 'required|email',
+                'checkin'       => 'required|date',
+                'phone'         => 'required|digits:11|numeric',
+                'checkout'      => 'required|date|after_or_equal:checkin',
             ],
             [
                 'name.required'     => 'Please enter your name.',
                 'email.required'    => 'Email address is required.',
                 'paymenttype.required'     => 'Please select payment type.',
                 'email.email'       => 'Please provide a valid email address.',
+                'phone.required'    => 'Phone number is required. Do not include country code. Example: 019xxxxxxxx',
+                'phone.digits'      => 'Phone number must be exactly 11 digits. Example: 019xxxxxxxx',
                 'checkin.required'  => 'Please select a check-in date.',
                 'checkin.date'      => 'Check-in date must be a valid date.',
                 'checkout.required' => 'Please select a check-out date.',
@@ -595,7 +598,7 @@ class BookingController extends Controller
             ->leftJoin('room', 'room.id', '=', 'booking.room_id')
             ->select(
                 'booking.*',
-               // 'users.phone',
+                // 'users.phone',
                 'room.name as room_name',
                 'room.roomPrice as perday_roomprice',
                 \DB::raw("
@@ -697,13 +700,14 @@ class BookingController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'checkin'     => 'required', // booking id (primary)
-                'checkout'    => 'required',
-                'arival_from' => 'required',
-                'room_id'     => 'required',
-                'phone'       => 'required',
-                'id_no'       => 'required',
-                'total_amount' => 'required',
+                'checkin'        => 'required', // booking id (primary)
+                'checkout'       => 'required',
+                'arival_from'    => 'required',
+                'room_id'        => 'required',
+                'phone'          => 'required|digits:11|numeric',
+                'email'          => 'required|email',
+                'id_no'          => 'required',
+                'total_amount'   => 'required',
                 'advance_amount' => 'required',
 
             ],
@@ -712,7 +716,8 @@ class BookingController extends Controller
                 'checkout.required'    => 'Check-out date is required.',
                 'arival_from.required' => 'Arrival location is required.',
                 'room_id.required'     => 'Room ID is required.',
-                'phone.required'       => 'Phone number is required.',
+                'phone.required'       => 'Phone number is required. Do not include country code. Example: 019xxxxxxxx',
+                'phone.digits'         => 'Phone number must be exactly 11 digits. Example: 019xxxxxxxx',
                 'id_no.required'       => 'ID number is required.',
                 'total_amount.required' => 'Total amount is required.',
                 'advance_amount.required' => 'Advance amount is required.',

@@ -447,9 +447,6 @@ const BookingList = () => {
                       ) : (
                         <div className="table-responsive">
                           <div className="card mt-4">
-                            <div className="card-header text-center">
-                              <h4>Booking Rooms List</h4>
-                            </div>
                             <div className="card-body p-0">
                               <table className="table table-striped table-bordered mb-0">
                                 <thead className="thead-dark">

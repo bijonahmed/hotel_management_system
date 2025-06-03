@@ -66,6 +66,7 @@ class SettingController extends Controller
             'data'         => $data,
             'banner_image' => !empty($data->banner_image) ? url($data->banner_image) : "",
             'logo'         => !empty($data->logo) ? url($data->logo) : "",
+            'tax_percentag'=> $data->tax_percentag,
             'message' => 'success'
         ];
         return response()->json($response, 200);

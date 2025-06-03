@@ -39,9 +39,10 @@ const LeftSideBarComponent = () => {
     <div className="sidebar-wrapper" data-simplebar="true">
       <div className="sidebar-header">
         <div>
-          <h4 className="logo-text" style={{ fontSize: "12px" }}>
-            <b>Hotel Management System</b>
-          </h4>
+         <Link to="/dashboard"> <center><h4 className="logo-text text-center" style={{ fontSize: "16px" }}>
+            HMS
+          </h4></center>
+          </Link>
         </div>
         <div className="toggle-icon ms-auto">
           <i className="bx bx-arrow-back" />

@@ -50,6 +50,12 @@ import CheckInDetails from "../pages/booking/CheckInDetails.jsx";
 import CheckOutInvoice from "../pages/booking/CheckOutInvoice.jsx";
 import PrintCheckOutInvoice from "../pages/booking/PrintCheckOutInvoice.jsx";
 import CheckInPreview from "../pages/booking/CheckInPreview.jsx";
+//Restaurants List 
+import RestaurantsList from "../pages/restaurants/RestaurantsList.jsx";
+import CreateInvoice from "../pages/restaurants/CreateInvoice.jsx";
+import EditInvoice from "../pages/restaurants/EditInvoice.jsx";
+
+
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
 import BedTypeAdd from "../pages/roomsetting/BedTypeAdd.jsx";
@@ -147,8 +153,14 @@ const AppRouter = () => {
       <Route path="/booking/checkin-list" element={<CheckInList />} />
       <Route path="/booking/checking-details" element={<CheckInDetails />} />  
       <Route path="/booking/checkout-invoice" element={<CheckOutInvoice />} />
-     <Route path="/booking/print-checkout-invoice" element={<PrintCheckOutInvoice />} />
+      <Route path="/booking/print-checkout-invoice" element={<PrintCheckOutInvoice />} />
       <Route path="/booking/checking-preview" element={<CheckInPreview />} />  
+      {/* Restarurents */}
+      <Route path="/restaurant/restaurant-invoice" element={<RestaurantsList />} /> 
+      <Route path="/restaurant/create-invoice" element={<CreateInvoice />} /> 
+      <Route path="/restaurant/edit-invoice" element={<EditInvoice />} />
+
+
       {/* //ROMM SETTING */}
       <Route path="/roomsetting/bed-type-list" element={<BedTypeList />} />
       <Route path="/roomsetting/add-bed-type" element={<BedTypeAdd />} />

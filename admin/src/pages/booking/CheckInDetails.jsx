@@ -805,7 +805,7 @@ const CheckInDetails = () => {
                                                 <input
                                                   type="text"
                                                   className="form-control"
-                                                  placeholder="Father Name"
+                                                  placeholder="Email"
                                                   value={
                                                     booking.email
                                                   }

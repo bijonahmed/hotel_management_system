@@ -12,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import AuthUser from "../../components/AuthUser";
 import withReactContent from "sweetalert2-react-content";
 import ReactDOMServer from "react-dom/server";
+import Select from "react-select";
 
 const CheckOutInvoice = () => {
   const navigate = useNavigate();
@@ -35,6 +36,23 @@ const CheckOutInvoice = () => {
   const [finalDiscountAmt, setFinalDiscountAmt] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const handleClose = () => setShowModal(false);
+
+ const [currency_symbol, set_currency_symbol] = useState("");
+
+  const globalSetting = async () => {
+    try {
+      const response = await axios.get(`/setting/settingrowSystem`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const userData = response.data.data;
+      set_currency_symbol(userData.currency_symbol || "");
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+
+
 
   const handleChangeDiscount = (e) => {
     const discountValue = parseFloat(e.target.value) || 0;
@@ -227,7 +245,6 @@ const CheckOutInvoice = () => {
       });
       navigate(`/booking/print-checkout-invoice?booking_id=${booking_id}`);
       //navigate("/booking/checkout-list");
-      
     } catch (error) {
       if (error.response?.status === 422) {
         Swal.fire({
@@ -321,6 +338,12 @@ const CheckOutInvoice = () => {
       console.error("Error fetching user data:", error);
     }
   };
+
+  const options = itemData.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
   // Find selected item object
   const selectedItems = itemData.find(
     (item) => item.id === Number(selectedItemId)
@@ -386,7 +409,8 @@ const CheckOutInvoice = () => {
       }
 
       // ✅ Correct Axios request
-      axios.post("/booking/insertItems", itemPayload, {
+      axios
+        .post("/booking/insertItems", itemPayload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -446,6 +470,7 @@ const CheckOutInvoice = () => {
 
   useEffect(() => {
     fetechData();
+    globalSetting();
     defaultFetchItems();
   }, []);
 
@@ -570,7 +595,23 @@ const CheckOutInvoice = () => {
                                     <tr>
                                       <td>--</td>
                                       <td>
-                                        <select
+                                        <Select
+                                          className="basic-single"
+                                          classNamePrefix="select"
+                                          value={options.find(
+                                            (option) =>
+                                              option.value === selectedItemId
+                                          )}
+                                          onChange={(selectedOption) =>
+                                            setSelectedItemId(
+                                              selectedOption?.value || ""
+                                            )
+                                          }
+                                          options={options}
+                                          isClearable
+                                          placeholder="Select item"
+                                        />
+                                        {/* <select
                                           className="form-control"
                                           value={selectedItemId}
                                           onChange={(e) =>
@@ -586,7 +627,7 @@ const CheckOutInvoice = () => {
                                               {item.name}
                                             </option>
                                           ))}
-                                        </select>
+                                        </select> */}
                                       </td>
                                       <td>
                                         <input
@@ -594,7 +635,7 @@ const CheckOutInvoice = () => {
                                           className="form-control"
                                           placeholder="Qty"
                                           min="1"
-                                          value={qty ?? ''}
+                                          value={qty ?? ""}
                                           onChange={(e) =>
                                             setQty(e.target.value)
                                           }
@@ -605,7 +646,7 @@ const CheckOutInvoice = () => {
                                           type="number"
                                           className="form-control"
                                           placeholder="Price"
-                                          value={price ?? ''}
+                                          value={price ?? ""}
                                           disabled
                                           readOnly
                                         />
@@ -615,7 +656,7 @@ const CheckOutInvoice = () => {
                                           type="text"
                                           className="form-control"
                                           placeholder="Total"
-                                          value={total ?? ''}
+                                          value={total ?? ""}
                                           disabled
                                           readOnly
                                         />
@@ -712,7 +753,7 @@ const CheckOutInvoice = () => {
                                           booking.perday_roomprice *
                                             booking.total_booking_days
                                         )}
-                                        TK
+                                      {currency_symbol}
                                       </td>
                                     </tr>
                                   </tbody>
@@ -723,7 +764,7 @@ const CheckOutInvoice = () => {
                                       </th>
                                       <td>
                                         {total_bill}
-                                        {" TK"}
+                                        {currency_symbol}
                                       </td>
                                     </tr>
                                     <tr>
@@ -782,7 +823,7 @@ const CheckOutInvoice = () => {
                                       </th>
                                       <td>
                                         {formatCurrency(finalDiscountAmt || 0)}{" "}
-                                        {" TK"}
+                                        {currency_symbol}
                                       </td>
                                     </tr>
 
@@ -790,7 +831,7 @@ const CheckOutInvoice = () => {
                                       <th colSpan={6} className="text-end">
                                         Tax ({booking.tax_percentage})%
                                       </th>
-                                      <td>{formatCurrency(totalWithTax)}</td>
+                                      <td>{formatCurrency(totalWithTax)} {currency_symbol}</td>
                                     </tr>
 
                                     <tr>
@@ -798,7 +839,7 @@ const CheckOutInvoice = () => {
                                         Item Total (+)
                                       </th>
                                       <td>
-                                        {itemGrandTotal} {" TK"}
+                                        {itemGrandTotal} {currency_symbol}
                                       </td>
                                     </tr>
                                     <tr>
@@ -806,7 +847,7 @@ const CheckOutInvoice = () => {
                                         <strong>Grand Total</strong>
                                       </th>
                                       <td>
-                                        {convGrandTotal} {" TK"}
+                                        {convGrandTotal} {currency_symbol}
                                       </td>
                                     </tr>
                                   </tfoot>
