@@ -122,10 +122,6 @@ class RestaurantController extends Controller
         $restInvoice = RestInvoice::create($resData);
         // Get the last inserted ID
         $lastId = $restInvoice->id;
-
-
-        //dd($updateBooking);
-
         // ✅ Use validated data
         $data = $validator->validated();
         // dd($data);
@@ -142,12 +138,71 @@ class RestaurantController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Successfully booked.']);
+        return response()->json(['message' => 'Successfully insert.']);
+    }
+
+    public function editItems(Request $request)
+    {
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'id'                  => 'required',
+            'name'                  => 'required',
+            'email'                 => 'required|email',
+            'phone'                 => 'required|digits:11|numeric',
+            'address'               => 'required',
+            'item_total'            => 'required',
+            'advance_amount'        => 'required',
+            'due_amount'            => 'required',
+            'discount_amount'       => 'required',
+            'after_discount'        => 'required',
+            'tax_percentage'        => 'required',
+            'tax_amount'            => 'required',
+            'grand_total'           => 'required',
+
+        ], [
+            'id.required'               => 'ID number is required.',
+            'name.required'             => 'Customer name is required.',
+            'email.required'            => 'Email address is required.',
+            'phone.required'            => 'Phone number is required. Do not include country code. Example: 019xxxxxxxx',
+            'phone.digits'              => 'Phone number must be exactly 11 digits. Example: 019xxxxxxxx',
+            'address.required'          => 'Address is required.',
+            'item_total.required'       => 'Item total is required.',
+            'advance_amount.required'   => 'Advance amount is required.',
+            'due_amount.required'       => 'Due amount is required.',
+            'discount_amount.required'  => 'Discount amount is required.',
+            'after_discount.required'   => 'Amount after discount is required.',
+            'tax_percentage.required'   => 'Tax percentage is required.',
+            'tax_amount.required'       => 'Tax amount is required.',
+            'grand_total.required'      => 'Grand total is required.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $id = $request->id;
+        $resData = [
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'phone'             => $request->phone,
+            'address'           => $request->address,
+            'item_total'        => str_replace(',', '', $request->item_total),
+            'advance_amount'    => str_replace(',', '', $request->advance_amount),
+            'due_amount'        => str_replace(',', '', $request->due_amount),
+            'discount_amount'   => str_replace(',', '', $request->discount_amount),
+            'after_discount'    => str_replace(',', '', $request->after_discount),
+            'tax_percentage'    => str_replace(',', '', $request->tax_percentage),
+            'tax_amount'        => str_replace(',', '', $request->tax_amount),
+            'grand_total'       => str_replace(',', '', $request->grand_total),
+            'invoice_create_by' => $this->userid,
+        ];
+        // ✅ Correct order: where()->update()
+        RestInvoice::where('id', $id)->update($resData);
+        return response()->json(['message' => 'Successfully update.']);
     }
 
     public function checkRestInvoiceRow(Request $request)
     {
-
         //dd($request->all());
         $id     = $request->id;
         $particularData  = RestInvoice::where('restaruent_invoice.id', $id)->first();
@@ -169,10 +224,33 @@ class RestaurantController extends Controller
         $setting       = Setting::where('id', 1)->first();
         $taxPercentage = !empty($setting->tax_percentag) ? $setting->tax_percentag : "0";
 
-        $data['booking_data']   = $particularData;
+        $data['particularData']   = $particularData;
         $data['tax_percentage'] = $taxPercentage;
         $data['itemlist']       = $invArray;
         return response()->json($data, 200);
+    }
+
+    public function deleteRestInvItem(Request $request)
+    {
+        //dd($request->all());
+        $invoiceId = $request->invoiceId;
+        $item_id    = $request->id;
+        $item       = RestInvoiceHistory::where('rest_invoice_id', $invoiceId)
+            ->where('item_id', $item_id)
+            ->first();
+
+        if ($item) {
+            $item->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Item deleted successfully.',
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Item not found.',
+        ], 404);
     }
 
     public function getInvoiceList(Request $request)

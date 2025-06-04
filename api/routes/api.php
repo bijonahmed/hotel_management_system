@@ -237,8 +237,10 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         'prefix' => 'restaurant'
     ], function () {
         Route::post('insertItems', [RestaurantController::class, 'insertItems']);
+        Route::post('editItems', [RestaurantController::class, 'editItems']);
         Route::get('getInvoiceList', [RestaurantController::class, 'getInvoiceList']);
         Route::get('checkRestInvoiceRow', [RestaurantController::class, 'checkRestInvoiceRow']);
+        Route::get('deleteRestInvItem', [RestaurantController::class, 'deleteRestInvItem']);
     });
 
 

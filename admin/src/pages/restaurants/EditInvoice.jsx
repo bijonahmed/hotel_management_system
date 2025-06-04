@@ -16,6 +16,7 @@ import Select from "react-select";
 const EditInvoice = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("invoice_id");
+  const invoiceId = id;
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const { getToken, token, logout, http, setToken } = AuthUser();
@@ -59,79 +60,38 @@ const EditInvoice = () => {
     }
   };
 
-
-
   const fetchDefaultData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get("/restaurant/checkRestInvoiceRow", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-          params: { id: id },
-        });
-  
-        const bookingData = response.data.booking_data;
-        setPreview({
-          front: response.data.front || null,
-          back: response.data.back || null,
-        });
-  
-        setBooking({
-          checkin: formatDate(bookingData.checkin),
-          checkout: formatDate(bookingData.checkout),
-          customer_dob: formatDate(bookingData.customer_dob),
-          booking_type: bookingData.booking_type || "",
-          booking_id: bookingData.booking_id || "",
-          booking_reference_no: bookingData.booking_reference_no || "",
-          pupose_of_visit: bookingData.pupose_of_visit || "",
-          remarks: bookingData.remarks || "",
-          arival_from: bookingData.arival_from || "",
-          room_id: bookingData.room_id || "",
-          room_no: bookingData.room_no || "",
-          adult: bookingData.adult || "",
-          child: bookingData.child || "",
-          country_code: bookingData.country_code || "88",
-          phone: bookingData.phone || "",
-          customer_title: bookingData.customer_title || "",
-          customer_first_name: bookingData.customer_first_name || "",
-          customer_last_name: bookingData.customer_last_name || "",
-          customer_father_name: bookingData.customer_father_name || "",
-          customer_gender: bookingData.customer_gender || "",
-          customer_occupation: bookingData.customer_occupation || "",
-          customer_nationality: bookingData.customer_nationality || "Bangladeshi",
-          customer_contact_type: bookingData.customer_contact_type || "",
-          customer_contact_email: bookingData.customer_contact_email || "",
-          customer_contact_address: bookingData.customer_contact_address || "",
-          room_name: bookingData.room_name || "",
-          id_no: bookingData.id_no || "",
-          room_price: formatCurrency(bookingData.room_price) || "0.00",
-          total_amount: formatCurrency(response.data.total_amount) || "0.00",
-          advance_amount: formatCurrency(bookingData.advance_amount) || "0.00",
-          total_booking_days: bookingData.total_booking_days || "",
-          front_side_document: null,
-          back_side_document: null,
-        });
-      } catch (error) {
-        console.error("Error fetching booking data:", error);
-        Swal.fire("Error", "Failed to fetch booking data", "error");
-      } finally {
-        setLoading(false);
-      }
-    };
+    setLoading(true);
+    try {
+      const response = await axios.get("/restaurant/checkRestInvoiceRow", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+        params: { id: id },
+      });
 
-
-
-
-
-
-
-
-
-
-
-
+      const particularData = response.data.particularData;
+      const ilistData = response.data.itemlist;
+      setData({
+        name: particularData.name || null,
+        email: particularData.email || null,
+        phone: particularData.phone || null,
+        address: particularData.address || null,
+        tax_percentage: particularData.tax_percentage || null,
+      });
+      setGrandTotal(particularData.item_total);
+      setAdvanceAmt(particularData.advance_amount);
+      setDueAmount(particularData.due_amount);
+      setdiscountAmt(particularData.discount_amount);
+      setAddedItems(ilistData);
+    } catch (error) {
+      console.error("Error fetching booking data:", error);
+      Swal.fire("Error", "Failed to fetch booking data", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChangeDiscount = (e) => {
     const discountValue = parseFloat(e.target.value) || 0;
@@ -163,6 +123,7 @@ const EditInvoice = () => {
   const handleConfirm = async () => {
     // console.log("All items:" + addedItems);
     const data = {
+      id: id,
       name: InsertData.name,
       email: InsertData.email,
       phone: InsertData.phone,
@@ -181,7 +142,7 @@ const EditInvoice = () => {
     };
 
     try {
-      const response = await axios.post("/restaurant/insertItems", data, {
+      const response = await axios.post("/restaurant/editItems", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -372,7 +333,7 @@ const EditInvoice = () => {
   }
 
   // Remove item by index
-  async function handleRemove(index, id) {
+  async function handleRemove(index, id, price) {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you really want to delete this item?",
@@ -383,10 +344,38 @@ const EditInvoice = () => {
     });
 
     if (result.isConfirmed) {
-      // Remove item from UI
-      setAddedItems((prev) => prev.filter((_, i) => i !== index));
+      const updatedItems = addedItems.filter((_, i) => i !== index);
+      setAddedItems(updatedItems); // update the UI list
+
+      try {
+        const response = await axios.get("/restaurant/deleteRestInvItem", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            invoiceId: invoiceId,
+            id: id,
+          },
+        });
+
+        const newItemTotal = updatedItems.reduce((sum, item) => {
+          const itemPrice = parseFloat(item.price || 0);
+          const itemQty = parseFloat(item.qty || 1); // default to 1 if qty is missing
+          return sum + itemPrice * itemQty;
+        }, 0);
+
+        console.log("Updated Item Grand Total: " + newItemTotal);
+        const dueAmt = newItemTotal - parseFloat(advanceAmt || 0);
+        setDueAmount(dueAmt);
+
+        Swal.fire("Deleted!", "The item has been removed.", "success");
+      } catch (error) {
+        Swal.fire("Error", "There was a problem deleting the item.", "error");
+        console.error("Delete error:", error);
+      }
     } else {
-      Swal.fire("Cancelled", "Your item is safe.", "info");
+      Swal.fire("Cancelled", "Item deletion was cancelled.", "info");
     }
   }
 
@@ -708,7 +697,11 @@ const EditInvoice = () => {
                                               <button
                                                 className="btn btn-sm btn-danger"
                                                 onClick={() =>
-                                                  handleRemove(index, item.id)
+                                                  handleRemove(
+                                                    index,
+                                                    item.id,
+                                                    item.price
+                                                  )
                                                 }
                                               >
                                                 Remove
