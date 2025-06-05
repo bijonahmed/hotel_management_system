@@ -163,9 +163,7 @@ const EditInvoice = () => {
         icon: "success",
         title: "Successfully create invoice.",
       });
-      navigate(
-        `/InsertData/print-checkout-invoice?InsertData_id=${InsertData_id}`
-      );
+       navigate(`/restaurant/print-invoice?invoice_id=${invoiceId}`);
       //navigate("/InsertData/checkout-list");
     } catch (error) {
       if (error.response?.status === 422) {

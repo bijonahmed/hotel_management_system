@@ -137,8 +137,10 @@ class RestaurantController extends Controller
                 'invoice_create_by' => $this->userid,
             ]);
         }
+        $data['invoiceid'] = $lastId; 
+        $data['message']   = 'Successfully insert.';
 
-        return response()->json(['message' => 'Successfully insert.']);
+        return response()->json($data);
     }
 
     public function editItems(Request $request)
@@ -297,6 +299,17 @@ class RestaurantController extends Controller
             'total_pages' => $paginator->lastPage(),
             'total_records' => $paginator->total(),
         ], 200);
+    }
+
+    public function getOnlyCustomerList(Request $request)
+    {
+        $data = RestInvoice::groupBy('name')->get();
+
+        $response = [
+            'data' => $data,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
     }
 
     public function generateUniqueRandomNumber()

@@ -15,6 +15,7 @@ use App\Models\PostCategory;
 use App\Models\Product;
 use App\Models\ProductAttributes;
 use App\Models\ProductAttributeValue;
+use App\Models\RestInvoice;
 use App\Models\Room;
 use App\Models\RoomImages;
 use App\Models\Setting;
@@ -45,11 +46,42 @@ class ReportController extends Controller
     }
 
 
+    public function filterByRestReport(Request $request)
+    {
+        //dd($request->all());
+        $fromDate     =  $request->fromDate;
+        $toDate       =  $request->toDate;
+        $invoice_id   =  $request->invoice_id;
+        $customer_id  =  $request->customer_id;
+
+        $query = RestInvoice::orderby('id', 'desc');
+        // Filter: Only if fromDate and toDate exist
+        if ($fromDate && $toDate) {
+            $query->whereBetween(\DB::raw('DATE(restaruent_invoice.created_at)'), [$fromDate, $toDate]);
+        }
+        // Filter by Booking ID
+        if ($invoice_id) {
+            $query->where('restaruent_invoice.invoice_no', $invoice_id);
+        }
+        // Filter by Customer ID
+        if ($customer_id) {
+            $query->where('restaruent_invoice.phone', $customer_id); // or your actual customer/user field
+        }
+        $invoices = $query->get();
+        // Add 'created_by' column to each invoice
+        $invoices->transform(function ($invoice) {
+            $chkName = User::where('id',$invoice->invoice_create_by)->first();
+            $invoice->created_by = !empty($chkName->name) ? $chkName->name: "";
+            return $invoice;
+        });
+
+        return response()->json($invoices, 200);
+    }
+
+
     public function filterBybookingReport(Request $request)
     {
-
         // dd($request->all());
-
         $fromDate     =  $request->fromDate;
         $toDate       =  $request->toDate;
         $booking_id   =  $request->booking_id;
@@ -90,6 +122,5 @@ class ReportController extends Controller
         $bookingData = $query->get();
 
         return response()->json($bookingData, 200);
-
     }
 }

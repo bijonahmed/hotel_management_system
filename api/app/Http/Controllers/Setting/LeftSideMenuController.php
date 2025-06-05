@@ -38,8 +38,8 @@ class LeftSideMenuController extends Controller
                 'submenu' => []
             ],
              [
-                'label' => 'Restaurants Report',
-                'path' => '/report/transaction-report',
+                'label' => 'Restaurant Report',
+                'path' => '/report/restaurant-report',
                 'icon' => 'bx bx-repeat',
                 'submenu' => []
             ],

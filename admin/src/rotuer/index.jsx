@@ -18,6 +18,7 @@ import RoleList from "../pages/users/RoleList.jsx";
 import RoleAdd from "../pages/users/Addrole.jsx";
 import BulkAddress from "../pages/configration/address/BulkAddress.jsx";
 import TransactionReport from "../pages/report/TransactionReport.jsx";
+import RestaurentReport from "../pages/report/RestaurentReport.jsx";
 import CheckLogAPI from "../pages/report/CheckLogAPI.jsx";
 
 import RoleEdit from "../pages/users/EditRole.jsx";
@@ -54,6 +55,7 @@ import CheckInPreview from "../pages/booking/CheckInPreview.jsx";
 import RestaurantsList from "../pages/restaurants/RestaurantsList.jsx";
 import CreateInvoice from "../pages/restaurants/CreateInvoice.jsx";
 import EditInvoice from "../pages/restaurants/EditInvoice.jsx";
+import Print from "../pages/restaurants/Print.jsx";
 
 
 //ROOM SETTING LIST
@@ -125,6 +127,7 @@ const AppRouter = () => {
       <Route path="/user/customer-add" element={<CustomerAdd />} />
       <Route path="/user/admin-list" element={<AdminList />} />
       <Route path="/report/transaction-report" element={<TransactionReport />} />
+      <Route path="/report/restaurant-report" element={<RestaurentReport />} />
       <Route path="/user/change-password" element={<ChangePassword />} />
       <Route path="/category/post-category-list" element={<PostCategoryList />} />
       <Route path="/category/post-categoryAdd" element={<PostCategoryAdd />} />
@@ -159,6 +162,8 @@ const AppRouter = () => {
       <Route path="/restaurant/restaurant-invoice" element={<RestaurantsList />} /> 
       <Route path="/restaurant/create-invoice" element={<CreateInvoice />} /> 
       <Route path="/restaurant/edit-invoice" element={<EditInvoice />} />
+      <Route path="/restaurant/print-invoice" element={<Print />} />
+
 
 
       {/* //ROMM SETTING */}

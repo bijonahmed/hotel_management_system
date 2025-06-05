@@ -230,6 +230,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         'prefix' => 'report'
     ], function () {
         Route::get('filterBybookingReport', [ReportController::class, 'filterBybookingReport']);
+         Route::get('filterByRestReport', [ReportController::class, 'filterByRestReport']);
     });
 
 
@@ -241,6 +242,7 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('getInvoiceList', [RestaurantController::class, 'getInvoiceList']);
         Route::get('checkRestInvoiceRow', [RestaurantController::class, 'checkRestInvoiceRow']);
         Route::get('deleteRestInvItem', [RestaurantController::class, 'deleteRestInvItem']);
+        Route::get('getOnlyCustomerList', [RestaurantController::class, 'getOnlyCustomerList']);
     });
 
 

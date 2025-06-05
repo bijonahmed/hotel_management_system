@@ -9,10 +9,10 @@ import Pagination from "../../components/Pagination";
 import axios from "/config/axiosConfig";
 import "../../components/css/RoleList.css";
 
-const TransactionReport = () => {
+const RestaurentReport = () => {
   const [merchantdata, setMerchantData] = useState([]);
   const [data, setData] = useState([]);
-  const [booking_id, setBookingId] = useState("");
+  const [invoice_id, setInvId] = useState("");
   const [customer_id, setCustomer] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(1);
   const [fromDate, setFromDate] = useState("");
@@ -20,7 +20,7 @@ const TransactionReport = () => {
   const [loading, setLoading] = useState(false);
   const rawToken = sessionStorage.getItem("token");
   const token = rawToken?.replace(/^"(.*)"$/, "$1");
-  const apiUrl = "/report/filterBybookingReport";
+  const apiUrl = "/report/filterByRestReport";
 
   const [currency_symbol, set_currency_symbol] = useState("");
   const globalSetting = async () => {
@@ -40,7 +40,7 @@ const TransactionReport = () => {
       if (!token) {
         throw new Error("Token not found in sessionStorage");
       }
-      const response = await axios.get(`/user/getOnlyMerchantList`, {
+      const response = await axios.get(`/restaurant/getOnlyCustomerList`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -69,7 +69,7 @@ const TransactionReport = () => {
           customer_id,
           fromDate,
           toDate,
-          booking_id,
+          invoice_id,
         },
       });
 
@@ -84,11 +84,27 @@ const TransactionReport = () => {
     }
   };
 
-  // Calculate the total deposit amount
-  const totalDepositAmount = data.reduce(
-    (sum, item) => sum + parseFloat(item.deposit_amount || 0),
-    0
-  );
+  const totals = {
+    item_total: 0,
+    advance_amount: 0,
+    due_amount: 0,
+    discount_amount: 0,
+    after_discount: 0,
+    tax_percentage: 0,
+    tax_amount: 0,
+    grand_total: 0,
+  };
+
+  data.forEach((item) => {
+    totals.item_total += Number(item.item_total || 0);
+    totals.advance_amount += Number(item.advance_amount || 0);
+    totals.due_amount += Number(item.due_amount || 0);
+    totals.discount_amount += Number(item.discount_amount || 0);
+    totals.after_discount += Number(item.after_discount || 0);
+    totals.tax_percentage += Number(item.tax_percentage || 0);
+    totals.tax_amount += Number(item.tax_amount || 0);
+    totals.grand_total += Number(item.grand_total || 0);
+  });
 
   useEffect(() => {
     const today = new Date();
@@ -109,12 +125,12 @@ const TransactionReport = () => {
     fetchData();
     fetchCustomerData();
     globalSetting();
-  }, [selectedFilter, customer_id, fromDate, toDate, booking_id]);
+  }, [selectedFilter, customer_id, fromDate, toDate, invoice_id]);
 
   return (
     <>
       <Helmet>
-        <title>Transaction Report</title>
+        <title>Restaurent Report</title>
       </Helmet>
 
       <div>
@@ -156,10 +172,10 @@ const TransactionReport = () => {
                           <div className="searchbar">
                             <input
                               type="text"
-                              placeholder="Search Booking ID..."
+                              placeholder="Search Invoice No"
                               className="form-control"
-                              value={booking_id}
-                              onChange={(e) => setBookingId(e.target.value)}
+                              value={invoice_id}
+                              onChange={(e) => setInvId(e.target.value)}
                             />
                           </div>
                         </div>
@@ -174,29 +190,15 @@ const TransactionReport = () => {
                           >
                             <option value="">All Customer</option>
                             {merchantdata.map((user) => (
-                              <option key={user.id} value={user.id}>
+                              <option key={user.id} value={user.phone}>
                                 {user.name} | {user.phone}
                               </option>
                             ))}
                           </select>
                         </div>
 
-                        <div className="col-12 col-md-4 mb-2 mb-md-0">
-                          <select
-                            style={{ height: "46px" }}
-                            className="form-select"
-                            value={selectedFilter}
-                            onChange={(e) => setSelectedFilter(e.target.value)}
-                          >
-                            <option value="">All Booking Status</option>
-                            <option value="1">Booking</option>
-                            <option value="2">Release</option>
-                            <option value="3">Cancel</option>
-                          </select>
-                        </div>
-
                         {/* From Date */}
-                        <div className="col-12 col-md-4 mb-2 mb-md-0 mt-3">
+                        <div className="col-12 col-md-4 mb-2 mb-md-0">
                           <div className="searchbar">
                             <input
                               type="date"
@@ -243,13 +245,19 @@ const TransactionReport = () => {
                           <table className="table align-middle mb-0 table-hover">
                             <thead className="table-light">
                               <tr>
-                                <th className="text-left">BookingID</th>
-                                <th className="text-left">Booking By</th>
-                                <th className="text-left">Check In/Out</th>
-                                <th className="text-center">Grand Total</th>
-                                <th className="text-center">Bed Info</th>
-                                <th className="text-center">Payment Type</th>
-                                <th className="text-center">Status</th>
+                                <th className="text-left">Invoice No.</th>
+                                <th className="text-left">Name</th>
+                                <th className="text-left">Phone</th>
+                                <th className="text-left">Email</th>
+                                <th className="text-end">Item Total</th>
+                                <th className="text-end">Adv. Amt</th>
+                                <th className="text-end">Due Amt</th>
+                                <th className="text-end">Discount Amt</th>
+                                <th className="text-end">After Discount Amt</th>
+                                <th className="text-end">Tax %</th>
+                                <th className="text-end">Tax % Amt</th>
+                                <th className="text-end">Grand Total</th>
+                                <th className="text-center">Created by</th>
                                 <th className="text-center">Action</th>
                               </tr>
                             </thead>
@@ -257,64 +265,42 @@ const TransactionReport = () => {
                               {data.length > 0 ? (
                                 data.map((item) => (
                                   <tr key={item.id}>
-                                    <td>{item.booking_id}</td>
+                                    <td>{item.invoice_no}</td>
                                     <td className="text-left">{item.name}</td>
-                                    <td className="text-left">
-                                      {item.checkin}---{item.checkout}
+                                    <td className="text-left">{item.phone}</td>
+                                    <td className="text-left">{item.email}</td>
+                                    <td className="text-end">
+                                      {item.item_total}
                                     </td>
-                                    <td className="text-center">
-                                      {item.grand_total ? (
-                                        `${item.grand_total} ${currency_symbol}`
-                                      ) : (
-                                        <span
-                                          style={{
-                                            color: "red",
-                                            fontWeight: "bold",
-                                          }}
-                                        >
-                                          Bill is not complete
-                                        </span>
-                                      )}
+                                    <td className="text-end bg-warning-subtle">
+                                      {item.advance_amount}
                                     </td>
-                                    <td className="text-center">
-                                      {item.bed_name}
+                                    <td className="text-end bg-danger-subtle">
+                                      {item.due_amount}
                                     </td>
-                                    <td className="text-center">
-                                      {item.paymenttype == 1
-                                        ? "Online"
-                                        : item.paymenttype == 2
-                                        ? "Offline"
-                                        : ""}
+                                    <td className="text-end bg-info-subtle">
+                                      {item.discount_amount}
                                     </td>
+                                    <td className="text-end bg-success-subtle">
+                                      {item.after_discount}
+                                    </td>
+                                    <td className="text-end bg-secondary-subtle">
+                                      {item.tax_percentage}
+                                    </td>
+                                    <td className="text-end bg-primary-subtle">
+                                      {item.tax_amount}
+                                    </td>
+                                    <td className="text-end bg-light text-dark fw-bold">
+                                      {item.grand_total}
+                                    </td>
+
                                     <td className="text-center">
-                                      <span
-                                        className={`badge ${
-                                          item.booking_status == 1
-                                            ? "bg-gradient-quepal"
-                                            : item.booking_status == 2
-                                            ? "bg-gradient-bloody"
-                                            : item.booking_status == 3
-                                            ? "bg-gradient-bloody"
-                                            : item.booking_status == 4
-                                            ? "bg-gradient-quepal"
-                                            : ""
-                                        } text-white shadow-sm w-100`}
-                                      >
-                                        {item.booking_status == 1
-                                          ? "Booking"
-                                          : item.booking_status == 2
-                                          ? "Release"
-                                          : item.booking_status == 3
-                                          ? "Cancel"
-                                          : item.booking_status == 4
-                                          ? "Others"
-                                          : ""}
-                                      </span>
+                                      {item.created_by}
                                     </td>
 
                                     <td className="text-center">
                                       <Link
-                                        to={`/booking/print-checkout-invoice?booking_id=${item.booking_id}`}
+                                        to={`/restaurant/print-invoice?invoice_id=${item.id}`}
                                       >
                                         <i class="fa-solid fa-print"></i> Print
                                       </Link>
@@ -328,6 +314,37 @@ const TransactionReport = () => {
                                   </td>
                                 </tr>
                               )}
+
+                              <tr className="fw-bold text-dark bg-light">
+                                <td colSpan="4" className="text-end">
+                                  Total
+                                </td>
+                                <td className="text-end">
+                                  {totals.item_total.toFixed(2)}
+                                </td>
+                                <td className="text-end">
+                                  {totals.advance_amount.toFixed(2)}
+                                </td>
+                                <td className="text-end bg-danger text-white">
+                                  {totals.due_amount.toFixed(2)}
+                                </td>
+                                <td className="text-end">
+                                  {totals.discount_amount.toFixed(2)}
+                                </td>
+                                <td className="text-end">
+                                  {totals.after_discount.toFixed(2)}
+                                </td>
+                                <td className="text-end">
+                                  {totals.tax_percentage.toFixed(2)}
+                                </td>
+                                <td className="text-end">
+                                  {totals.tax_amount.toFixed(2)}
+                                </td>
+                                <td className="text-end bg-danger text-white">
+                                  {totals.grand_total.toFixed(2)}
+                                </td>
+                                <td colSpan="2"></td>
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -336,14 +353,13 @@ const TransactionReport = () => {
                       <div className="text-end mt-3">
                         <p className="fw-bold">
                           {" "}
-                          Total Amount:{" "}
-                          {data
-                            .reduce(
-                              (sum, item) => sum + Number(item.grand_total),
-                              0
-                            )
-                            .toLocaleString()}{" "}
-                         {currency_symbol}
+                          Balacne:{" "}
+                           {(data.reduce(
+  (sum, item) => sum + Number(item.grand_total),
+  0
+) - totals.due_amount).toFixed(2)}
+
+                          {currency_symbol}
                         </p>
                       </div>
                     </div>
@@ -364,4 +380,4 @@ const TransactionReport = () => {
   );
 };
 
-export default TransactionReport;
+export default RestaurentReport;

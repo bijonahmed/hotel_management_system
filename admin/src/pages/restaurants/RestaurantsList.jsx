@@ -83,8 +83,11 @@ const RestaurantsList = () => {
   };
 
   const handleEdit = (id) => {
-   // navigate(`/restaurants/edit-invoice/${id}`);
-    navigate(`/restaurant/edit-invoice?invoice_id=${id}`);
+     navigate(`/restaurant/edit-invoice?invoice_id=${id}`);
+  };
+
+  const handlePrint = (id) => {
+      navigate(`/restaurant/print-invoice?invoice_id=${id}`);
   };
 
   // Correctly closed useEffect hook
@@ -253,6 +256,14 @@ const RestaurantsList = () => {
                                         onClick={() => handleEdit(item.id)}
                                       >
                                         <i className="lni lni-pencil-alt"></i>
+                                      </a> || &nbsp;
+
+                                      <a
+                                        href="#"
+                                        onClick={() => handlePrint(item.id)}
+                                      >
+                                      <i className="fas fa-print"></i>
+
                                       </a>
                                     </td>
                                   </tr>

@@ -273,7 +273,6 @@ const PrintCheckOutInvoice = () => {
 
   // Split into integer and decimal parts
   const [integerPart, decimalPart] = grandTotal.toFixed(2).split(".");
-
   //const numberInWords = `${toWords(parseInt(integerPart))} Taka and ${toWords(parseInt(decimalPart))} Paisa`;
   const integerWords = capitalizeFirstLetter(toWords(parseInt(integerPart)));
   const decimalWords = capitalizeFirstLetter(toWords(parseInt(decimalPart)));
@@ -435,7 +434,7 @@ const PrintCheckOutInvoice = () => {
                               {settingData.whatsApp}
                             </span>
                             <span>Facebook: {settingData.fblink}</span>
-                            <span>Pechardwip, Cox's Bazar, Bangladesh</span>
+                             <span>{settingData.address}</span>
                           </div>
                           <hr />
 

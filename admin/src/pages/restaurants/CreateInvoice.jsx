@@ -46,7 +46,6 @@ const CreateInvoice = () => {
       });
       const userData = response.data.data;
       set_currency_symbol(userData.currency_symbol || "");
-      console.log("Tax:" + userData.tax_percentag);
       const taxData = userData.tax_percentag;
       setTaxPercetage(taxData);
       // set_currency_symbol(userData.currency_symbol || "");
@@ -80,7 +79,6 @@ const CreateInvoice = () => {
     phone: "",
     address: "",
     tax_percentage: "",
-    
   });
 
   const handleSubmitModal = () => {
@@ -113,8 +111,9 @@ const CreateInvoice = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("Success:", response.data);
-      //alert("InsertData saved successfully!");
+      //console.log("Success:", response.data.invoiceid);
+      const invoiceid = response.data.invoiceid; 
+    //  alert(invoiceid);
       Swal.mixin({
         toast: true,
         position: "top-end",
@@ -129,9 +128,7 @@ const CreateInvoice = () => {
         icon: "success",
         title: "Successfully create invoice.",
       });
-      navigate(
-        `/InsertData/print-checkout-invoice?InsertData_id=${InsertData_id}`
-      );
+      navigate(`/restaurant/print-invoice?invoice_id=${invoiceid}`);
       //navigate("/InsertData/checkout-list");
     } catch (error) {
       if (error.response?.status === 422) {
@@ -312,6 +309,19 @@ const CreateInvoice = () => {
     if (result.isConfirmed) {
       // Remove item from UI
       setAddedItems((prev) => prev.filter((_, i) => i !== index));
+
+      const updatedItems = addedItems.filter((_, i) => i !== index);
+      setAddedItems(updatedItems); // update the UI list
+
+      const newItemTotal = updatedItems.reduce((sum, item) => {
+        const itemPrice = parseFloat(item.price || 0);
+        const itemQty = parseFloat(item.qty || 1); // default to 1 if qty is missing
+        return sum + itemPrice * itemQty;
+      }, 0);
+
+      console.log("Updated Item Grand Total: " + newItemTotal);
+      const dueAmt = newItemTotal - parseFloat(advanceAmt || 0);
+      setDueAmount(dueAmt);
     } else {
       Swal.fire("Cancelled", "Your item is safe.", "info");
     }
