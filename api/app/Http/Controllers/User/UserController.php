@@ -27,6 +27,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use App\Http\Controllers\Controller;
 use App\Imports\BulkAddressImport;
 use App\Models\BulkAddress;
+use App\Models\RestInvoice;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log; // Add this line
@@ -152,11 +153,27 @@ class UserController extends Controller
 
     public function getOnlyMerchantList(Request $request)
     {
-        $data = User::where('status', 1)->where('role_id', 2)->get();
+        $dataArr1 = User::select('email')
+            ->where('status', 1)
+            ->where('role_id', 2)
+            ->get()
+            ->pluck('email'); // Collection of emails only
+
+        $dataArr2 = RestInvoice::select('email')
+            ->distinct()
+            ->get()
+            ->pluck('email'); // Collection of emails only
+
+        // Combine, remove duplicates, and reset the array keys
+        $mergedEmails = $dataArr1
+            ->merge($dataArr2)
+            ->unique()
+            ->values(); // Optional: reset array index
+
+        // dd($mergedEmails);
 
         $response = [
-            'data' => $data,
-            'message' => 'success'
+            'data' => $mergedEmails,
         ];
         return response()->json($response, 200);
     }
@@ -232,12 +249,12 @@ class UserController extends Controller
         return response()->json($history, 200); // Return the result as JSON
     }
 
- 
+
 
     public function allUsers(Request $request)
     {
 
-       // dd($request->all());
+        // dd($request->all());
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
 
@@ -250,7 +267,7 @@ class UserController extends Controller
 
         // dd($selectedFilter);
         $query = User::orderBy('users.id', 'desc')
-            ->where('users.role_id',$request->rule_id)
+            ->where('users.role_id', $request->rule_id)
             ->join('rule', 'users.role_id', '=', 'rule.id')
             ->select('users.company_name', 'users.created_at', 'users.username', 'lastlogin_country', 'register_ip', 'lastlogin_ip', 'users.ref_id', 'users.telegram', 'users.phone', 'users.role_id', 'users.id', 'users.name', 'users.email', 'users.phone_number', 'users.show_password', 'users.status', 'rule.name as rulename');
 
@@ -269,7 +286,7 @@ class UserController extends Controller
         if ($selectedFilter !== null) {
             $query->where('users.status', $selectedFilter);
         }
-       // $query->where('users.role_id', $merchant_rule);
+        // $query->where('users.role_id', $merchant_rule);
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
 
         $modifiedCollection = $paginator->getCollection()->map(function ($item) {

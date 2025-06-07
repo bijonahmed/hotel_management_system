@@ -106,11 +106,7 @@ const Sendmail = () => {
         const customerList = response.data.data;
 
         // ✅ Extract unique emails
-        const uniqueEmails = [
-          ...new Set(
-            customerList.map((customer) => customer.email).filter(Boolean)
-          ),
-        ];
+        const uniqueEmails = [...new Set(customerList.filter(Boolean))];
 
         // ✅ Comma-separated string of emails
         const emailList = uniqueEmails.join(",");
@@ -179,7 +175,7 @@ const Sendmail = () => {
                     <label>Recipient Emails (comma-separated)</label>
                     <textarea
                       className="form-control"
-                      rows={1}
+                      rows={3}
                       name="emails"
                       value={formData.emails}
                       onChange={handleChange}

@@ -12,6 +12,7 @@ import "../../components/css/RoleList.css";
 const RestaurentReport = () => {
   const [merchantdata, setMerchantData] = useState([]);
   const [data, setData] = useState([]);
+  const [bookingData, setBookingData] = useState([]);
   const [invoice_id, setInvId] = useState("");
   const [customer_id, setCustomer] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(1);
@@ -74,7 +75,8 @@ const RestaurentReport = () => {
       });
 
       if (response.data) {
-        setData(response.data);
+        setData(response.data.restData);
+        setBookingData(response.data.bookingData);
         // setTotalPages(response.data.total_pages);
       }
     } catch (error) {
@@ -119,6 +121,8 @@ const RestaurentReport = () => {
     setToDate(formatDate(today));
     setFromDate(formatDate(priorDate));
   }, []);
+
+  const totalItemTotal = bookingData.reduce((sum, item) => sum + parseFloat(item.item_total || 0), 0);
 
   // Correctly closed useEffect hook
   useEffect(() => {
@@ -228,7 +232,7 @@ const RestaurentReport = () => {
                               className="btn btn-primary"
                               onClick={fetchData}
                             >
-                              <i class="fa-solid fa-filter"></i> Filter
+                              <i className="fa-solid fa-filter"></i> Filter
                             </button>
                           </div>
                         </div>
@@ -302,7 +306,8 @@ const RestaurentReport = () => {
                                       <Link
                                         to={`/restaurant/print-invoice?invoice_id=${item.id}`}
                                       >
-                                        <i class="fa-solid fa-print"></i> Print
+                                        <i className="fa-solid fa-print"></i>{" "}
+                                        Print
                                       </Link>
                                     </td>
                                   </tr>
@@ -354,13 +359,62 @@ const RestaurentReport = () => {
                         <p className="fw-bold">
                           {" "}
                           Balacne:{" "}
-                           {(data.reduce(
-  (sum, item) => sum + Number(item.grand_total),
-  0
-) - totals.due_amount).toFixed(2)}
-
+                          {(
+                            data.reduce(
+                              (sum, item) => sum + Number(item.grand_total),
+                              0
+                            ) - totals.due_amount
+                          ).toFixed(2)}
                           {currency_symbol}
                         </p>
+                      </div>
+                      <center><b><u>Found {bookingData.length} booking(s).</u></b></center>
+
+                      <div className="table-responsive mt-3">
+                        <table className="table align-middle mb-0 table-hover">
+                          <thead className="table-light">
+                            <tr>
+                              <th className="text-start">Booking ID.</th>
+                              <th className="text-start">Item Total</th>
+                              <th className="text-center">Print</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {bookingData.length > 0 ? (
+                              bookingData.map((item) => (
+                                <tr key={item.id}>
+                                  <td>{item.booking_id}</td>
+                                  <td className="text-start">
+                                    {item.item_total}
+                                  </td>
+                                  <td className="text-center">
+                                    <Link
+                                      to={`/booking/print-checkout-invoice?booking_id=${item.booking_id}`}
+                                    >
+                                      <i className="fa-solid fa-print"></i>{" "}
+                                      Print
+                                    </Link>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan="3" className="text-center">
+                                  No data found
+                                </td>
+                              </tr>
+                            )}
+
+                            {/* Totals Row – soft background */}
+                            <tr className="fw-bold bg-light border-top">
+                              <td className="text-end">Total</td>
+                              <td className="text-start">
+                                {totalItemTotal.toFixed(2)}
+                              </td>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>

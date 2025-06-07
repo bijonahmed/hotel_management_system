@@ -446,6 +446,13 @@ const PrintCheckOutInvoice = () => {
                               maxWidth: "500px",
                             }}
                           >
+                       
+                           <div style={{ marginBottom: "0.5rem" }}>
+                                <strong>Booking ID:</strong>{" "}
+                                {booking.booking_id}
+                              </div>
+
+
                             {customerName && (
                               <div style={{ marginBottom: "0.5rem" }}>
                                 <strong>Customer Name:</strong>{" "}

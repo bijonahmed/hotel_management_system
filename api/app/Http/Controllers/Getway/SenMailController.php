@@ -55,7 +55,7 @@ class SenMailController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $emails      = array_map('trim', explode(',', $request->emails));
+        $emails      = array_map('trim', explode(',', strtolower($request->emails)));
         $settingData = Setting::find(1);
         foreach ($emails as $email) {
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {

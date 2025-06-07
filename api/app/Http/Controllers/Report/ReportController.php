@@ -70,12 +70,21 @@ class ReportController extends Controller
         $invoices = $query->get();
         // Add 'created_by' column to each invoice
         $invoices->transform(function ($invoice) {
-            $chkName = User::where('id',$invoice->invoice_create_by)->first();
-            $invoice->created_by = !empty($chkName->name) ? $chkName->name: "";
+            $chkName = User::where('id', $invoice->invoice_create_by)->first();
+            $invoice->created_by = !empty($chkName->name) ? $chkName->name : "";
             return $invoice;
         });
 
-        return response()->json($invoices, 200);
+
+        $bookingQuery = Booking::select('id','booking_id','item_total')->where('booking_status', 2)->orderby('id', 'desc');
+        if ($fromDate && $toDate) {
+            $bookingQuery->whereBetween(\DB::raw('DATE(booking.created_at)'), [$fromDate, $toDate]);
+        }
+        $bookingData = $bookingQuery->get();
+
+        $data['restData']    = $invoices;
+        $data['bookingData'] = $bookingData;
+        return response()->json($data, 200);
     }
 
 
