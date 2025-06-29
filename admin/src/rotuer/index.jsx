@@ -37,10 +37,9 @@ import PostCategoryEdit from "../pages/category/PostCategoryEdit.jsx";
 import PostList from "../pages/post/PostList.jsx";
 import PostAdd from "../pages/post/PostAdd.jsx";
 import PostEdit from "../pages/post/PostEdit.jsx";
-
+//send
 import Sendmail from "../pages/getway/Sendmail.jsx";
 import SendSms from "../pages/getway/SendSms.jsx";
-
 //Booking
 import RoomStatusList from "../pages/booking/RoomStatusList.jsx";
 import BookingList from "../pages/booking/BookingList.jsx";
@@ -56,7 +55,12 @@ import RestaurantsList from "../pages/restaurants/RestaurantsList.jsx";
 import CreateInvoice from "../pages/restaurants/CreateInvoice.jsx";
 import EditInvoice from "../pages/restaurants/EditInvoice.jsx";
 import Print from "../pages/restaurants/Print.jsx";
-
+//Purchase
+import PurchaseList from "../pages/purchase/PurchaseList.jsx";
+import PurCreateInvoice from "../pages/purchase/CreateInvoice.jsx";
+import PrintPurchase from "../pages/purchase/Print.jsx";
+import PurEditInvoice from "../pages/purchase/EditInvoice.jsx";
+import PurchaseReport from "../pages/report/PurchaseReport.jsx";
 
 //ROOM SETTING LIST
 import BedTypeList from "../pages/roomsetting/BedTypeList.jsx";
@@ -163,6 +167,13 @@ const AppRouter = () => {
       <Route path="/restaurant/create-invoice" element={<CreateInvoice />} /> 
       <Route path="/restaurant/edit-invoice" element={<EditInvoice />} />
       <Route path="/restaurant/print-invoice" element={<Print />} />
+      {/* Restarurents */}
+      <Route path="/purchase/purchase-list" element={<PurchaseList />} /> 
+      <Route path="/purchase/create-invoice" element={<PurCreateInvoice />} /> 
+      <Route path="/purchase/print-invoice" element={<PrintPurchase />} />
+      <Route path="/purchase/edit-invoice" element={<PurEditInvoice />} />
+      <Route path="/purchase/report" element={<PurchaseReport />} />
+            
 
 
 

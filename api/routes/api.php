@@ -19,6 +19,7 @@ use App\Http\Controllers\Facility\FacilityController;
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\Booking\GuestBookingController;
 use App\Http\Controllers\Restaurant\RestaurantController;
+use App\Http\Controllers\Purchase\PurchaseController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Getway\SenMailController;
 use App\Http\Controllers\Getway\SenSMSController;
@@ -229,8 +230,9 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
     Route::group([
         'prefix' => 'report'
     ], function () {
+        Route::get('filterByTransactionReport', [ReportController::class, 'filterByTransactionReport']);
         Route::get('filterBybookingReport', [ReportController::class, 'filterBybookingReport']);
-         Route::get('filterByRestReport', [ReportController::class, 'filterByRestReport']);
+        Route::get('filterByRestReport', [ReportController::class, 'filterByRestReport']);
     });
 
 
@@ -245,6 +247,17 @@ Route::middleware(['auth:api', CheckUserStatus::class])->group(function () {
         Route::get('getOnlyCustomerList', [RestaurantController::class, 'getOnlyCustomerList']);
     });
 
+
+    Route::group([
+        'prefix' => 'purchase'
+    ], function () {
+        Route::post('insertItems', [PurchaseController::class, 'insertItems']);
+        Route::get('getInvoiceList', [PurchaseController::class, 'getInvoiceList']);
+        Route::get('checkInvoiceRow', [PurchaseController::class, 'checkInvoiceRow']);
+        Route::post('editItems', [PurchaseController::class, 'editItems']);
+        Route::get('deleteInvItem', [PurchaseController::class, 'deleteInvItem']);
+        // Route::get('getOnlyCustomerList', [RestaurantController::class, 'getOnlyCustomerList']);
+    });
 
 
     Route::group([

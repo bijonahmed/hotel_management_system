@@ -15,6 +15,7 @@ use App\Models\PostCategory;
 use App\Models\Product;
 use App\Models\ProductAttributes;
 use App\Models\ProductAttributeValue;
+use App\Models\PurchaseInvoice;
 use App\Models\RestInvoice;
 use App\Models\Room;
 use App\Models\RoomImages;
@@ -87,6 +88,27 @@ class ReportController extends Controller
         return response()->json($data, 200);
     }
 
+
+ public function filterByTransactionReport(Request $request)
+    {
+        // dd($request->all());
+        $fromDate     =  $request->fromDate;
+        $toDate       =  $request->toDate;
+
+        $query = PurchaseInvoice::query();
+        // Filter: Only if fromDate and toDate exist
+        if ($fromDate && $toDate) {
+            $query->whereBetween(\DB::raw('DATE(created_at)'), [$fromDate, $toDate]);
+        }
+
+        $rdata = $query->get();
+
+        return response()->json($rdata, 200);
+    }
+
+
+
+    
 
     public function filterBybookingReport(Request $request)
     {

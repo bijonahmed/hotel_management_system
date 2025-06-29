@@ -37,7 +37,7 @@ class LeftSideMenuController extends Controller
                 'icon' => 'bx bx-repeat',
                 'submenu' => []
             ],
-             [
+            [
                 'label' => 'Restaurant Report',
                 'path' => '/report/restaurant-report',
                 'icon' => 'bx bx-repeat',
@@ -51,7 +51,7 @@ class LeftSideMenuController extends Controller
                     ['label' => 'Booking List', 'path' => '/booking/booking-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'CheckIn', 'path' => '/booking/checkin-list', 'icon' => 'bx bx-radio-circle'],
                     ['label' => 'Checkout', 'path' => '/booking/checkout-list', 'icon' => 'bx bx-radio-circle'],
-                  //  ['label' => 'Room Status', 'path' => '/booking/room-status-list', 'icon' => 'bx bx-radio-circle'],
+                    //  ['label' => 'Room Status', 'path' => '/booking/room-status-list', 'icon' => 'bx bx-radio-circle'],
                 ]
             ],
             [
@@ -100,7 +100,6 @@ class LeftSideMenuController extends Controller
                     ['label' => 'Send SMS', 'path' => '/getway/send-sms', 'icon' => 'bx bx-radio-circle'],
                 ]
             ],
-
             [
                 'label' => 'Restaurant',
                 'path' => '#',
@@ -108,6 +107,15 @@ class LeftSideMenuController extends Controller
                 'submenu' => [
                     ['label' => 'Invoice List', 'path' => '/restaurant/restaurant-invoice', 'icon' => 'bx bx-radio-circle'],
                     //['label' => 'Send SMS', 'path' => '/getway/send-sms', 'icon' => 'bx bx-radio-circle'],
+                ]
+            ],
+            [
+                'label' => 'Purchase',
+                'path' => '#',
+                'icon' => 'bx bx-category',
+                'submenu' => [
+                    ['label' => 'Purchase List', 'path' => '/purchase/purchase-list', 'icon' => 'bx bx-radio-circle'],
+                    ['label' => 'Report', 'path' => '/purchase/report', 'icon' => 'bx bx-radio-circle'],
                 ]
             ],
             /*
